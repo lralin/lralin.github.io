@@ -1,5 +1,7 @@
 ---
 title: Github+Hexo 个人博客搭建教程
+date: 2018-02-01
+tags: github
 ---
 ##### 1.下载Node.js安装文件：
 [Window Installer 64-bit](https://nodejs.org/dist/v4.2.3/node-v4.2.3-x64.msi)<br/>
