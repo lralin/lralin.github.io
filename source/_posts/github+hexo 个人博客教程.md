@@ -133,4 +133,4 @@ $ git push origin master:Hexo-Blog
 现在你会发现github你的博客仓库已经有了一个新分支Hexo-Blog，我们的备份工作完成。  
 **换一台电脑之后处理Hexo**
 1. 使用`git clone git@github.com:username/username.github.io.git`拷贝仓库（分支为Hexo-blog）；
-2. 在本地新拷贝的http://lralin.github.io文件夹下通过Git bash依次执行下列指令：`npm install hexo`、`npm install`、`npm install hexo-deployer-git --save`（记得，不需要`hexo init`这条指令）。
+2. 在本地新拷贝的username.github.io文件夹下通过Git bash依次执行下列指令：`npm install hexo`、`npm install`、`npm install hexo-deployer-git --save`（记得，不需要`hexo init`这条指令）。
