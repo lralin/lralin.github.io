@@ -37,7 +37,6 @@
 
 <!-- 自定义背景 -->
 {% if theme.canvas_snow %}
-  {% set js_vendors.three  = 'three/three.min.js' %}
   {% set js_vendors.canvas_snow  = 'three/canvas_snow.min.js' %}
 {% endif %}
 {% if theme.canvas_bubble %}
