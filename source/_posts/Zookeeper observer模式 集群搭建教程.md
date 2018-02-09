@@ -1,5 +1,5 @@
 ---
-title: Zookeeper 集群搭建教程
+title: Zookeeper 集群
 ---
 #### 一、Zookeeper原理简介
 
@@ -9,13 +9,13 @@ title: Zookeeper 集群搭建教程
 
 - 可靠性：具有简单、健壮、良好的性能、如果消息m被到一台服务器接收，那么消息m将被所有服务器接收。
 - 实时性：Zookeeper保证客户端将在一个时间间隔范围内获得服务器的更新信息，或者服务器失效的信息。但由于网络延时等原因，Zookeeper不能保证两个客户端能同时得到刚更新的数据，如果需要最新数据，应该在读数据之前调用sync()接口。  
-
+<!--more-->
 - 等待无关（wait-free）：慢的或者失效的client不得干预快速的client的请求，使得每个client都能有效的等待。  
 
 - 原子性：更新只能成功或者失败，没有中间状态。  
 
 - 顺序性：包括全局有序和偏序两种：全局有序是指如果在一台服务器上消息a在消息b前发布，则在所有Server上消息a都将在消息b前被发布；偏序是指如果一个消息b在消息a后被同一个发送者发布，a必将排在b前面。
-<!--more-->
+
 ##### 2. Zookeeper工作原理
 
 - 在zookeeper的集群中，各个节点共有下面3种角色和4种状态：   
@@ -32,8 +32,7 @@ title: Zookeeper 集群搭建教程
 ***FOLLOWING***：leader已经选举出来，当前Server与之同步。   
 ***OBSERVING***：observer的行为在大多数情况下与follower完全一致，但是他们不参加选举和投票，而仅仅接受(observing)选举和投票的结果。  
 #### 二、Zookeeper安装
-> Zookeeper链接：http://zookeeper.apache.org/  
-
+> Zookeeper链接：http://zookeeper.apache.org/
 ```
 wget http://mirrors.cnnic.cn/apache/zookeeper/zookeeper-3.4.8/zookeeper-3.4.8.tar.gz -P /usr/local/src/
 tar zxvf zookeeper-3.4.8.tar.gz -C /opt
@@ -45,8 +44,7 @@ cp conf/zoo_sample.cfg conf/zoo.cfg
 echo -e "# append zk_env\nexport PATH=$PATH:/opt/zookeeper/bin" >> /etc/profile
 ```
 #### 三、Zookeeper集群配置
-> 等集群的所有机器启动之后再查看zookeeper的状态。  
-
+> ###### 等集群的所有机器启动之后再查看zookeeper的状态。
 ##### 1. Zookeeper配置文件修改
 ###### 修改过后的配置文件zoo.cfg，如下：
 ```
@@ -61,9 +59,9 @@ dataDir=/opt/zookeeper/data
 clientPort=2181
 autopurge.snapRetainCount=500 #设置保留多少个snapshot
 autopurge.purgeInterval=24 #设置多少小时清理一次
-server.1= 10.18.8.100:2888:3888
-server.2= 10.18.8.101:2888:3888
-server.3= 10.18.8.102:2888:3888
+server.1= 192.168.1.148:2888:3888
+server.2= 192.168.1.149:2888:3888
+server.3= 192.168.1.150:2888:3888
 
 ```
 ###### 创建相关目录，三台节点都需要
@@ -72,8 +70,8 @@ mkdir -p /opt/zookeeper/{logs,data}
 ```
 ###### 其余zookeeper节点安装完成之后，同步配置文件zoo.cfg。
 
-> *如果要增加一台observer，上面的配置忽略，应按下面的配置。*
-> 不是observer的三台zoo.cfg的配置为：
+##### *如果要增加一台observer，上面的配置忽略，应按下面的配置。*
+- ###### 不是observer的三台zoo.cfg的配置为：
 ```
 tickTime=2000
 initLimit=10
@@ -86,14 +84,14 @@ autopurge.snapRetainCount=500 #设置保留多少个snapshot
 
 autopurge.purgeInterval=24 #设置多少小时清理一次
 
-server.1= 10.18.8.100:2888:3888
-server.2= 10.18.8.101:2888:3888
-server.3= 10.18.8.102:2888:3888
-server.4= 10.18.8.103:2888:3888
-server.4:10.18.8.103:5888:6888:observer #告诉集群10.18.8.103是observer模式
+server.1= 192.168.1.148:2888:3888
+server.2= 192.168.1.149:2888:3888
+server.3= 192.168.1.150:2888:3888
+server.4= 192.168.1.151:2888:3888:observer
+ #告诉集群192.168.1.151是observer模式
 
 ```
-> 10.18.8.103的observer配置为：
+- ###### 192.168.1.151的observer配置为：
 ```
 tickTime=2000
 initLimit=10
@@ -104,13 +102,12 @@ clientPort=2181
 autopurge.snapRetainCount=500 #设置保留多少个snapshot
 autopurge.purgeInterval=24 #设置多少小时清理一次
 
-peerType=observer#观察者observer需要增加的配置 如果10.18.8.103这台机器是observer模式的话
+peerType=observer#观察者observer需要增加的配置 如果192.168.1.151这台机器是observer模式的话
 
-server.1= 10.18.8.100:2888:3888
-server.2= 10.18.8.101:2888:3888
-server.3= 10.18.8.102:2888:3888
-server.4= 10.18.8.103:2888:3888
-server.4:10.18.8.103:5888:6888:observer
+server.1= 192.168.1.148:2888:3888
+server.2= 192.168.1.149:2888:3888
+server.3= 192.168.1.150:2888:3888
+server.4= 192.168.1.151:2888:3888:observer
 ```
   
   
@@ -130,20 +127,20 @@ server.4:10.18.8.103:5888:6888:observer
 
 这个文件里面有一个数据就是A的值（该A就是zoo.cfg文件中server.A=B:C:D中的A）,在zoo.cfg文件中配置的dataDir路径中创建myid文件。
 
-#在10.18.8.100服务器上面创建myid文件，并设置值为1，同时与zoo.cfg文件里面的server.1保持一致，如下
+#在192.168.1.148服务器上面创建myid文件，并设置值为1，同时与zoo.cfg文件里面的server.1保持一致，如下
 ```
 echo "1" > /opt/zookeeper/data/myid
 ```
-在10.18.8.101服务器上面创建myid文件，并设置值为2，同时与zoo.cfg文件里面的server.2保持一致，如下
+在192.168.1.149服务器上面创建myid文件，并设置值为2，同时与zoo.cfg文件里面的server.2保持一致，如下
 ```
 echo "2" > /opt/zookeeper/data/myid
 ```
-在10.18.8.102服务器上面创建myid文件，并设置值为3，同时与zoo.cfg文件里面的server.3保持一致，如下
+在192.168.1.150服务器上面创建myid文件，并设置值为3，同时与zoo.cfg文件里面的server.3保持一致，如下
 ```
 echo "3" > /opt/zookeeper/data/myid
 ```
 
-如果需要observer 在10.18.8.103服务器上面创建myid文件，并设置值为4，同时与zoo.cfg文件里面的server.4保持一致，如下
+如果需要observer 在192.168.1.151服务器上面创建myid文件，并设置值为4，同时与zoo.cfg文件里面的server.4保持一致，如下
 ```
 echo "4" > /opt/zookeeper/data/myid
 ```

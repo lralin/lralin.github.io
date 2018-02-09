@@ -1,7 +1,5 @@
 ---
 title: Github+Hexo 个人博客搭建教程
-date: 2018-02-01
-tags: github
 ---
 ##### 1.下载Node.js安装文件：
 [Window Installer 64-bit](https://nodejs.org/dist/v4.2.3/node-v4.2.3-x64.msi)<br/>
@@ -145,4 +143,8 @@ $ git push origin master:Hexo-Blog
 **换一台电脑之后处理Hexo**
 1. 使用`git clone git@github.com:username/username.github.io.git`拷贝仓库（分支为Hexo-blog）；
 2. 在本地新拷贝的http://lralin.github.io文件夹下通过Git bash依次执行下列指令：`npm install hexo`、`npm install`、`npm install hexo-deployer-git --save`（记得，不需要`hexo init`这条指令）。  
----
+ 
+**添加网易云音乐**
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86   
+    src="http://music.163.com/outchain/player?type=2&id=25706282&auto=0&height=66">  
+</iframe>  
