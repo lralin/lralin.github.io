@@ -705,8 +705,12 @@ canvas_lines: false
 # canvas_sphere
 canvas_sphere: false
 
-# canvas_sphere
+# canvas_snow
 canvas_snow: true
+
+# canvas_snow
+canvas_bubble: false
+
 
 # Only fit scheme Pisces
 # Canvas-ribbon

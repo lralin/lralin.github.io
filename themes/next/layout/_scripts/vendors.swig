@@ -40,6 +40,10 @@
   {% set js_vendors.three  = 'three/three.min.js' %}
   {% set js_vendors.canvas_snow  = 'three/canvas_snow.min.js' %}
 {% endif %}
+{% if theme.canvas_bubble %}
+  {% set js_vendors.three  = 'three/three.min.js' %}
+  {% set js_vendors.canvas_bubble  = 'three/canvas_bubble.min.js' %}
+{% endif %}
 
 {% if theme.canvas_ribbon.enable and theme.scheme === 'Pisces'%}
   {% set js_vendors.canvas_ribbon  = 'canvas-ribbon/canvas-ribbon.js' %}
