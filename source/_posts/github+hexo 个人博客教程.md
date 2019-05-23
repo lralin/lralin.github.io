@@ -1,6 +1,7 @@
 ---
 title: Github+Hexo 个人博客搭建教程
 date: 2018-02-01
+updated: 2019/05/23 12:50:25
 tags: github
 ---
 ##### 1.下载Node.js安装文件：
@@ -33,13 +34,13 @@ sudo yum install gcc-c++ make
 ##### 2.安装git
 ##### 3.安装Hexo
 在自己认为合适的地方创建一个文件夹，这里我以E：/hexo 为例子讲解，首先在E盘目录下创建Hexo文件夹，并在命令行的窗口进入到该目录
-![image](https://github.com/lralin/TheFirst/raw/master/markdown_img/hexo-cd_image.jpg)  
+![image](https://raw.githubusercontent.com/lralin/TheFirst/master/markdown_img/hexo-cd_image.jpg)  
 在命令行输入：
 ```
 npm install hexo-cli -g
 ```
 然后你将看到：  
-![image](https://github.com/lralin/TheFirst/raw/master/markdown_img/hexo-cli_image.jpg)
+![image](https://raw.githubusercontent.com/lralin/TheFirst/master/markdown_img/hexo-cli_image.jpg)
 可能你会看到一个WARN，但是不用担心，这不会影响你的正常使用。 
 在命令行中输入：
 ```
@@ -47,7 +48,7 @@ hexo -v
 ```
 如果你看到了如图文字，则说明已经安装成功了。
 
-![image](https://github.com/lralin/TheFirst/raw/master/markdown_img/hexo-success_image.jpg)
+![image](https://raw.githubusercontent.com/lralin/TheFirst/master/markdown_img/hexo-success_image.jpg)
 
 ##### 4.hexo的相关配置
 **初始化Hexo**  
@@ -61,7 +62,7 @@ cd blog
 # 首次操作可以不执行，界面已经编译好了。
 hexo g
 ```
-![image](https://github.com/lralin/TheFirst/raw/master/markdown_img/hexo-g_image.jpg)  
+![image](https://raw.githubusercontent.com/lralin/TheFirst/master/markdown_img/hexo-g_image.jpg)  
 然后输入：
 ```
 hexo s
@@ -75,9 +76,9 @@ INFO Hexo is running at http://0.0.0.0:4000/. Press Ctrl+C to stop.
 ##### 5.配置Github
 
 **Git 免密**  
-（1）打开git bash，在用户主目录下运行：`ssh-keygen -t rsa -C "youremail@example.com"`  把其中的邮件地址换成自己的邮件地址，然后一路回车  
-（2）最后完成后，会在用户主目录下生成.ssh目录，执行`cd ~/.ssh/`，里面有id_rsa和id_rsa.pub两个文件，这两个就是SSH key密钥对，id_rsa是私钥，千万不能泄露出去，id_rsa.pub是公钥，可以放心地告诉任何人,`cat id_rsa.pub`。  
-（3）登陆GitHub，打开「Settings」->「SSH and GPG keys」，然后点击「new SSH key」，填上Title，在Key文本框里粘贴公钥id_rsa.pub文件的内容（千万不要粘贴成私钥了！），最后点击「Add SSH Key」，你就应该看到已经添加的Key。 
+1. 打开git bash，cd ~/.ssh，查看是否已经存在公私钥了。如果不存在则运行：`ssh-keygen -t rsa -C "youremail@example.com"`  把其中的邮件地址换成自己的邮件地址，然后一路回车  
+2. 最后完成后，会在用户主目录下生成.ssh目录，执行`cd ~/.ssh/`，里面有id_rsa和id_rsa.pub两个文件，这两个就是SSH key密钥对，id_rsa是私钥，千万不能泄露出去，id_rsa.pub是公钥，可以放心地告诉任何人,使用命令`clip < ~/.ssh/id_rsa.pub`直接复制到粘贴板或者`cat id_rsa.pub`。  
+3. 登陆GitHub，打开「Settings」->「SSH and GPG keys」，然后点击「new SSH key」，填上Title，在Key文本框里粘贴公钥id_rsa.pub文件的内容（千万不要粘贴成私钥了！），最后点击「Add SSH Key」，你就应该看到已经添加的Key。 
 
 **hexo 部署编译文件到github**  
 修改_config.yml文件，来建立关联，命令：
@@ -145,5 +146,5 @@ $ git push origin master:Hexo-Blog
 **换一台电脑之后处理Hexo**
 1. 使用`git clone git@github.com:username/username.github.io.git`拷贝仓库（分支为Hexo-blog）；
 2. 切换分支`git checkout Hexo-Blog`。
-3. 在本地新拷贝的http://lralin.github.io文件夹下通过Git bash依次执行下列指令：`npm install hexo`、`npm install`、`npm install hexo-deployer-git --save`（记得，不需要`hexo init`这条指令）。  
+3. 在本地新拷贝的`http://lralin.github.io`文件夹下通过Git bash依次执行下列指令：`npm install -g hexo-cli`、`npm install`、`hexo clean`、`hexo g -d`、`npm install hexo-deployer-git --save`（记得，不需要`hexo init`这条指令，部署的时候github必须已经免密）。  
 ---
