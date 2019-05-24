@@ -19,6 +19,7 @@ updated: 2019/05/23 12:50:25
 6. 提交svn，判断是提交整个文件夹，还是只需提交一个日报文件。
 7. 结束流程。
 ##### 完整的脚本
+脚本需要用电脑自动编辑器另存为ANSI编码格式，不然中文会乱码。
 ```dos
 @echo off
 :: 改成自己的名字
@@ -28,6 +29,7 @@ set fileName=XXXXX_技术部_工作周报_%userName%_
 rem 获取当前脚本目录
 set currentPath=%~dp0
 echo 当前脚本目录 : %currentPath%
+rem 切换到当前脚本目录，防止脚本不是在当前目录被执行的。
 cd /d %currentPath%
 
 rem 获取昨天日期20190521
