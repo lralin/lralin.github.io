@@ -12,7 +12,7 @@ tags:
 mock测试就是在测试过程中，对于某些不容易构造或者不容易获取的对象，用一个虚拟的对象来创建以便测试的测试方法。而在java中mock工具有很多例如Mockito、EasyMock、PowerMock，我们这里主要介绍Mockito。
 
 ##### 示例
-
+<!--more-->
 1. pom包：
    ```xml
    <dependency>
