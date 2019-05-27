@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/maozi.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/maozi.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/maozi.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="zookeeper,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="一、Zookeeper原理简介1. Zookeeper设计目的 最终一致性：client不论连接到那个Server，展示给它的都是同一个视图。    可靠性：具有简单、健壮、良好的性能、如果消息m被到一台服务器接收，那么消息m将被所有服务器接收。  实时性：Zookeeper保证客户端将在一个时间间隔范围内获得服务器的更新信息，或者服务器失效的信息。但由于网络延时等原因，Zookeeper不能保证">
+<meta name="keywords" content="zookeeper">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Zookeeper 集群">
+<meta property="og:url" content="http://yoursite.com/2018/02/03/Zookeeper observer模式 集群搭建教程/index.html">
+<meta property="og:site_name" content="lralin">
+<meta property="og:description" content="一、Zookeeper原理简介1. Zookeeper设计目的 最终一致性：client不论连接到那个Server，展示给它的都是同一个视图。    可靠性：具有简单、健壮、良好的性能、如果消息m被到一台服务器接收，那么消息m将被所有服务器接收。  实时性：Zookeeper保证客户端将在一个时间间隔范围内获得服务器的更新信息，或者服务器失效的信息。但由于网络延时等原因，Zookeeper不能保证">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-05-23T04:50:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Zookeeper 集群">
+<meta name="twitter:description" content="一、Zookeeper原理简介1. Zookeeper设计目的 最终一致性：client不论连接到那个Server，展示给它的都是同一个视图。    可靠性：具有简单、健壮、良好的性能、如果消息m被到一台服务器接收，那么消息m将被所有服务器接收。  实时性：Zookeeper保证客户端将在一个时间间隔范围内获得服务器的更新信息，或者服务器失效的信息。但由于网络延时等原因，Zookeeper不能保证">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/02/03/Zookeeper observer模式 集群搭建教程/">
+
+
+
+
+
+  <title>Zookeeper 集群 | lralin</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">lralin</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/03/Zookeeper observer模式 集群搭建教程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="两个木">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/20180124140140.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lralin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Zookeeper 集群</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-03T17:29:25+08:00">
+                2018-02-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="一、Zookeeper原理简介"><a href="#一、Zookeeper原理简介" class="headerlink" title="一、Zookeeper原理简介"></a>一、Zookeeper原理简介</h4><h5 id="1-Zookeeper设计目的"><a href="#1-Zookeeper设计目的" class="headerlink" title="1. Zookeeper设计目的"></a>1. Zookeeper设计目的</h5><ul>
+<li><p>最终一致性：client不论连接到那个Server，展示给它的都是同一个视图。  </p>
+</li>
+<li><p>可靠性：具有简单、健壮、良好的性能、如果消息m被到一台服务器接收，那么消息m将被所有服务器接收。</p>
+</li>
+<li>实时性：Zookeeper保证客户端将在一个时间间隔范围内获得服务器的更新信息，或者服务器失效的信息。但由于网络延时等原因，Zookeeper不能保证两个客户端能同时得到刚更新的数据，如果需要最新数据，应该在读数据之前调用sync()接口。  <a id="more"></a></li>
+<li><p>等待无关（wait-free）：慢的或者失效的client不得干预快速的client的请求，使得每个client都能有效的等待。  </p>
+</li>
+<li><p>原子性：更新只能成功或者失败，没有中间状态。  </p>
+</li>
+<li><p>顺序性：包括全局有序和偏序两种：全局有序是指如果在一台服务器上消息a在消息b前发布，则在所有Server上消息a都将在消息b前被发布；偏序是指如果一个消息b在消息a后被同一个发送者发布，a必将排在b前面。</p>
+</li>
+</ul>
+<h5 id="2-Zookeeper工作原理"><a href="#2-Zookeeper工作原理" class="headerlink" title="2. Zookeeper工作原理"></a>2. Zookeeper工作原理</h5><ul>
+<li><p>在zookeeper的集群中，各个节点共有下面3种角色和4种状态：<br>角色：leader,follower,observer<br>状态：leading,following,observing,looking</p>
+</li>
+<li><p>Zookeeper的核心是原子广播，这个机制保证了各个Server之间的同步。实现这个机制的协议叫做Zab协议（ZooKeeper Atomic Broadcast protocol）。Zab协议有两种模式，它们分别是恢复模式（Recovery选主）和广播模式（Broadcast同步）。当服务启动或者在领导者崩溃后，Zab就进入了恢复模式，当领导者被选举出来，且大多数Server完成了和leader的状态同步以后，恢复模式就结束了。状态同步保证了leader和Server具有相同的系统状态。</p>
+</li>
+<li><p>为了保证事务的顺序一致性，zookeeper采用了递增的事务id号（zxid）来标识事务。所有的提议（proposal）都在被提出的时候加上了zxid。实现中zxid是一个64位的数字，它高32位是epoch用来标识leader关系是否改变，每次一个leader被选出来，它都会有一个新的epoch，标识当前属于那个leader的统治时期。低32位用于递增计数。</p>
+</li>
+<li><p>每个Server在工作过程中有4种状态：<br><strong><em>LOOKING</em></strong>：当前Server不知道leader是谁，正在搜寻。<br><strong><em>LEADING</em></strong>：当前Server即为选举出来的leader。<br><strong><em>FOLLOWING</em></strong>：leader已经选举出来，当前Server与之同步。<br><strong><em>OBSERVING</em></strong>：observer的行为在大多数情况下与follower完全一致，但是他们不参加选举和投票，而仅仅接受(observing)选举和投票的结果。  </p>
+<h4 id="二、Zookeeper安装"><a href="#二、Zookeeper安装" class="headerlink" title="二、Zookeeper安装"></a>二、Zookeeper安装</h4><blockquote>
+<p>Zookeeper链接：<a href="http://zookeeper.apache.org/" target="_blank" rel="noopener">http://zookeeper.apache.org/</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">wget http://mirrors.cnnic.cn/apache/zookeeper/zookeeper-3.4.8/zookeeper-3.4.8.tar.gz -P /usr/local/src/</span><br><span class="line">tar zxvf zookeeper-3.4.8.tar.gz -C /opt</span><br><span class="line">cd /opt &amp;&amp; mv zookeeper-3.4.8 zookeeper</span><br><span class="line">cd zookeeper</span><br><span class="line">cp conf/zoo_sample.cfg conf/zoo.cfg</span><br><span class="line"></span><br><span class="line">#把zookeeper加入到环境变量(为验证可以不加)</span><br><span class="line">echo -e &quot;# append zk_env\nexport PATH=$PATH:/opt/zookeeper/bin&quot; &gt;&gt; /etc/profile</span><br></pre></td></tr></table></figure>
+</blockquote>
+</li>
+</ul>
+<h4 id="三、Zookeeper集群配置"><a href="#三、Zookeeper集群配置" class="headerlink" title="三、Zookeeper集群配置"></a>三、Zookeeper集群配置</h4><blockquote>
+<h6 id="等集群的所有机器启动之后再查看zookeeper的状态。"><a href="#等集群的所有机器启动之后再查看zookeeper的状态。" class="headerlink" title="等集群的所有机器启动之后再查看zookeeper的状态。"></a>等集群的所有机器启动之后再查看zookeeper的状态。</h6><h5 id="1-Zookeeper配置文件修改"><a href="#1-Zookeeper配置文件修改" class="headerlink" title="1. Zookeeper配置文件修改"></a>1. Zookeeper配置文件修改</h5><h6 id="修改过后的配置文件zoo-cfg，如下："><a href="#修改过后的配置文件zoo-cfg，如下：" class="headerlink" title="修改过后的配置文件zoo.cfg，如下："></a>修改过后的配置文件zoo.cfg，如下：</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">egrep -v &quot;^#|^$&quot; zoo.cfg</span><br></pre></td></tr></table></figure>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">tickTime=2000</span><br><span class="line">initLimit=10</span><br><span class="line">syncLimit=5</span><br><span class="line">dataLogDir=/opt/zookeeper/logs</span><br><span class="line">dataDir=/opt/zookeeper/data</span><br><span class="line">clientPort=2181</span><br><span class="line">autopurge.snapRetainCount=500 #设置保留多少个snapshot</span><br><span class="line">autopurge.purgeInterval=24 #设置多少小时清理一次</span><br><span class="line">server.1= 192.168.1.148:2888:3888</span><br><span class="line">server.2= 192.168.1.149:2888:3888</span><br><span class="line">server.3= 192.168.1.150:2888:3888</span><br></pre></td></tr></table></figure>
+<h6 id="创建相关目录，三台节点都需要"><a href="#创建相关目录，三台节点都需要" class="headerlink" title="创建相关目录，三台节点都需要"></a>创建相关目录，三台节点都需要</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /opt/zookeeper/&#123;logs,data&#125;</span><br></pre></td></tr></table></figure>
+<h6 id="其余zookeeper节点安装完成之后，同步配置文件zoo-cfg。"><a href="#其余zookeeper节点安装完成之后，同步配置文件zoo-cfg。" class="headerlink" title="其余zookeeper节点安装完成之后，同步配置文件zoo.cfg。"></a>其余zookeeper节点安装完成之后，同步配置文件zoo.cfg。</h6><h5 id="如果要增加一台observer，上面的配置忽略，应按下面的配置。"><a href="#如果要增加一台observer，上面的配置忽略，应按下面的配置。" class="headerlink" title="如果要增加一台observer，上面的配置忽略，应按下面的配置。"></a><em>如果要增加一台observer，上面的配置忽略，应按下面的配置。</em></h5><ul>
+<li><h6 id="不是observer的三台zoo-cfg的配置为："><a href="#不是observer的三台zoo-cfg的配置为：" class="headerlink" title="不是observer的三台zoo.cfg的配置为："></a>不是observer的三台zoo.cfg的配置为：</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">tickTime=2000</span><br><span class="line">initLimit=10</span><br><span class="line">syncLimit=5</span><br><span class="line">dataLogDir=/opt/zookeeper/logs</span><br><span class="line">dataDir=/opt/zookeeper/data</span><br><span class="line">clientPort=2181</span><br><span class="line"></span><br><span class="line">autopurge.snapRetainCount=500 #设置保留多少个snapshot</span><br><span class="line"></span><br><span class="line">autopurge.purgeInterval=24 #设置多少小时清理一次</span><br><span class="line"></span><br><span class="line">server.1= 192.168.1.148:2888:3888</span><br><span class="line">server.2= 192.168.1.149:2888:3888</span><br><span class="line">server.3= 192.168.1.150:2888:3888</span><br><span class="line">server.4= 192.168.1.151:2888:3888:observer</span><br><span class="line"> #告诉集群192.168.1.151是observer模式</span><br></pre></td></tr></table></figure>
+</li>
+<li><h6 id="192-168-1-151的observer配置为："><a href="#192-168-1-151的observer配置为：" class="headerlink" title="192.168.1.151的observer配置为："></a>192.168.1.151的observer配置为：</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">tickTime=2000</span><br><span class="line">initLimit=10</span><br><span class="line">syncLimit=5</span><br><span class="line">dataLogDir=/opt/zookeeper/logs</span><br><span class="line">dataDir=/opt/zookeeper/data</span><br><span class="line">clientPort=2181</span><br><span class="line">autopurge.snapRetainCount=500 #设置保留多少个snapshot</span><br><span class="line">autopurge.purgeInterval=24 #设置多少小时清理一次</span><br><span class="line"></span><br><span class="line">peerType=observer#观察者observer需要增加的配置 如果192.168.1.151这台机器是observer模式的话</span><br><span class="line"></span><br><span class="line">server.1= 192.168.1.148:2888:3888</span><br><span class="line">server.2= 192.168.1.149:2888:3888</span><br><span class="line">server.3= 192.168.1.150:2888:3888</span><br><span class="line">server.4= 192.168.1.151:2888:3888:observer</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h5 id="2-配置参数说明"><a href="#2-配置参数说明" class="headerlink" title="2. 配置参数说明"></a>2. 配置参数说明</h5><ul>
+<li><strong><em>autopurge.snapRetainCount，autopurge.purgeInterval：</em></strong><br>客户端在与zookeeper交互过程中会产生非常多的日志，而且zookeeper也会将内存中的数据作为snapshot保存下来，这些数据是不会被自动删除的，这样磁盘中这样的数据就会越来越多。不过可以通过这两个参数来设置，让zookeeper自动删除数据。autopurge.purgeInterval就是设置多少小时清理一次。而autopurge.snapRetainCount是设置保留多少个snapshot，之前的则删除。</li>
+<li><strong><em>tickTime</em></strong>这个时间是作为zookeeper服务器之间或客户端与服务器之间维持心跳的时间间隔,也就是说每个tickTime时间就会发送一个心跳。</li>
+<li><strong><em>initLimit</em></strong>这个配置项是用来配置zookeeper接受客户端（这里所说的客户端不是用户连接zookeeper服务器的客户端,而是zookeeper服务器集群中连接到leader的follower 服务器）初始化连接时最长能忍受多少个心跳时间间隔数。<br>当已经超过10个心跳的时间（也就是tickTime）长度后 zookeeper 服务器还没有收到客户端的返回信息,那么表明这个客户端连接失败。总的时间长度就是 10*2000=20秒。</li>
+<li><strong><em>syncLimit</em></strong>这个配置项标识leader与follower之间发送消息,请求和应答时间长度,最长不能超过多少个tickTime的时间长度,总的时间长度就是5*2000=10秒。</li>
+<li><strong><em>dataDir</em></strong>顾名思义就是zookeeper保存数据的目录,默认情况下zookeeper将写数据的日志文件也保存在这个目录里；</li>
+<li><strong><em>clientPort</em></strong>这个端口就是客户端连接Zookeeper服务器的端口,Zookeeper会监听这个端口接受客户端的访问请求；</li>
+<li><strong><em>server.A=B:C:D</em></strong>中的A是一个数字,表示这个是第几号服务器,B是这个服务器的IP地址，C第一个端口用来集群成员的信息交换,表示这个服务器与集群中的leader服务器交换信息的端口，D是在leader挂掉时专门用来进行选举leader所用的端口。<h5 id="3-3-创建ServerID标识"><a href="#3-3-创建ServerID标识" class="headerlink" title="3.3 创建ServerID标识"></a>3.3 创建ServerID标识</h5></li>
+</ul>
+<p>除了修改zoo.cfg配置文件外,zookeeper集群模式下还要配置一个myid文件,这个文件需要放在dataDir目录下。</p>
+<p>这个文件里面有一个数据就是A的值（该A就是zoo.cfg文件中server.A=B:C:D中的A）,在zoo.cfg文件中配置的dataDir路径中创建myid文件。</p>
+<p>#在192.168.1.148服务器上面创建myid文件，并设置值为1，同时与zoo.cfg文件里面的server.1保持一致，如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;1&quot; &gt; /opt/zookeeper/data/myid</span><br></pre></td></tr></table></figure></p>
+<p>在192.168.1.149服务器上面创建myid文件，并设置值为2，同时与zoo.cfg文件里面的server.2保持一致，如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;2&quot; &gt; /opt/zookeeper/data/myid</span><br></pre></td></tr></table></figure></p>
+<p>在192.168.1.150服务器上面创建myid文件，并设置值为3，同时与zoo.cfg文件里面的server.3保持一致，如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;3&quot; &gt; /opt/zookeeper/data/myid</span><br></pre></td></tr></table></figure></p>
+<p>如果需要observer 在192.168.1.151服务器上面创建myid文件，并设置值为4，同时与zoo.cfg文件里面的server.4保持一致，如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;4&quot; &gt; /opt/zookeeper/data/myid</span><br></pre></td></tr></table></figure></p>
+<p>到此，相关配置已完成  </p>
+<h4 id="四、Zookeeper集群查看"><a href="#四、Zookeeper集群查看" class="headerlink" title="四、Zookeeper集群查看"></a>四、Zookeeper集群查看</h4><h5 id="1-启动每个服务器上面的zookeeper节点："><a href="#1-启动每个服务器上面的zookeeper节点：" class="headerlink" title="1.启动每个服务器上面的zookeeper节点："></a>1.启动每个服务器上面的zookeeper节点：</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/opt/zookeeper/bin/zkServer.sh start</span><br></pre></td></tr></table></figure>
+<h5 id="2、启动完成之后查看每个节点的状态："><a href="#2、启动完成之后查看每个节点的状态：" class="headerlink" title="2、启动完成之后查看每个节点的状态："></a>2、启动完成之后查看每个节点的状态：</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">[root@server1 bin]# /opt/zookeeper/bin/zkServer.sh status</span><br><span class="line">JMX enabled by default</span><br><span class="line">Using config: /home/xlzx/otter/zookeeper/bin/../conf/zoo.cfg</span><br><span class="line">Mode: follower #显示follower表示从，显示leader表示主，显示observer表示观察者</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/zookeeper/" rel="tag"># zookeeper</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/01/github+hexo 个人博客教程/" rel="next" title="Github+Hexo 个人博客搭建教程">
+                <i class="fa fa-chevron-left"></i> Github+Hexo 个人博客搭建教程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/02/06/搭建Shadowsocks server/" rel="prev" title="搭建Shadowsocks server">
+                搭建Shadowsocks server <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/20180124140140.jpg" alt="两个木">
+            
+              <p class="site-author-name" itemprop="name">两个木</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#一、Zookeeper原理简介"><span class="nav-number">1.</span> <span class="nav-text">一、Zookeeper原理简介</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-Zookeeper设计目的"><span class="nav-number">1.1.</span> <span class="nav-text">1. Zookeeper设计目的</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-Zookeeper工作原理"><span class="nav-number">1.2.</span> <span class="nav-text">2. Zookeeper工作原理</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二、Zookeeper安装"><span class="nav-number">2.</span> <span class="nav-text">二、Zookeeper安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#三、Zookeeper集群配置"><span class="nav-number">3.</span> <span class="nav-text">三、Zookeeper集群配置</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#等集群的所有机器启动之后再查看zookeeper的状态。"><span class="nav-number">3.0.1.</span> <span class="nav-text">等集群的所有机器启动之后再查看zookeeper的状态。</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-Zookeeper配置文件修改"><span class="nav-number">3.1.</span> <span class="nav-text">1. Zookeeper配置文件修改</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#修改过后的配置文件zoo-cfg，如下："><span class="nav-number">3.1.1.</span> <span class="nav-text">修改过后的配置文件zoo.cfg，如下：</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#创建相关目录，三台节点都需要"><span class="nav-number">3.1.2.</span> <span class="nav-text">创建相关目录，三台节点都需要</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#其余zookeeper节点安装完成之后，同步配置文件zoo-cfg。"><span class="nav-number">3.1.3.</span> <span class="nav-text">其余zookeeper节点安装完成之后，同步配置文件zoo.cfg。</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#如果要增加一台observer，上面的配置忽略，应按下面的配置。"><span class="nav-number">3.2.</span> <span class="nav-text">如果要增加一台observer，上面的配置忽略，应按下面的配置。</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#不是observer的三台zoo-cfg的配置为："><span class="nav-number">3.2.1.</span> <span class="nav-text">不是observer的三台zoo.cfg的配置为：</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#192-168-1-151的observer配置为："><span class="nav-number">3.2.2.</span> <span class="nav-text">192.168.1.151的observer配置为：</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-配置参数说明"><span class="nav-number">3.3.</span> <span class="nav-text">2. 配置参数说明</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-3-创建ServerID标识"><span class="nav-number">3.4.</span> <span class="nav-text">3.3 创建ServerID标识</span></a></li></ol><li class="nav-item nav-level-4"><a class="nav-link" href="#四、Zookeeper集群查看"><span class="nav-number">4.</span> <span class="nav-text">四、Zookeeper集群查看</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-启动每个服务器上面的zookeeper节点："><span class="nav-number">4.1.</span> <span class="nav-text">1.启动每个服务器上面的zookeeper节点：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2、启动完成之后查看每个节点的状态："><span class="nav-number">4.2.</span> <span class="nav-text">2、启动完成之后查看每个节点的状态：</span></a></li></ol></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">两个木</span>
+
+  
+</div>
+
+
+	<div class="powered-by">越努力越幸运</div>
+  <!--<div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>-->
+
+
+<!--
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+-->
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+<!-- 自定义背景 -->
+
+  
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_snow.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

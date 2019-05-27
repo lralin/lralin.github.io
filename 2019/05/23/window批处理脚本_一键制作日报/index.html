@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/maozi.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/maozi.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/maozi.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="window 批处理命令背景公司规定每天都要写日报，本来写日报就已经很烦了，可在写日报之前，还要一堆svn的操作就更烦了，所以就想着怎么能减少一点劳力呢。由于之前用linux写过自动化打包脚本，自然而然的就想到了window批处理命令。网上一查还真的可以各种操作。 代码思路 首先更新svn。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一键制作日报">
+<meta property="og:url" content="http://yoursite.com/2019/05/23/window批处理脚本_一键制作日报/index.html">
+<meta property="og:site_name" content="lralin">
+<meta property="og:description" content="window 批处理命令背景公司规定每天都要写日报，本来写日报就已经很烦了，可在写日报之前，还要一堆svn的操作就更烦了，所以就想着怎么能减少一点劳力呢。由于之前用linux写过自动化打包脚本，自然而然的就想到了window批处理命令。网上一查还真的可以各种操作。 代码思路 首先更新svn。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://raw.githubusercontent.com/lralin/TheFirst/master/markdown_img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%AE%A1%E7%90%86-%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1.jpg">
+<meta property="og:updated_time" content="2019-05-23T04:50:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一键制作日报">
+<meta name="twitter:description" content="window 批处理命令背景公司规定每天都要写日报，本来写日报就已经很烦了，可在写日报之前，还要一堆svn的操作就更烦了，所以就想着怎么能减少一点劳力呢。由于之前用linux写过自动化打包脚本，自然而然的就想到了window批处理命令。网上一查还真的可以各种操作。 代码思路 首先更新svn。">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/lralin/TheFirst/master/markdown_img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%AE%A1%E7%90%86-%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/05/23/window批处理脚本_一键制作日报/">
+
+
+
+
+
+  <title>一键制作日报 | lralin</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">lralin</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/23/window批处理脚本_一键制作日报/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="两个木">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/20180124140140.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lralin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">一键制作日报</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-23T12:50:25+08:00">
+                2019-05-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="window-批处理命令"><a href="#window-批处理命令" class="headerlink" title="window 批处理命令"></a>window 批处理命令</h4><h5 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h5><p>公司规定每天都要写日报，本来写日报就已经很烦了，可在写日报之前，还要一堆svn的操作就更烦了，所以就想着怎么能减少一点劳力呢。由于之前用linux写过自动化打包脚本，自然而然的就想到了window批处理命令。网上一查还真的可以各种操作。</p>
+<h5 id="代码思路"><a href="#代码思路" class="headerlink" title="代码思路"></a>代码思路</h5><ol>
+<li>首先更新svn。<a id="more"></a></li>
+<li>查看当前日期的文件夹是否已经存在了，不存在就创建一个文件夹。</li>
+<li>判断当前日期中是否已经存在日报，存在的话直接提交，并跳转到结束。</li>
+<li>不存在就复制昨天的日报到今天的日报文件夹中并且重命名。并且打开日报。</li>
+<li>命令行暂停，等待填写日报。</li>
+<li>提交svn，判断是提交整个文件夹，还是只需提交一个日报文件。</li>
+<li>结束流程。<h5 id="完整的脚本"><a href="#完整的脚本" class="headerlink" title="完整的脚本"></a>完整的脚本</h5>脚本需要用电脑自动编辑器另存为ANSI编码格式，不然中文会乱码。<figure class="highlight dos"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line">:: 改成自己的名字</span><br><span class="line"><span class="built_in">set</span> userName=lralin</span><br><span class="line"><span class="built_in">set</span> fileName=XXXXX_技术部_工作周报_<span class="variable">%userName%</span>_</span><br><span class="line"></span><br><span class="line"><span class="comment">rem 获取当前脚本目录</span></span><br><span class="line"><span class="built_in">set</span> currentPath=%~dp0</span><br><span class="line"><span class="built_in">echo</span> 当前脚本目录 : <span class="variable">%currentPath%</span></span><br><span class="line"><span class="comment">rem 切换到当前脚本目录，防止脚本不是在当前目录被执行的。</span></span><br><span class="line"><span class="built_in">cd</span> /d <span class="variable">%currentPath%</span></span><br><span class="line"></span><br><span class="line"><span class="comment">rem 获取昨天日期20190521</span></span><br><span class="line"><span class="built_in">set</span> YE=<span class="variable">%date:~0,4%</span></span><br><span class="line"><span class="built_in">set</span> MO=<span class="variable">%date:~5,2%</span></span><br><span class="line"><span class="built_in">set</span> DA=<span class="variable">%date:~8,2%</span></span><br><span class="line"><span class="built_in">set</span> DG=<span class="number">1</span></span><br><span class="line"><span class="built_in">set</span>/a vY1=<span class="variable">%YE%</span> %% <span class="number">400</span></span><br><span class="line"><span class="built_in">set</span>/a vY2=<span class="variable">%YE%</span> %% <span class="number">4</span></span><br><span class="line"><span class="built_in">set</span>/a vY3=<span class="variable">%YE%</span> %% <span class="number">100</span></span><br><span class="line"><span class="keyword">if</span> <span class="variable">%vY1%</span>==<span class="number">0</span> (<span class="built_in">set</span> var=true) <span class="keyword">else</span> (<span class="keyword">if</span> <span class="variable">%vY2%</span>==<span class="number">0</span> (<span class="keyword">if</span> <span class="variable">%vY3%</span>==<span class="number">0</span> (<span class="built_in">set</span> var=false) <span class="keyword">else</span> (<span class="built_in">set</span> var=true)) <span class="keyword">else</span> (<span class="built_in">set</span> var=false))</span><br><span class="line"><span class="built_in">set</span> LY=<span class="variable">%YE%</span></span><br><span class="line"><span class="built_in">set</span> LM=<span class="variable">%MO%</span></span><br><span class="line"><span class="keyword">if</span> <span class="variable">%MO:~0,1%</span>==<span class="number">0</span> (<span class="built_in">set</span> MO=<span class="variable">%MO:~1,1%</span>)</span><br><span class="line"><span class="keyword">if</span> <span class="variable">%DA:~0,1%</span>==<span class="number">0</span> (<span class="built_in">set</span> DA=<span class="variable">%DA:~1,1%</span>)</span><br><span class="line"><span class="keyword">if</span> <span class="variable">%DA%</span> <span class="keyword">GTR</span> <span class="variable">%DG%</span> (<span class="built_in">set</span>/a LD=<span class="variable">%DA%</span>-<span class="variable">%DG%</span>) <span class="keyword">else</span> (</span><br><span class="line"><span class="keyword">if</span> <span class="variable">%MO%</span>==<span class="number">1</span> (<span class="built_in">set</span>/a LY=<span class="variable">%YE%</span>-<span class="number">1</span>) &amp; (<span class="built_in">set</span>/a LM=<span class="number">12</span>+<span class="variable">%MO%</span>-<span class="number">1</span>) &amp; (<span class="built_in">set</span>/a LD=<span class="number">31</span>+<span class="variable">%DA%</span>-<span class="variable">%DG%</span>) <span class="keyword">else</span> (</span><br><span class="line"><span class="built_in">set</span>/a LM=<span class="variable">%MO%</span>-<span class="number">1</span></span><br><span class="line"><span class="keyword">if</span> <span class="variable">%MO%</span>==<span class="number">3</span> (<span class="keyword">if</span> <span class="variable">%var%</span>==false (<span class="built_in">set</span>/a LD=<span class="number">28</span>+<span class="variable">%DA%</span>-<span class="variable">%DG%</span>) <span class="keyword">else</span> (<span class="built_in">set</span>/a LD=<span class="number">29</span>+<span class="variable">%DA%</span>-<span class="variable">%DG%</span>))</span><br><span class="line"><span class="keyword">for</span> <span class="variable">%%a</span> <span class="keyword">in</span> (<span class="number">2</span> <span class="number">4</span> <span class="number">6</span> <span class="number">8</span> <span class="number">9</span> <span class="number">11</span>) <span class="keyword">do</span> (<span class="keyword">if</span> "<span class="variable">%MO%</span>"=="<span class="variable">%%a</span>" (<span class="built_in">set</span>/a LD=<span class="number">31</span>+<span class="variable">%DA%</span>-<span class="variable">%DG%</span>))</span><br><span class="line"><span class="keyword">for</span> <span class="variable">%%b</span> <span class="keyword">in</span> (<span class="number">5</span> <span class="number">7</span> <span class="number">8</span> <span class="number">10</span> <span class="number">12</span>) <span class="keyword">do</span> (<span class="keyword">if</span> "<span class="variable">%MO%</span>"=="<span class="variable">%%b</span>" (<span class="built_in">set</span>/a LD=<span class="number">30</span>+<span class="variable">%DA%</span>-<span class="variable">%DG%</span>))))</span><br><span class="line"><span class="keyword">if</span> <span class="variable">%LM%</span> <span class="keyword">LSS</span> <span class="number">10</span> <span class="built_in">set</span> LM=<span class="number">0</span><span class="variable">%LM:~-1%</span></span><br><span class="line"><span class="keyword">if</span> <span class="variable">%LD%</span> <span class="keyword">LSS</span> <span class="number">10</span> <span class="built_in">set</span> LD=<span class="number">0</span><span class="variable">%LD:~-1%</span></span><br><span class="line"><span class="built_in">set</span> YESTERDAY_DATE=<span class="variable">%LY%</span><span class="variable">%LM%</span><span class="variable">%LD%</span></span><br><span class="line"></span><br><span class="line"><span class="comment">rem 获取当前日期20190522</span></span><br><span class="line"><span class="built_in">set</span> CURRENT_DATE=<span class="variable">%date:~0,4%</span><span class="variable">%date:~5,2%</span><span class="variable">%date:~8,2%</span></span><br><span class="line"></span><br><span class="line"><span class="comment">rem 获取昨天日期2019-05-21</span></span><br><span class="line"><span class="built_in">set</span> fileYesterday=<span class="variable">%LY%</span>-<span class="variable">%LM%</span>-<span class="variable">%LD%</span></span><br><span class="line"></span><br><span class="line"><span class="comment">rem 获取当前日期2019-05-22</span></span><br><span class="line"><span class="built_in">set</span> fileToday=<span class="variable">%date:~0,4%</span>-<span class="variable">%date:~5,2%</span>-<span class="variable">%date:~8,2%</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> 日报集</span><br><span class="line"><span class="comment">rem 1.首先更新svn</span></span><br><span class="line">svn update</span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> isExist=true </span><br><span class="line"><span class="built_in">echo</span> <span class="variable">%CURRENT_DATE%</span></span><br><span class="line"></span><br><span class="line"><span class="comment">rem 2.查看当前日期的文件夹是否已经存在了</span></span><br><span class="line"><span class="keyword">if</span> <span class="keyword">exist</span> <span class="variable">%CURRENT_DATE%</span> (</span><br><span class="line">	<span class="built_in">set</span> isExist=true</span><br><span class="line"><span class="comment">	rem cd %CURRENT_DATE%</span></span><br><span class="line">	<span class="built_in">echo</span> "当前日期的文件夹已经存在"</span><br><span class="line">) <span class="keyword">else</span> (</span><br><span class="line">	<span class="built_in">set</span> isExist=false</span><br><span class="line">	<span class="built_in">echo</span> "当前日期的文件夹不存在,创建文件夹"</span><br><span class="line">	<span class="built_in">mkdir</span> <span class="variable">%CURRENT_DATE%</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> oldFile=<span class="variable">%YESTERDAY_DATE%</span>\<span class="variable">%fileName%</span><span class="variable">%fileYesterday%</span>.xlsx</span><br><span class="line"><span class="built_in">set</span> newFile=<span class="variable">%CURRENT_DATE%</span>\<span class="variable">%fileName%</span><span class="variable">%fileToday%</span>.xlsx</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">%oldFile%</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">%newFile%</span></span><br><span class="line"><span class="comment">rem 3.复制昨天的日报到今天的日报文件夹中并且重命名</span></span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> <span class="keyword">exist</span> <span class="variable">%newFile%</span> (</span><br><span class="line">	<span class="built_in">echo</span> 今天的日报不存在复制昨天的日报</span><br><span class="line"><span class="comment">	rem 复制文件</span></span><br><span class="line">	<span class="built_in">copy</span> <span class="variable">%oldFile%</span> <span class="variable">%newFile%</span></span><br><span class="line"><span class="comment">	rem 打开文件</span></span><br><span class="line">	<span class="built_in">start</span> <span class="variable">%newFile%</span></span><br><span class="line">) <span class="keyword">else</span> (</span><br><span class="line">	<span class="built_in">echo</span> 今天的日报已经存在，直接进行svn自动上传。</span><br><span class="line">	<span class="built_in">cd</span> <span class="variable">%CURRENT_DATE%</span></span><br><span class="line">	svn commit -m "每日周报上传-<span class="variable">%userName%</span>"</span><br><span class="line">	<span class="keyword">goto</span> noparms</span><br><span class="line">)</span><br><span class="line"><span class="built_in">echo</span> 请填写今天的日报，修改完成后按下enter键进行svn自动上传。</span><br><span class="line"><span class="built_in">Pause</span></span><br><span class="line"><span class="built_in">echo</span> 确认文件是否已经关闭!</span><br><span class="line"><span class="built_in">Pause</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">%isExist%</span></span><br><span class="line"><span class="keyword">if</span> <span class="variable">%isExist%</span>==true (</span><br><span class="line">	<span class="built_in">echo</span> 文件夹已经存在，只需上传文件</span><br><span class="line">	<span class="built_in">cd</span> <span class="variable">%CURRENT_DATE%</span></span><br><span class="line">	svn add <span class="variable">%fileName%</span><span class="variable">%fileToday%</span>.xlsx</span><br><span class="line">	svn commit -m "每日周报上传-<span class="variable">%userName%</span>"</span><br><span class="line">) <span class="keyword">else</span> (</span><br><span class="line">	<span class="built_in">echo</span> 文件夹不存在，上传整个文件夹</span><br><span class="line">	svn add <span class="variable">%CURRENT_DATE%</span></span><br><span class="line">	svn commit -m "每日周报上传-<span class="variable">%userName%</span>"</span><br><span class="line">)</span><br><span class="line">:noparms</span><br><span class="line"><span class="built_in">echo</span> 命令执行结束！！！！！！</span><br><span class="line"><span class="built_in">Pause</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h5 id="windows设置定时任务"><a href="#windows设置定时任务" class="headerlink" title="windows设置定时任务"></a>windows设置定时任务</h5><ol>
+<li>右键计算机，选择【管理】，打开【计算机管理】界面；或者直接输入命令<code>compmgmt.msc</code>。</li>
+<li>选择【任务计划程序】&gt; 【任务计划程序】，点击创建基本任务。</li>
+<li>根据引导填写相应的信息创建基本任务<br><img src="https://raw.githubusercontent.com/lralin/TheFirst/master/markdown_img/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%AE%A1%E7%90%86-%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1.jpg" alt="Image text"></li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/06/搭建Shadowsocks server/" rel="next" title="搭建Shadowsocks server">
+                <i class="fa fa-chevron-left"></i> 搭建Shadowsocks server
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/05/24/mock模拟测试/" rel="prev" title="Mock模拟测试">
+                Mock模拟测试 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/20180124140140.jpg" alt="两个木">
+            
+              <p class="site-author-name" itemprop="name">两个木</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#window-批处理命令"><span class="nav-number">1.</span> <span class="nav-text">window 批处理命令</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#背景"><span class="nav-number">1.1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#代码思路"><span class="nav-number">1.2.</span> <span class="nav-text">代码思路</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#完整的脚本"><span class="nav-number">1.3.</span> <span class="nav-text">完整的脚本</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#windows设置定时任务"><span class="nav-number">1.4.</span> <span class="nav-text">windows设置定时任务</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">两个木</span>
+
+  
+</div>
+
+
+	<div class="powered-by">越努力越幸运</div>
+  <!--<div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>-->
+
+
+<!--
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+-->
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+<!-- 自定义背景 -->
+
+  
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_snow.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
