@@ -144,7 +144,11 @@ $ git push origin master:Hexo-Blog
 ```
 现在你会发现github你的博客仓库已经有了一个新分支Hexo-Blog，我们的备份工作完成。  
 **换一台电脑之后处理Hexo**
-1. 使用`git clone git@github.com:username/username.github.io.git`拷贝仓库（分支为Hexo-blog）；
-2. 切换分支`git checkout Hexo-Blog`。
-3. 在本地新拷贝的`http://lralin.github.io`文件夹下通过Git bash依次执行下列指令：`npm install -g hexo-cli`、`npm install`、`hexo clean`、`hexo g -d`、`npm install hexo-deployer-git --save`（记得，不需要`hexo init`这条指令，部署的时候github必须已经免密）。  
+1. 使用`git clone git@github.com:username/username.github.io.git`拷贝仓库；
+2. 切换分支`git checkout Hexo-Blog`，官方详细说明是这样的切换命令`git checkout -b Hexo-Blog origin/Hexo-Blog`。
+3. `cd username.github.io`进入项目目录
+4. 安装hexo客户端`npm install -g hexo-cli`,清理项目`hexo clean`，然后生成静态文件并部署`hexo g -d`
+5. 通过`git push origin Hexo-Blog`命令把文件上传到分支目录；(你也可以把本地分支推送到某个命名不同的远程分支：若想把远程分支叫作 awesomebranch，可以用 git push origin Hexo-Blog:awesomebranch 来推送数据。)
+5. 如果出现ERROR Deployer not found: git 或者 ERROR Deployer not found: github；解决方法： `npm install hexo-deployer-git --save`
+6. 记得，不需要`hexo init`这条指令，部署的时候github必须已经免密。  
 ---
