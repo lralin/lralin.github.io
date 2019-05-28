@@ -26,8 +26,8 @@ updated: 2019/05/23 12:50:25
 ```dos
 @echo off
 rem 改成自己的名字
-set userName=李林瑞
-set fileName=信联征信_技术部_工作周报_%userName%_
+set userName=xxx
+set fileName=xxxx_技术部_工作周报_%userName%_
 
 rem 判断当前时间是否为工作日，法定假期除外
 set workDate=%date:~-3%
