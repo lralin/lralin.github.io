@@ -28,7 +28,7 @@ public interface AirTravelDubboService {
 }
 
 public class AirTravelDubboServiceImpl implements AirTravelDubboService {
-    @Autowired
+	@Autowired
 	private A0032Service a0032Service;
 	
 	public AirTravelRes airTravel(AirTravelReq req){
@@ -36,7 +36,7 @@ public class AirTravelDubboServiceImpl implements AirTravelDubboService {
 		// xxx 业务代码
 		a0032Service.flight(data);
 		// xxx 业务代码
-        return res;
+		return res;
 	}
 }
 
@@ -51,11 +51,11 @@ public class A0032ServiceImpl implements A0032Service{
 	@Autowired
 	private FlightInfoDubboService flightInfoDubboService;
 	
-    public boolean flight(RouteData data,List<String> list){
-        //xxx业务代码
-        FlightInfoA0032Resp resp = flightInfoDubboService.flightInfo(req);
-        //xxx业务代码
-    }
+	public boolean flight(RouteData data,List<String> list){
+		//xxx业务代码
+ 		FlightInfoA0032Resp resp = flightInfoDubboService.flightInfo(req);
+		//xxx业务代码
+	}
 }
 ```
 该样例使用的是两个dubbo服务之间的调用。AirTravelDubboService服务通过A0032Service接口调用flightInfoDubboService远程服务
@@ -72,7 +72,7 @@ public class AirTravelDubboTest extends BaseTest {
 	private A0032Service a0032Service;
 	
 	@Mock
-    private FlightInfoDubboService mockApiService;
+	private FlightInfoDubboService mockApiService;
 
 	@Before
 	public void TestBefore() {
@@ -81,7 +81,7 @@ public class AirTravelDubboTest extends BaseTest {
 		resp.setThirdCode("200");
 		resp.setResult("交易成功");
 		//设置a0032Service接口实现类里面的flightInfoDubboService属性为mockApiService对象。（进行属性注入）
-        ReflectionTestUtils.setField(a0032Service, "flightInfoDubboService", mockApiService);
+		ReflectionTestUtils.setField(a0032Service, "flightInfoDubboService", mockApiService);
 		when(mockApiService.flightInfo(any(RouteBean.class),anyList())).thenReturn(resp);
 //		doCallRealMethod().when(a0032Service).flight();
 	}
@@ -89,7 +89,7 @@ public class AirTravelDubboTest extends BaseTest {
 	@Test
 	public void Test1() {
 		AirTravelReq req = new AirTravelReq();
-        req.setAAA("xxxxxxxx");
+		req.setAAA("xxxxxxxx");
 		req.setBBB("xxxxx");
 		AirTravelRes res = airTravelDubboService.airTravel(req);
 		//该测试类启用后，a0032Service接口中的FlightInfoDubboService远程服务返回的数据就是{thirdCode:200,result:"交易成功"}。
