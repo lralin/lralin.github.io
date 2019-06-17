@@ -41,7 +41,7 @@ public class PhoneverifyDubboTest {
 	//表示该测试启动100个线程，一共执行50s
 	@Test
 	@PerfTest(threads = 100, duration = 50000)
-	public void testTelecom() throws Throwable {
+	public void testDuration() throws Throwable {
 		System.out.println("lralin");
 	}
 }
