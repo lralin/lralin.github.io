@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="测试,junit,性能测试,">
 
 
 
@@ -79,17 +79,20 @@
 
 
 
-<meta name="description" content="一、安装 shadowsocks Debian / Ubuntu 用户运行：   12apt-get install python-pippip install shadowsocks  CentOS 用户运行：  12yum install python-setuptools &amp;amp;&amp;amp; easy_install pippip install shadowsocks">
+<meta name="description" content="简介contiperf是一个性能测试工具，可以设置线程数threads，总笔数invocations，总时长duration 等参数，配合@PerfTest 注解自由设置，并且还会生成一个折线图，目录位置一般就在target/contiperf-report 目录下面。">
+<meta name="keywords" content="测试,junit,性能测试">
 <meta property="og:type" content="article">
-<meta property="og:title" content="搭建Shadowsocks server">
-<meta property="og:url" content="http://yoursite.com/2018/02/06/搭建Shadowsocks server/index.html">
+<meta property="og:title" content="Junit压力测试">
+<meta property="og:url" content="http://yoursite.com/2019/05/30/junit压力测试/index.html">
 <meta property="og:site_name" content="lralin">
-<meta property="og:description" content="一、安装 shadowsocks Debian / Ubuntu 用户运行：   12apt-get install python-pippip install shadowsocks  CentOS 用户运行：  12yum install python-setuptools &amp;amp;&amp;amp; easy_install pippip install shadowsocks">
+<meta property="og:description" content="简介contiperf是一个性能测试工具，可以设置线程数threads，总笔数invocations，总时长duration 等参数，配合@PerfTest 注解自由设置，并且还会生成一个折线图，目录位置一般就在target/contiperf-report 目录下面。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-05-25T14:02:32.035Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/lralin/TheFirst/master/markdown_img/ContiPerf_Report.png">
+<meta property="og:updated_time" content="2019-05-30T04:15:25.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="搭建Shadowsocks server">
-<meta name="twitter:description" content="一、安装 shadowsocks Debian / Ubuntu 用户运行：   12apt-get install python-pippip install shadowsocks  CentOS 用户运行：  12yum install python-setuptools &amp;amp;&amp;amp; easy_install pippip install shadowsocks">
+<meta name="twitter:title" content="Junit压力测试">
+<meta name="twitter:description" content="简介contiperf是一个性能测试工具，可以设置线程数threads，总笔数invocations，总时长duration 等参数，配合@PerfTest 注解自由设置，并且还会生成一个折线图，目录位置一般就在target/contiperf-report 目录下面。">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/lralin/TheFirst/master/markdown_img/ContiPerf_Report.png">
 
 
 
@@ -119,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/02/06/搭建Shadowsocks server/">
+  <link rel="canonical" href="http://yoursite.com/2019/05/30/junit压力测试/">
 
 
 
 
 
-  <title>搭建Shadowsocks server | lralin</title>
+  <title>Junit压力测试 | lralin</title>
   
 
 
@@ -232,7 +235,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/06/搭建Shadowsocks server/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/30/junit压力测试/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="两个木">
@@ -249,7 +252,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">搭建Shadowsocks server</h1>
+          <h1 class="post-title" itemprop="name headline">Junit压力测试</h1>
         
 
         <div class="post-meta">
@@ -261,8 +264,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-06T10:09:25+08:00">
-                2018-02-06
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-30T12:15:25+08:00">
+                2019-05-30
               </time>
             
 
@@ -299,34 +302,22 @@
       
 
       
-        <h4 id="一、安装-shadowsocks"><a href="#一、安装-shadowsocks" class="headerlink" title="一、安装 shadowsocks"></a>一、安装 shadowsocks</h4><ul>
-<li><p>Debian / Ubuntu 用户运行：  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt-get install python-pip</span><br><span class="line">pip install shadowsocks</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>CentOS 用户运行： </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install python-setuptools &amp;&amp; easy_install pip</span><br><span class="line">pip install shadowsocks</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
+        <h5 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h5><p>contiperf是一个性能测试工具，可以设置线程数<code>threads</code>，总笔数<code>invocations</code>，总时长<code>duration</code> 等参数，配合<code>@PerfTest</code> 注解自由设置，并且还会生成一个折线图，目录位置一般就在<code>target/contiperf-report</code> 目录下面。</p>
 <a id="more"></a>
-<h4 id="二、配置文件"><a href="#二、配置文件" class="headerlink" title="二、配置文件"></a>二、配置文件</h4><ul>
-<li><p>新建配置文件：  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim ~/shadowsocks/config.json</span><br></pre></td></tr></table></figure>
+<h5 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h5><ol>
+<li><p>pom包：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.databene<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>contiperf<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.1.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
 </li>
-<li><p>编辑配置文件，依然是按 i 进入编辑，按 ESC 退出编辑，按 :wq 保存并退出：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">&quot;server&quot;:&quot;0.0.0.0&quot;,</span><br><span class="line">&quot;local_address&quot;:&quot;127.0.0.1&quot;,</span><br><span class="line">&quot;local_port&quot;:1080,</span><br><span class="line">&quot;port_password&quot;:&#123;</span><br><span class="line">&quot;8392&quot;:&quot;youpassword&quot;,</span><br><span class="line">&quot;8393&quot;:&quot;youpassword&quot;,</span><br><span class="line">&quot;8394&quot;:&quot;youpassword&quot;,</span><br><span class="line">&quot;8395&quot;:&quot;youpassword&quot;,</span><br><span class="line">&quot;8396&quot;:&quot;youpassword&quot;,</span><br><span class="line">&quot;8397&quot;:&quot;youpassword&quot; # 多端口设置</span><br><span class="line">&#125;,</span><br><span class="line">&quot;timeout&quot;:300,</span><br><span class="line">&quot;method&quot;:&quot;aes-256-cfb&quot;,</span><br><span class="line">&quot;fast_open&quot;: false</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<li><p>Java代码中的实际调用关系</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RunWith</span>(SpringJUnit4ClassRunner.class)</span><br><span class="line"><span class="meta">@ContextConfiguration</span>(locations = &#123; <span class="string">"classpath:spring-dubbo-test.xml"</span> &#125;)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PhoneverifyDubboTest</span> </span>&#123;</span><br><span class="line">	<span class="comment">//使用@Rule注释激活ContiPerf</span></span><br><span class="line">	<span class="meta">@Rule</span></span><br><span class="line">	<span class="keyword">public</span> ContiPerfRule i = <span class="keyword">new</span> ContiPerfRule();</span><br><span class="line">	<span class="comment">//加上junit的注解，表示该测试启动100个线程，一共跑5000次</span></span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="meta">@PerfTest</span>(threads = <span class="number">100</span>, invocations = <span class="number">5000</span>)</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testTelecom</span><span class="params">()</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"lralin"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//表示该测试启动100个线程，一共执行50s</span></span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="meta">@PerfTest</span>(threads = <span class="number">100</span>, duration = <span class="number">50000</span>)</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testDuration</span><span class="params">()</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"lralin"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
-</ul>
-<h4 id="三、启动并永久运行"><a href="#三、启动并永久运行" class="headerlink" title="三、启动并永久运行"></a>三、启动并永久运行</h4><ul>
-<li>启动命令<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nohup ssserver -c ~/shadowsocks/config.json -d start &amp;</span><br><span class="line">#nohup ssserver -c ~/shadowsocks/config.json &gt; log -d start &amp;</span><br></pre></td></tr></table></figure>
+<li><p>在<code>@PerfTest</code>配置中如果duration和invocations同时使用的话会在保证两个参数都符合的情况，才会停止。例如<code>@PerfTest(threads = 100, duration = 50000, invocations = 500)</code> ，如果50s内，500次请求还没结束的话，会一直等到500次执行完毕才会结束.</p>
 </li>
-</ul>
-<blockquote>
-<p> ssserver 是 shadowsocks 的服务端命令。<br>   -c 表示以配置文件的方式运行 shadowsocks， ~/shadowsocks/config.json 则是配置文件的路径。<br>   -d 表示在后台运行，这样允许用户进行其他操作。<br>   start 就是启动。<br>   nohup 以及最后的 &amp; 是让 shadowsocks 服务端一直运行，并把运行日志输出到当前用户主目录下的 nohup.out 文件中。  </p>
-</blockquote>
-<ul>
-<li>停止命令：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssserver -c ~/shadowsocks/config.json -d stop</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
+<li>关于timer参数，主要是用于设置等待多久后又执行，例如<code>@PerfTest(invocations = 500, threads = 100, timer = RandomTimer.class, timerParams = {200, 300})</code> ，每执行完一次后，等待200~300ms继续执行下一次.</li>
+<li>可能测试用例刚开始启动的时候，响应时间比较慢，需要运行一段时间后才能响应速度才会变快，这时我们就需要去掉前一段时间。这时我们就可以用到ContiPerf的rampUp和warmUp参数，例如<code>@PerfTest(threads = 5, duration = 50000, rampUp = 2000)</code> ，启动时会先起一个线程，然后每个2000ms起一线程，到8000ms时5个线程同时执行，那么这个测试实际执行了58s，这时我们要去掉前8s，那么就要在注释中加入warmUp，即<code>@PerfTest(threads = 5, duration = 50000, rampUp = 2000, warmUp = 8000)</code>，那么统计结果的时候会去掉预热的8s.</li>
+<li>也可以使用@Required指定性能要求<br><code>@Required(max = 1000, average = 800, totalTime = 10000)</code>  要求每次执行的最长时间不能超过1s，平均时间不能超过0.8s，总时间不能超过10s;<br><code>@Required(percentile90 = 5000)</code>要求90%的测试不超过5s;<br><code>@Required(percentiles = &quot;70:300,95:550&quot;)</code>要求70%的测试不超过300ms，95%的测试不超过550ms;</li>
+</ol>
+<h5 id="折线图"><a href="#折线图" class="headerlink" title="折线图"></a>折线图</h5><p>文件目录<code>target/contiperf-report/index.html</code><br><img src="https://raw.githubusercontent.com/lralin/TheFirst/master/markdown_img/ContiPerf_Report.png" alt="Image text"></p>
 
       
     </div>
@@ -342,6 +333,16 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/测试/" rel="tag"># 测试</a>
+          
+            <a href="/tags/junit/" rel="tag"># junit</a>
+          
+            <a href="/tags/性能测试/" rel="tag"># 性能测试</a>
+          
+        </div>
+      
 
       
       
@@ -351,8 +352,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/02/03/Zookeeper observer模式 集群搭建教程/" rel="next" title="Zookeeper 集群">
-                <i class="fa fa-chevron-left"></i> Zookeeper 集群
+              <a href="/2019/05/24/mock模拟测试/" rel="next" title="Mock模拟测试">
+                <i class="fa fa-chevron-left"></i> Mock模拟测试
               </a>
             
           </div>
@@ -361,8 +362,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/05/23/window批处理脚本_一键制作日报/" rel="prev" title="一键制作日报">
-                一键制作日报 <i class="fa fa-chevron-right"></i>
+              <a href="/2019/06/09/ES6变量解构赋值/" rel="prev" title="ES6变量解构赋值">
+                ES6变量解构赋值 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -488,7 +489,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#一、安装-shadowsocks"><span class="nav-number">1.</span> <span class="nav-text">一、安装 shadowsocks</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#二、配置文件"><span class="nav-number">2.</span> <span class="nav-text">二、配置文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#三、启动并永久运行"><span class="nav-number">3.</span> <span class="nav-text">三、启动并永久运行</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#示例"><span class="nav-number">2.</span> <span class="nav-text">示例</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#折线图"><span class="nav-number">3.</span> <span class="nav-text">折线图</span></a></li></ol></div>
             
 
           </div>
