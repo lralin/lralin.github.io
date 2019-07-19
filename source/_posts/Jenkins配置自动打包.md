@@ -10,9 +10,9 @@ tags:
 ### 配置远程服务器
 
 点击 **Manage Jenkins** ，选择  **Configure System** 服务器配置
+<!--more-->
 ![Configure](https://raw.githubusercontent.com/lralin/TheFirst/master/markdown_img/jenkins/Jenkins-1.png)
 
-<!--more-->
 
 找到 **Publish over SSH** 配置远程服务器
 ![SSH](https://raw.githubusercontent.com/lralin/TheFirst/master/markdown_img/jenkins/Jenkins-2.png)
