@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/maozi.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/maozi.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/maozi.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="java,spring,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="简介前端统一使用AES随机秘钥加密报文，使用RSA加密AES的秘钥，传输key和value给后台，后台在过滤器中统一解密。">
+<meta name="keywords" content="java,spring">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端统一加密请求到后端，后端过滤器统一解密">
+<meta property="og:url" content="http://yoursite.com/2019/07/12/前端统一加密请求到后端，后端过滤器统一解密/index.html">
+<meta property="og:site_name" content="lralin">
+<meta property="og:description" content="简介前端统一使用AES随机秘钥加密报文，使用RSA加密AES的秘钥，传输key和value给后台，后台在过滤器中统一解密。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-07-12T08:57:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="前端统一加密请求到后端，后端过滤器统一解密">
+<meta name="twitter:description" content="简介前端统一使用AES随机秘钥加密报文，使用RSA加密AES的秘钥，传输key和value给后台，后台在过滤器中统一解密。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/07/12/前端统一加密请求到后端，后端过滤器统一解密/">
+
+
+
+
+
+  <title>前端统一加密请求到后端，后端过滤器统一解密 | lralin</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">lralin</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/12/前端统一加密请求到后端，后端过滤器统一解密/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="两个木">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/20180124140140.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lralin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">前端统一加密请求到后端，后端过滤器统一解密</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-12T16:57:25+08:00">
+                2019-07-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>前端统一使用AES随机秘钥加密报文，使用RSA加密AES的秘钥，传输key和value给后台，后台在过滤器中统一解密。</p>
+<a id="more"></a>
+<h3 id="前端代码"><a href="#前端代码" class="headerlink" title="前端代码"></a>前端代码</h3><ol>
+<li>封装ajax 从而达到统一处理请求参数。封装后，前端只能使用ccdrpAjax进行后台请求。</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span> (<span class="params">$</span>) </span>&#123;</span><br><span class="line">    $.extend(&#123;</span><br><span class="line">        urlArgs: <span class="function"><span class="keyword">function</span> (<span class="params">url</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">var</span> args = &#123;&#125;;</span><br><span class="line">            <span class="keyword">var</span> index = url.indexOf(<span class="string">'?'</span>);</span><br><span class="line">            <span class="keyword">var</span> query = url.substring(index + <span class="number">1</span>);</span><br><span class="line">            <span class="keyword">var</span> pairs = query.split(<span class="string">'&amp;'</span>);</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; pairs.length; i++) &#123;</span><br><span class="line">                <span class="keyword">var</span> pos = pairs[i].indexOf(<span class="string">'='</span>);</span><br><span class="line">                <span class="keyword">if</span> (pos == <span class="number">-1</span>) &#123;</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125; <span class="comment">// 如果没找到，就跳过</span></span><br><span class="line">                <span class="keyword">var</span> name = pairs[i].substr(<span class="number">0</span>, pos);  <span class="comment">// 获得名称</span></span><br><span class="line">                <span class="keyword">var</span> value = pairs[i].substr(pos + <span class="number">1</span>); <span class="comment">// 提取value</span></span><br><span class="line">                value = <span class="built_in">decodeURI</span>(value);</span><br><span class="line">                args[name] = value;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> args</span><br><span class="line">        &#125;,</span><br><span class="line">        ccdrpAjax: <span class="function"><span class="keyword">function</span> (<span class="params">options</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">var</span> defaults = &#123;</span><br><span class="line">                type: <span class="string">"POST"</span>,</span><br><span class="line">                dataType: <span class="string">"json"</span>,<span class="comment">//返回结果的数据类型</span></span><br><span class="line">                <span class="keyword">async</span>: <span class="literal">true</span>,<span class="comment">//是否异步</span></span><br><span class="line">                cache: <span class="literal">false</span>,<span class="comment">//是否缓存</span></span><br><span class="line">                appPath: <span class="literal">true</span>,<span class="comment">//是否加上项目前缀</span></span><br><span class="line">                <span class="comment">// timeout: 1000 * 60 * 6,</span></span><br><span class="line">                data: &#123;&#125;,</span><br><span class="line">                success: <span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line">            <span class="keyword">var</span> opts = $.extend(defaults, options);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (opts.appPath) &#123;</span><br><span class="line">                opts.url = <span class="built_in">window</span>.servicePath + opts.url;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (opts.type.toUpperCase() == <span class="string">"POST"</span>) &#123;</span><br><span class="line">                <span class="keyword">var</span> params = opts.data;</span><br><span class="line">                <span class="comment">//判断是否为 FormData数据格式。如果是，就把不是文件类型的数据拿出来进行加密传输。</span></span><br><span class="line">                <span class="keyword">if</span> (params <span class="keyword">instanceof</span> FormData) &#123;</span><br><span class="line">                    <span class="keyword">var</span> dataTemp = &#123;&#125;;</span><br><span class="line">                    <span class="comment">// var i = params.entries();</span></span><br><span class="line">                    <span class="comment">// while(i.next())&#123;</span></span><br><span class="line">                    <span class="comment">//</span></span><br><span class="line">                    <span class="comment">// &#125;</span></span><br><span class="line">                    <span class="keyword">for</span> (<span class="keyword">const</span> [key, value] <span class="keyword">of</span> params.entries()) &#123;</span><br><span class="line">                        <span class="keyword">if</span> (!(value <span class="keyword">instanceof</span> File)) &#123;</span><br><span class="line">                            dataTemp[key] = value;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                    $.each(dataTemp, <span class="function"><span class="keyword">function</span> (<span class="params">n, v</span>) </span>&#123;</span><br><span class="line">                        params.delete(n);</span><br><span class="line">                    &#125;);</span><br><span class="line">                    <span class="keyword">var</span> rsaData = $.devilencrypt(<span class="built_in">JSON</span>.stringify(dataTemp));</span><br><span class="line">                    opts.data.append(<span class="string">"securekey"</span>, rsaData.encryptedrsa);</span><br><span class="line">                    opts.data.append(<span class="string">"securevalue"</span>, rsaData.encrypted);</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="keyword">var</span> rsaData = $.devilencrypt(<span class="built_in">JSON</span>.stringify(params));</span><br><span class="line">                    opts.data = &#123;<span class="attr">securevalue</span>: rsaData.encrypted, <span class="attr">securekey</span>: rsaData.encryptedrsa&#125;;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (opts.type.toUpperCase() == <span class="string">"GET"</span>) &#123;</span><br><span class="line">                <span class="keyword">var</span> params = $.urlArgs(opts.url);</span><br><span class="line">                <span class="keyword">var</span> rsaData = $.devilencrypt(<span class="built_in">JSON</span>.stringify(params));</span><br><span class="line">                <span class="keyword">var</span> indexT = opts.url.indexOf(<span class="string">'?'</span>);</span><br><span class="line">                <span class="keyword">var</span> newUrl = opts.url.substring(<span class="number">0</span>, indexT);</span><br><span class="line">                opts.url = newUrl + <span class="string">'?securevalue='</span> + <span class="built_in">encodeURIComponent</span>(rsaData.encrypted) + <span class="string">'&amp;securekey='</span> + <span class="built_in">encodeURIComponent</span>(rsaData.encryptedrsa);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">var</span> _beforeSend = opts.beforeSend;</span><br><span class="line">            opts.beforeSend = <span class="function"><span class="keyword">function</span> (<span class="params">request</span>) </span>&#123;</span><br><span class="line">                <span class="keyword">if</span> (_beforeSend) &#123;</span><br><span class="line">                    _beforeSend(httpRequest, status);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">var</span> _complete = opts.complete;</span><br><span class="line">            opts.complete = <span class="function"><span class="keyword">function</span> (<span class="params">httpRequest, status</span>) </span>&#123;</span><br><span class="line">                <span class="keyword">if</span> (_complete) &#123;</span><br><span class="line">                    _complete(httpRequest, status);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line">            <span class="comment">//统一处理异常</span></span><br><span class="line">            opts.error = <span class="function"><span class="keyword">function</span> (<span class="params">event, request, settings</span>) </span>&#123;</span><br><span class="line">                alert(<span class="string">"ajax error check callback :"</span> + <span class="built_in">JSON</span>.stringify(request));</span><br><span class="line">            &#125;;</span><br><span class="line">            <span class="keyword">var</span> _success = opts.success;</span><br><span class="line">            opts.success = <span class="function"><span class="keyword">function</span> (<span class="params">data, textStatus, httpRequest</span>) </span>&#123;</span><br><span class="line">                <span class="comment">//统一处理 登录跳转。</span></span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (_success) &#123;</span><br><span class="line">                    _success(data, textStatus, httpRequest);</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">            &#125;;</span><br><span class="line">            opts.statusCode = &#123;</span><br><span class="line">                <span class="number">404</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">                    alert(<span class="string">"ajax net error 404"</span>);</span><br><span class="line">                &#125;, <span class="number">400</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">                    alert(<span class="string">"ajax net error 400"</span>);</span><br><span class="line">                &#125;, <span class="number">502</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">                    alert(<span class="string">"ajax net error 502"</span>);</span><br><span class="line">                &#125;, <span class="number">500</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">                    alert(<span class="string">"ajax net error 500"</span>);</span><br><span class="line">                &#125;, <span class="string">"500.12"</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">                    alert(<span class="string">"ajax net error 500.12"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line"> </span><br><span class="line">            $.ajax(opts);<span class="comment">// ajaxAsync</span></span><br><span class="line"> </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;)(jQuery);</span><br></pre></td></tr></table></figure>
+<p>   ccdrpAjax 对文件流不进行加密，对get和post都进行了拦截。</p>
+<ol>
+<li>封装<a href="https://github.com/travist/jsencrypt" target="_blank" rel="noopener">前端RSA</a> 加解密和AES解密，我使用的<a href="https://github.com/lralin/TheFirst/tree/master/markdown_source/js/jsencrypt.min.js" target="_blank" rel="noopener">RSA</a>和<a href="https://github.com/lralin/TheFirst/tree/master/markdown_source/js/devil.js" target="_blank" rel="noopener">AES</a> 源码。</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    $.extend(&#123;</span><br><span class="line">        devilencrypt_res: <span class="function"><span class="keyword">function</span> (<span class="params">word</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">var</span> key = CryptoJS.enc.Utf8.parse(<span class="string">"NZKDDAMXuQQp3tK5QoK9tiY9twlR4hq5"</span>);</span><br><span class="line">            <span class="keyword">var</span> srcs = CryptoJS.enc.Utf8.parse(word);</span><br><span class="line">            <span class="keyword">var</span> encrypted = CryptoJS.AES.encrypt(srcs, key, &#123;<span class="attr">mode</span>: CryptoJS.mode.ECB, <span class="attr">padding</span>: CryptoJS.pad.Pkcs7&#125;);</span><br><span class="line">            <span class="keyword">return</span> encrypted.toString();</span><br><span class="line">        &#125;,</span><br><span class="line">        devilencrypt: <span class="function"><span class="keyword">function</span> (<span class="params">word</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">var</span> result = &#123;&#125;;</span><br><span class="line">            <span class="keyword">var</span> encrypt = <span class="keyword">new</span> JSEncrypt(&#123;<span class="attr">default_key_size</span>: <span class="number">2048</span>&#125;);</span><br><span class="line">            <span class="keyword">var</span> pubkey = <span class="string">"-----BEGIN PUBLIC KEY-----"</span> +</span><br><span class="line">                <span class="string">"xxx相关RSA公钥xxx"</span> +</span><br><span class="line">                <span class="string">"-----END PUBLIC KEY-----"</span>;</span><br><span class="line">            encrypt.setPublicKey(pubkey);</span><br><span class="line">            <span class="keyword">var</span> key = $.getAesKey();</span><br><span class="line">            <span class="keyword">var</span> encryptedRsa = encrypt.encrypt(key);</span><br><span class="line">            result.encryptedrsa = encryptedRsa;</span><br><span class="line">            <span class="keyword">var</span> key = CryptoJS.enc.Utf8.parse(key);</span><br><span class="line">            <span class="keyword">var</span> srcs = CryptoJS.enc.Utf8.parse(word);</span><br><span class="line">            <span class="keyword">var</span> encrypted = CryptoJS.AES.encrypt(srcs, key, &#123;<span class="attr">mode</span>: CryptoJS.mode.ECB, <span class="attr">padding</span>: CryptoJS.pad.Pkcs7&#125;);</span><br><span class="line">            result.encrypted = encrypted.toString();</span><br><span class="line">            <span class="keyword">return</span> result;</span><br><span class="line">        &#125;,</span><br><span class="line">        getAesKey: <span class="function"><span class="keyword">function</span> (<span class="params">len</span>) </span>&#123;</span><br><span class="line">            len = len || <span class="number">32</span>;</span><br><span class="line">            <span class="keyword">var</span> $chars = <span class="string">'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678'</span>;</span><br><span class="line">            <span class="comment">/****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/</span></span><br><span class="line">            <span class="keyword">var</span> maxPos = $chars.length;</span><br><span class="line">            <span class="keyword">var</span> keyStr = <span class="string">''</span>;</span><br><span class="line">            <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">                keyStr += $chars.charAt(<span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random() * maxPos));</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> keyStr;</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<ol>
+<li>ccdrpAjax 使用样例</li>
+</ol>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"zh"</span> <span class="attr">xmlns:th</span>=<span class="string">"http://www.thymeleaf.org"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"utf-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1.0, maximum-scale=1.0"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>系统<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span> <span class="attr">class</span>=<span class="string">"signin"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">id</span>=<span class="string">"test1"</span>&gt;</span>hello world!<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">id</span>=<span class="string">"test2"</span>&gt;</span>bbbb<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"form-group"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">"upload_crowd_name"</span> <span class="attr">class</span>=<span class="string">"col-sm-2 control-label"</span>&gt;</span>人群名称<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"col-sm-10"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">class</span>=<span class="string">"form-control"</span> <span class="attr">id</span>=<span class="string">"upload_crowd_name"</span> <span class="attr">placeholder</span>=<span class="string">"请输入人群名称"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"form-group"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">"upload_crowd_desc"</span> <span class="attr">class</span>=<span class="string">"col-sm-2 control-label"</span>&gt;</span>人群说明<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"col-sm-10"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">textarea</span> <span class="attr">class</span>=<span class="string">"form-control"</span> <span class="attr">id</span>=<span class="string">"upload_crowd_desc"</span> <span class="attr">cols</span>=<span class="string">"20"</span> <span class="attr">rows</span>=<span class="string">"5"</span>&gt;</span><span class="tag">&lt;/<span class="name">textarea</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"form-group"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">"crowd_file"</span> <span class="attr">class</span>=<span class="string">"col-sm-2 control-label"</span>&gt;</span>上传文件<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"col-sm-10"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">accept</span>=<span class="string">".xlsx"</span> <span class="attr">id</span>=<span class="string">"crowd_file"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">button</span> <span class="attr">id</span>=<span class="string">"test3"</span>&gt;</span>开始上传<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">th:inline</span>=<span class="string">"javascript"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">    <span class="comment">//Thymeleaf 模板引擎</span></span></span><br><span class="line"><span class="javascript">    <span class="keyword">var</span> ctx = [[@&#123;/&#125;]];</span></span><br><span class="line"><span class="javascript">        <span class="built_in">window</span>.servicePath = ctx;</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">th:src</span>=<span class="string">"@&#123;/js/jquery.min.js&#125;"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">th:src</span>=<span class="string">"@&#123;/js/devil.js&#125;"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">th:src</span>=<span class="string">"@&#123;/js/jsencrypt.min.js&#125;"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">th:src</span>=<span class="string">"@&#123;/ajax/remote.js&#125;"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/javascript"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">    $(<span class="string">"#test1"</span>).click(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">        $.ccdrpAjax(&#123;</span></span><br><span class="line"><span class="javascript">            contentType: <span class="string">"application/x-www-form-urlencoded; charset=utf-8"</span>,</span></span><br><span class="line"><span class="javascript">            headers: &#123;<span class="string">'Content-Type'</span>: <span class="string">'application/x-www-form-urlencoded'</span>&#125;,</span></span><br><span class="line"><span class="javascript">            type: <span class="string">"post"</span>,</span></span><br><span class="line"><span class="javascript">            url: <span class="string">"mobile/api"</span>,</span></span><br><span class="line"><span class="undefined">            data: &#123;</span></span><br><span class="line"><span class="javascript">                <span class="string">"username"</span>: <span class="string">"sls.s"</span>,</span></span><br><span class="line"><span class="undefined">            &#125;,</span></span><br><span class="line"><span class="javascript">            dataType: <span class="string">"json"</span>,</span></span><br><span class="line"><span class="javascript">            success: <span class="function"><span class="keyword">function</span> (<span class="params">r</span>) </span>&#123;</span></span><br><span class="line"><span class="undefined">                alert(r.msg);</span></span><br><span class="line"><span class="undefined">            &#125;</span></span><br><span class="line"><span class="undefined">        &#125;);</span></span><br><span class="line"><span class="undefined">    &#125;);</span></span><br><span class="line"><span class="javascript">    $(<span class="string">"#test2"</span>).click(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">        $.ccdrpAjax(&#123;</span></span><br><span class="line"><span class="javascript">            contentType: <span class="string">"application/x-www-form-urlencoded; charset=utf-8"</span>,</span></span><br><span class="line"><span class="javascript">            headers: &#123;<span class="string">'Content-Type'</span>: <span class="string">'application/x-www-form-urlencoded'</span>&#125;,</span></span><br><span class="line"><span class="javascript">            type: <span class="string">"get"</span>,</span></span><br><span class="line"><span class="javascript">            url: <span class="string">"mobile/userApi?username=111&amp;&amp;bb=11"</span>,</span></span><br><span class="line"><span class="javascript">            dataType: <span class="string">"json"</span>,</span></span><br><span class="line"><span class="javascript">            success: <span class="function"><span class="keyword">function</span> (<span class="params">r</span>) </span>&#123;</span></span><br><span class="line"><span class="undefined">                alert(r.msg);</span></span><br><span class="line"><span class="undefined">            &#125;</span></span><br><span class="line"><span class="undefined">        &#125;);</span></span><br><span class="line"><span class="undefined">    &#125;);</span></span><br><span class="line"><span class="undefined"> </span></span><br><span class="line"><span class="javascript">    $(<span class="string">'#test3'</span>).click(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">        <span class="comment">//上传文件。</span></span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> crowd_name = $.trim($(<span class="string">'#upload_crowd_name'</span>).val());</span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> crowd_desc = $.trim($(<span class="string">'#upload_crowd_desc'</span>).val());</span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> crowd_file = $(<span class="string">'#crowd_file'</span>)[<span class="number">0</span>].files[<span class="number">0</span>];</span></span><br><span class="line"><span class="undefined"> </span></span><br><span class="line"><span class="javascript">        <span class="keyword">var</span> formData = <span class="keyword">new</span> FormData();</span></span><br><span class="line"><span class="undefined"> </span></span><br><span class="line"><span class="javascript">        formData.append(<span class="string">"file"</span>, $(<span class="string">'#crowd_file'</span>)[<span class="number">0</span>].files[<span class="number">0</span>]);</span></span><br><span class="line"><span class="javascript">        formData.append(<span class="string">"crowd_name"</span>, crowd_name);</span></span><br><span class="line"><span class="javascript">        formData.append(<span class="string">"crowd_desc"</span>, crowd_desc);</span></span><br><span class="line"><span class="javascript">        <span class="comment">//或者 testForm为form表单ID</span></span></span><br><span class="line"><span class="javascript">        <span class="comment">// var form = new FormData(document.getElementById("testForm"));</span></span></span><br><span class="line"><span class="javascript">        <span class="comment">// var formData = new FormData(form);</span></span></span><br><span class="line"><span class="javascript">        $.ccdrpAjax(&#123;</span></span><br><span class="line"><span class="javascript">            url: <span class="string">'mobile/common/upload'</span>,</span></span><br><span class="line"><span class="javascript">            dataType: <span class="string">'json'</span>,</span></span><br><span class="line"><span class="javascript">            type: <span class="string">'POST'</span>,</span></span><br><span class="line"><span class="javascript">            <span class="keyword">async</span>: <span class="literal">false</span>,</span></span><br><span class="line"><span class="undefined">            data: formData,</span></span><br><span class="line"><span class="javascript">            processData: <span class="literal">false</span>, <span class="comment">// 使数据不做处理</span></span></span><br><span class="line"><span class="javascript">            contentType: <span class="literal">false</span>, <span class="comment">// 不要设置Content-Type请求头</span></span></span><br><span class="line"><span class="javascript">            success: <span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">                <span class="built_in">console</span>.log(data);</span></span><br><span class="line"><span class="javascript">                <span class="keyword">if</span> (data.status == <span class="string">'ok'</span>) &#123;</span></span><br><span class="line"><span class="javascript">                    alert(<span class="string">'上传成功！'</span>);</span></span><br><span class="line"><span class="undefined">                &#125;</span></span><br><span class="line"><span class="undefined">            &#125;,</span></span><br><span class="line"><span class="javascript">            error: <span class="function"><span class="keyword">function</span> (<span class="params">response</span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">                <span class="built_in">console</span>.log(response);</span></span><br><span class="line"><span class="undefined">            &#125;</span></span><br><span class="line"><span class="undefined">        &#125;);</span></span><br><span class="line"><span class="undefined">    &#125;)</span></span><br><span class="line"><span class="undefined"></span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="后台代码"><a href="#后台代码" class="headerlink" title="后台代码"></a>后台代码</h3><ol>
+<li>过滤其中处理的代码</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doFilter</span><span class="params">(ServletRequest request, ServletResponse response, FilterChain chain)</span> <span class="keyword">throws</span> IOException, ServletException </span>&#123;</span><br><span class="line">    </span><br><span class="line">    HttpServletRequest req = (HttpServletRequest) request;</span><br><span class="line">    HttpServletResponse resp = (HttpServletResponse) response;</span><br><span class="line">    <span class="comment">//是否跳过不处理</span></span><br><span class="line">    <span class="comment">//if (handleExcludeURL(req, resp)) &#123;</span></span><br><span class="line">    <span class="comment">//    chain.doFilter(request, response);</span></span><br><span class="line">    <span class="comment">//    return;</span></span><br><span class="line">    <span class="comment">//&#125;</span></span><br><span class="line">    <span class="comment">// http信息封装类</span></span><br><span class="line">    Map&lt;String, Object&gt; map = <span class="keyword">null</span>;</span><br><span class="line">    MultiReadHttpServletRequest wrapperRequest = <span class="keyword">new</span> MultiReadHttpServletRequest(req);</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        String securevalue = request.getParameter(<span class="string">"securevalue"</span>);</span><br><span class="line">        String securekey = request.getParameter(<span class="string">"securekey"</span>);</span><br><span class="line">        String contentType = req.getContentType();</span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isNotBlank(contentType) &amp;&amp; contentType.contains(<span class="string">"multipart/form-data"</span>)) &#123;</span><br><span class="line">            <span class="comment">//文件上传请求 *特殊请求</span></span><br><span class="line">            CommonsMultipartResolver multipartResolver = <span class="keyword">new</span> CommonsMultipartResolver();</span><br><span class="line">            MultipartHttpServletRequest multiReq = multipartResolver.resolveMultipart(wrapperRequest);</span><br><span class="line">            securevalue = multiReq.getParameter(<span class="string">"securevalue"</span>);</span><br><span class="line">            securekey = multiReq.getParameter(<span class="string">"securekey"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isNotBlank(securekey)) &#123;</span><br><span class="line">            String key = DevilRSA.decryptByPrivateKey(securekey);</span><br><span class="line">            securevalue = DevilAES.aesDecrypt(securevalue, key);</span><br><span class="line">        &#125;</span><br><span class="line">        map = JSON.parseObject(securevalue, <span class="keyword">new</span> TypeReference&lt;Map&lt;String, Object&gt;&gt;() &#123;</span><br><span class="line">        &#125;);</span><br><span class="line">    </span><br><span class="line">    &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">        log.error(<span class="string">"过滤器修改paramter异常"</span>, e);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (map != <span class="keyword">null</span> &amp;&amp; !map.isEmpty()) &#123;</span><br><span class="line">        wrapperRequest.addAllParameters(map);</span><br><span class="line">    &#125;</span><br><span class="line">    chain.doFilter(wrapperRequest, response);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>MultipartHttpServletRequest封装http请求，从而达到在拦截器和Controller拿到的数据是解密后的数据，并且使流能够重复使用。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.poi.util.IOUtils;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.servlet.ReadListener;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.ServletInputStream;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletRequest;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletRequestWrapper;</span><br><span class="line"><span class="keyword">import</span> java.io.BufferedReader;</span><br><span class="line"><span class="keyword">import</span> java.io.ByteArrayInputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.ByteArrayOutputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.InputStreamReader;</span><br><span class="line"><span class="keyword">import</span> java.util.Enumeration;</span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"><span class="keyword">import</span> java.util.Vector;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> 林非木</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@create</span> 2019年07月10日 16:49</span></span><br><span class="line"><span class="comment"> **/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MultiReadHttpServletRequest</span> <span class="keyword">extends</span> <span class="title">HttpServletRequestWrapper</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Logger log = LoggerFactory.getLogger(MultiReadHttpServletRequest.class);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> ByteArrayOutputStream cachedBytes;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Map&lt;String, String[]&gt; params = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MultiReadHttpServletRequest</span><span class="params">(HttpServletRequest request)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(request);</span><br><span class="line">        <span class="keyword">this</span>.params.putAll(request.getParameterMap());</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">//重载一个构造方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MultiReadHttpServletRequest</span><span class="params">(HttpServletRequest request, Map&lt;String, Object&gt; extendParams)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(request);</span><br><span class="line">        addAllParameters(extendParams);<span class="comment">//这里将扩展参数写入参数表</span></span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addAllParameters</span><span class="params">(Map&lt;String, Object&gt; otherParams)</span> </span>&#123;<span class="comment">//增加多个参数</span></span><br><span class="line">        <span class="keyword">for</span> (Map.Entry&lt;String, Object&gt; entry : otherParams.entrySet()) &#123;</span><br><span class="line">            addParameter(entry.getKey(), entry.getValue());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addParameter</span><span class="params">(String name, Object value)</span> </span>&#123;<span class="comment">//增加参数</span></span><br><span class="line">        <span class="keyword">if</span> (value != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (value <span class="keyword">instanceof</span> String[]) &#123;</span><br><span class="line">                params.put(name, (String[]) value);</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (value <span class="keyword">instanceof</span> String) &#123;</span><br><span class="line">                params.put(name, <span class="keyword">new</span> String[]&#123;(String) value&#125;);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                params.put(name, <span class="keyword">new</span> String[]&#123;String.valueOf(value)&#125;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String[] getParameterValues(String name) &#123;</span><br><span class="line">        <span class="keyword">return</span> params.get(name);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Map&lt;String, String[]&gt; getParameterMap() &#123;</span><br><span class="line">        <span class="keyword">return</span> params;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Enumeration&lt;String&gt; <span class="title">getParameterNames</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Vector(params.keySet()).elements();</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getParameter</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        String[] values = params.get(name);</span><br><span class="line">        <span class="keyword">if</span> (values == <span class="keyword">null</span> || values.length == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> values[<span class="number">0</span>];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ServletInputStream <span class="title">getInputStream</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (cachedBytes == <span class="keyword">null</span>) &#123;</span><br><span class="line">            cacheInputStream();</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> CachedServletInputStream();</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> BufferedReader <span class="title">getReader</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(getInputStream()));</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">cacheInputStream</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="comment">/* Cache the inputstream in order to read it multiple times. For</span></span><br><span class="line"><span class="comment">         * convenience, I use apache.commons IOUtils</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        cachedBytes = <span class="keyword">new</span> ByteArrayOutputStream();</span><br><span class="line">        IOUtils.copy(<span class="keyword">super</span>.getInputStream(), cachedBytes);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">/* An inputstream which reads the cached request body */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CachedServletInputStream</span> <span class="keyword">extends</span> <span class="title">ServletInputStream</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> ByteArrayInputStream input;</span><br><span class="line"> </span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">CachedServletInputStream</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="comment">/* create a new input stream from the cached request body */</span></span><br><span class="line">            input = <span class="keyword">new</span> ByteArrayInputStream(cachedBytes.toByteArray());</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">read</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> input.read();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//jdk1.8 需要重写的方法</span></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isFinished</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> input.available() == <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isReady</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setReadListener</span><span class="params">(ReadListener readListener)</span> </span>&#123;</span><br><span class="line"> </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>RSA就使用正常的RSA就好，这里使用的如下</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"><span class="keyword">import</span> sun.misc.BASE64Decoder;</span><br><span class="line"><span class="keyword">import</span> sun.misc.BASE64Encoder;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.crypto.Cipher;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.security.Key;</span><br><span class="line"><span class="keyword">import</span> java.security.KeyFactory;</span><br><span class="line"><span class="keyword">import</span> java.security.KeyPair;</span><br><span class="line"><span class="keyword">import</span> java.security.KeyPairGenerator;</span><br><span class="line"><span class="keyword">import</span> java.security.PrivateKey;</span><br><span class="line"><span class="keyword">import</span> java.security.PublicKey;</span><br><span class="line"><span class="keyword">import</span> java.security.Signature;</span><br><span class="line"><span class="keyword">import</span> java.security.spec.PKCS8EncodedKeySpec;</span><br><span class="line"><span class="keyword">import</span> java.security.spec.X509EncodedKeySpec;</span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 前台RSA加密传输,后台解密</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> 林非木</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@version</span> 2.0</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2018年09月28日 下午3:49</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@SuppressWarnings</span>(<span class="string">"restriction"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DevilRSA</span> </span>&#123;</span><br><span class="line">	</span><br><span class="line">    <span class="meta">@SuppressWarnings</span>(<span class="string">"unused"</span>)</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">static</span> Logger log = LoggerFactory.getLogger(DevilRSA.class);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String KEY_ALGORITHM = <span class="string">"RSA"</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String SIGNATURE_ALGORITHM = <span class="string">"MD5withRSA"</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String PUBLIC_KEY = <span class="string">"RSAPublicKey"</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String PRIVATE_KEY = <span class="string">"RSAPrivateKey"</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//字节数组转Base64编码</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">encryptBASE64</span><span class="params">(<span class="keyword">byte</span>[] bytes)</span> </span>&#123;</span><br><span class="line">        BASE64Encoder encoder = <span class="keyword">new</span> BASE64Encoder();</span><br><span class="line">        <span class="keyword">return</span> encoder.encode(bytes);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//Base64编码转字节数组</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">byte</span>[] decryptBASE64(String base64Key) <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        BASE64Decoder decoder = <span class="keyword">new</span> BASE64Decoder();</span><br><span class="line">        <span class="keyword">return</span> decoder.decodeBuffer(base64Key);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String privKey = <span class="string">""</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String pubKey = <span class="string">""</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 用私钥对信息生成数字签名</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> data       加密数据</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> privateKey 私钥</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">sign</span><span class="params">(<span class="keyword">byte</span>[] data, String privateKey)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="comment">// 解密由base64编码的私钥</span></span><br><span class="line">        <span class="keyword">byte</span>[] keyBytes = decryptBASE64(privateKey);</span><br><span class="line">        <span class="comment">// 构造PKCS8EncodedKeySpec对象</span></span><br><span class="line">        PKCS8EncodedKeySpec pkcs8KeySpec = <span class="keyword">new</span> PKCS8EncodedKeySpec(keyBytes);</span><br><span class="line">        <span class="comment">// KEY_ALGORITHM 指定的加密算法</span></span><br><span class="line">        KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);</span><br><span class="line">        <span class="comment">// 取私钥匙对象</span></span><br><span class="line">        PrivateKey priKey = keyFactory.generatePrivate(pkcs8KeySpec);</span><br><span class="line">        <span class="comment">// 用私钥对信息生成数字签名</span></span><br><span class="line">        Signature signature = Signature.getInstance(SIGNATURE_ALGORITHM);</span><br><span class="line">        signature.initSign(priKey);</span><br><span class="line">        signature.update(data);</span><br><span class="line">        <span class="keyword">return</span> encryptBASE64(signature.sign());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//    /**</span></span><br><span class="line"><span class="comment">//     * @Description  后端加签,传到前端</span></span><br><span class="line"><span class="comment">//     * @Date 18-9-28 下午4:42</span></span><br><span class="line"><span class="comment">//     * @Author 林非木</span></span><br><span class="line"><span class="comment">//     * @Param [data]</span></span><br><span class="line"><span class="comment">//     * @return java.lang.String</span></span><br><span class="line"><span class="comment">//     **/</span></span><br><span class="line"><span class="comment">//    public static String sign(String data) throws Exception &#123;</span></span><br><span class="line"><span class="comment">//        return sign(data.getBytes("UTF-8"),privKey);</span></span><br><span class="line"><span class="comment">//    &#125;</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//    /**</span></span><br><span class="line"><span class="comment">//     * @Description  后端对前端的数据验签</span></span><br><span class="line"><span class="comment">//     * @Date 18-9-28 下午4:42</span></span><br><span class="line"><span class="comment">//     * @Author 林非木</span></span><br><span class="line"><span class="comment">//     * @Param [data]</span></span><br><span class="line"><span class="comment">//     * @return java.lang.String</span></span><br><span class="line"><span class="comment">//     **/</span></span><br><span class="line"><span class="comment">//    public static boolean verify(String data,String sign) throws Exception&#123;</span></span><br><span class="line"><span class="comment">//        return verify(data.getBytes("UTF-8"), pubKey1, sign);</span></span><br><span class="line"><span class="comment">//    &#125;</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//    /**</span></span><br><span class="line"><span class="comment">//     * @Description  后端加密,传输到前端</span></span><br><span class="line"><span class="comment">//     * @Date 18-9-28 下午4:42</span></span><br><span class="line"><span class="comment">//     * @Author 林非木</span></span><br><span class="line"><span class="comment">//     * @Param [data]</span></span><br><span class="line"><span class="comment">//     * @return java.lang.String</span></span><br><span class="line"><span class="comment">//     **/</span></span><br><span class="line"><span class="comment">//    public static byte[] encryptByPublicKey(String data) throws Exception&#123;</span></span><br><span class="line"><span class="comment">//        return encryptByPublicKey(data,pubKey1);</span></span><br><span class="line"><span class="comment">//    &#125;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> java.lang.String</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Description</span> 后端对前端的数据解密</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Date</span> 18-9-28 下午4:42</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Author</span> 林非木</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@Param</span> [data]</span></span><br><span class="line"><span class="comment">     **/</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">decryptByPrivateKey</span><span class="params">(String data)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> String(decryptByPrivateKey(data, privKey), <span class="string">"UTF-8"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 校验数字签名</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> data      加密数据</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> publicKey 公钥</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> sign      数字签名</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 校验成功返回true 失败返回false</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">verify</span><span class="params">(<span class="keyword">byte</span>[] data, String publicKey, String sign)</span></span></span><br><span class="line"><span class="function">            <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="comment">// 解密由base64编码的公钥</span></span><br><span class="line">        <span class="keyword">byte</span>[] keyBytes = decryptBASE64(publicKey);</span><br><span class="line">        <span class="comment">// 构造X509EncodedKeySpec对象</span></span><br><span class="line">        X509EncodedKeySpec keySpec = <span class="keyword">new</span> X509EncodedKeySpec(keyBytes);</span><br><span class="line">        <span class="comment">// KEY_ALGORITHM 指定的加密算法</span></span><br><span class="line">        KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);</span><br><span class="line">        <span class="comment">// 取公钥匙对象</span></span><br><span class="line">        PublicKey pubKey = keyFactory.generatePublic(keySpec);</span><br><span class="line">        Signature signature = Signature.getInstance(SIGNATURE_ALGORITHM);</span><br><span class="line">        signature.initVerify(pubKey);</span><br><span class="line">        signature.update(data);</span><br><span class="line">        <span class="comment">// 验证签名是否正常</span></span><br><span class="line">        <span class="keyword">return</span> signature.verify(decryptBASE64(sign));</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">byte</span>[] decryptByPrivateKey(<span class="keyword">byte</span>[] data, String key)</span><br><span class="line">            <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="comment">// 对密钥解密</span></span><br><span class="line">        <span class="keyword">byte</span>[] keyBytes = decryptBASE64(key);</span><br><span class="line">        <span class="comment">// 取得私钥</span></span><br><span class="line">        PKCS8EncodedKeySpec pkcs8KeySpec = <span class="keyword">new</span> PKCS8EncodedKeySpec(keyBytes);</span><br><span class="line">        KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);</span><br><span class="line">        Key privateKey = keyFactory.generatePrivate(pkcs8KeySpec);</span><br><span class="line">        <span class="comment">// 对数据解密</span></span><br><span class="line">        Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());</span><br><span class="line">        cipher.init(Cipher.DECRYPT_MODE, privateKey);</span><br><span class="line">        <span class="keyword">return</span> cipher.doFinal(data);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 解密&lt;br&gt;</span></span><br><span class="line"><span class="comment">     * 用私钥解密</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> data</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">byte</span>[] decryptByPrivateKey(String data, String key)</span><br><span class="line">            <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="keyword">return</span> decryptByPrivateKey(decryptBASE64(data), key);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 解密&lt;br&gt;</span></span><br><span class="line"><span class="comment">     * 用公钥解密</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> data</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">byte</span>[] decryptByPublicKey(<span class="keyword">byte</span>[] data, String key)</span><br><span class="line">            <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="comment">// 对密钥解密</span></span><br><span class="line">        <span class="keyword">byte</span>[] keyBytes = decryptBASE64(key);</span><br><span class="line">        <span class="comment">// 取得公钥</span></span><br><span class="line">        X509EncodedKeySpec x509KeySpec = <span class="keyword">new</span> X509EncodedKeySpec(keyBytes);</span><br><span class="line">        KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);</span><br><span class="line">        Key publicKey = keyFactory.generatePublic(x509KeySpec);</span><br><span class="line">        <span class="comment">// 对数据解密</span></span><br><span class="line">        Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());</span><br><span class="line">        cipher.init(Cipher.DECRYPT_MODE, publicKey);</span><br><span class="line">        <span class="keyword">return</span> cipher.doFinal(data);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 加密&lt;br&gt;</span></span><br><span class="line"><span class="comment">     * 用公钥加密</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> data</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">byte</span>[] encryptByPublicKey(String data, String key)</span><br><span class="line">            <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="comment">// 对公钥解密</span></span><br><span class="line">        <span class="keyword">byte</span>[] keyBytes = decryptBASE64(key);</span><br><span class="line">        <span class="comment">// 取得公钥</span></span><br><span class="line">        X509EncodedKeySpec x509KeySpec = <span class="keyword">new</span> X509EncodedKeySpec(keyBytes);</span><br><span class="line">        KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);</span><br><span class="line">        Key publicKey = keyFactory.generatePublic(x509KeySpec);</span><br><span class="line">        <span class="comment">// 对数据加密</span></span><br><span class="line">        Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());</span><br><span class="line">        cipher.init(Cipher.ENCRYPT_MODE, publicKey);</span><br><span class="line">        <span class="keyword">return</span> cipher.doFinal(data.getBytes());</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 加密&lt;br&gt;</span></span><br><span class="line"><span class="comment">     * 用私钥加密</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> data</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> key</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">byte</span>[] encryptByPrivateKey(<span class="keyword">byte</span>[] data, String key)</span><br><span class="line">            <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="comment">// 对密钥解密</span></span><br><span class="line">        <span class="keyword">byte</span>[] keyBytes = decryptBASE64(key);</span><br><span class="line">        <span class="comment">// 取得私钥</span></span><br><span class="line">        PKCS8EncodedKeySpec pkcs8KeySpec = <span class="keyword">new</span> PKCS8EncodedKeySpec(keyBytes);</span><br><span class="line">        KeyFactory keyFactory = KeyFactory.getInstance(KEY_ALGORITHM);</span><br><span class="line">        Key privateKey = keyFactory.generatePrivate(pkcs8KeySpec);</span><br><span class="line">        <span class="comment">// 对数据加密</span></span><br><span class="line">        Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());</span><br><span class="line">        cipher.init(Cipher.ENCRYPT_MODE, privateKey);</span><br><span class="line">        <span class="keyword">return</span> cipher.doFinal(data);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 取得私钥</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> keyMap</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">getPrivateKey</span><span class="params">(Map&lt;String, Key&gt; keyMap)</span></span></span><br><span class="line"><span class="function">            <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        Key key = (Key) keyMap.get(PRIVATE_KEY);</span><br><span class="line">        <span class="keyword">return</span> encryptBASE64(key.getEncoded());</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 取得公钥</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> keyMap</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">getPublicKey</span><span class="params">(Map&lt;String, Key&gt; keyMap)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        Key key = keyMap.get(PUBLIC_KEY);</span><br><span class="line">        <span class="keyword">return</span> encryptBASE64(key.getEncoded());</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 初始化密钥</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Map&lt;String, Key&gt; <span class="title">initKey</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        KeyPairGenerator keyPairGen = KeyPairGenerator</span><br><span class="line">                .getInstance(KEY_ALGORITHM);</span><br><span class="line">        keyPairGen.initialize(<span class="number">1024</span>);</span><br><span class="line">        KeyPair keyPair = keyPairGen.generateKeyPair();</span><br><span class="line">        <span class="meta">@SuppressWarnings</span>(&#123; <span class="string">"rawtypes"</span>, <span class="string">"unchecked"</span> &#125;)</span><br><span class="line">		Map&lt;String, Key&gt; keyMap = <span class="keyword">new</span> HashMap(<span class="number">2</span>);</span><br><span class="line">        keyMap.put(PUBLIC_KEY, keyPair.getPublic());<span class="comment">// 公钥</span></span><br><span class="line">        keyMap.put(PRIVATE_KEY, keyPair.getPrivate());<span class="comment">// 私钥</span></span><br><span class="line">        <span class="keyword">return</span> keyMap;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>AES加解密方法</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.math.BigInteger;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.crypto.Cipher;</span><br><span class="line"><span class="keyword">import</span> javax.crypto.KeyGenerator;</span><br><span class="line"><span class="keyword">import</span> javax.crypto.spec.SecretKeySpec;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.commons.codec.binary.Base64;</span><br><span class="line"><span class="keyword">import</span> org.apache.commons.lang3.StringUtils;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.Logger;</span><br><span class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sun.misc.BASE64Decoder;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * AES的加密和解密</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> 林非木</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="meta">@SuppressWarnings</span>(<span class="string">"restriction"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DevilAES</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Logger logger = LoggerFactory.getLogger(DevilAES.class);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//算法</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String ALGORITHMSTR = <span class="string">"AES/ECB/PKCS5Padding"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String UTF8 = <span class="string">"UTF-8"</span>;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 将byte[]转为各种进制的字符串</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> bytes byte[]</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> radix 可以转换进制的范围，从Character.MIN_RADIX到Character.MAX_RADIX，超出范围后变为10进制</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 转换后的字符串</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">binary</span><span class="params">(<span class="keyword">byte</span>[] bytes, <span class="keyword">int</span> radix)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> BigInteger(<span class="number">1</span>, bytes).toString(radix);<span class="comment">// 这里的1代表正数</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * base 64 encode</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> bytes 待编码的byte[]</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 编码后的base 64 code</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">base64Encode</span><span class="params">(<span class="keyword">byte</span>[] bytes)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> Base64.encodeBase64String(bytes);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * base 64 decode</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> base64Code 待解码的base 64 code</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 解码后的byte[]</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">byte</span>[] base64Decode(String base64Code) <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="keyword">return</span> StringUtils.isBlank(base64Code) ? <span class="keyword">null</span> : <span class="keyword">new</span> BASE64Decoder().decodeBuffer(base64Code);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * AES加密</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> content    待加密的内容</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> encryptKey 加密密钥</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 加密后的byte[]</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">byte</span>[] aesEncryptToBytes(String content, String encryptKey) <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        KeyGenerator kgen = KeyGenerator.getInstance(<span class="string">"AES"</span>);</span><br><span class="line">        kgen.init(<span class="number">128</span>);</span><br><span class="line">        Cipher cipher = Cipher.getInstance(ALGORITHMSTR);</span><br><span class="line">        cipher.init(Cipher.ENCRYPT_MODE, <span class="keyword">new</span> SecretKeySpec(encryptKey.getBytes(UTF8), <span class="string">"AES"</span>));</span><br><span class="line"> </span><br><span class="line">        <span class="keyword">return</span> cipher.doFinal(content.getBytes(UTF8));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * AES加密为base 64 code</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> content    待加密的内容</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> encryptKey 加密密钥</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 加密后的base 64 code</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">aesEncrypt</span><span class="params">(String content, String encryptKey)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> base64Encode(aesEncryptToBytes(content, encryptKey));</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * AES解密</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> encryptBytes 待解密的byte[]</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> decryptKey   解密密钥</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 解密后的String</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">aesDecryptByBytes</span><span class="params">(<span class="keyword">byte</span>[] encryptBytes, String decryptKey)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        KeyGenerator kgen = KeyGenerator.getInstance(<span class="string">"AES"</span>);</span><br><span class="line">        kgen.init(<span class="number">128</span>);</span><br><span class="line"> </span><br><span class="line">        Cipher cipher = Cipher.getInstance(ALGORITHMSTR);</span><br><span class="line">        cipher.init(Cipher.DECRYPT_MODE, <span class="keyword">new</span> SecretKeySpec(decryptKey.getBytes(UTF8), <span class="string">"AES"</span>));</span><br><span class="line">        <span class="keyword">byte</span>[] decryptBytes = cipher.doFinal(encryptBytes);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> String(decryptBytes, UTF8);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 将base 64 code AES解密</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> encryptStr 待解密的base 64 code</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> decryptKey 解密密钥</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> 解密后的string</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">aesDecrypt</span><span class="params">(String encryptStr, String decryptKey)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> StringUtils.isBlank(encryptStr) ? <span class="keyword">null</span> : aesDecryptByBytes(base64Decode(encryptStr), decryptKey);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>自行生成一对RSA公钥就可以使用了。</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/spring/" rel="tag"># spring</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/07/为什么Jdk1.7中的HashMap线程不安全？/" rel="next" title="为什么Jdk1.7中的HashMap线程不安全？">
+                <i class="fa fa-chevron-left"></i> 为什么Jdk1.7中的HashMap线程不安全？
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/07/18/redis 分布式锁/" rel="prev" title="redis 分布式锁">
+                redis 分布式锁 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/20180124140140.jpg" alt="两个木">
+            
+              <p class="site-author-name" itemprop="name">两个木</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#前端代码"><span class="nav-number">2.</span> <span class="nav-text">前端代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#后台代码"><span class="nav-number">3.</span> <span class="nav-text">后台代码</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">两个木</span>
+
+  
+</div>
+
+
+	<div class="powered-by">越努力越幸运</div>
+  <!--<div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>-->
+
+
+<!--
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+-->
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+<!-- 自定义背景 -->
+
+  
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_snow.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
