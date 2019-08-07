@@ -20,9 +20,19 @@ tags:
 ```
 `data-valid`和`data-error`两个参数，样式中加入`required`。
 
-2. javascrpit校验的时候只需调用
+2. javascrpit校验的时候需先调用初始化方法，再调用校验方法。当然初始化方法可以直接封装在verify.js中，使插件用起来更方便。
 
 ```
+// 使用默认的提示方式
+// verifyCheck();
+// 或者使用自定义的提示方式
+verifyCheck({resultTips:function (obj,isRight,value) {
+            debugger;
+            if(!isRight){
+            	//自定义提示方式
+                console.log(value);
+            }
+    }});
 if(!verifyCheck._click()) return;
 ```
 那么输入的值被校验通过了，`verifyCheck._click()`函数就会返回true，而且校验规则可以自定义，支持正则，简单快捷。
@@ -38,9 +48,9 @@ if(!verifyCheck._click()) return;
     <title>Title</title>
 </head>
 <body>
-<form>
-    <div class="f-fl item-ifo" id="verifyCheck">
-        <input type="text" maxlength="20" class="txt03 f-r3 required" tabindex="1" data-valid="isNonEmpty||between:3-20||isUname" data-error="用户名不能为空||用户名长度3-20位||只能输入中文、字母、数字、下划线，且以中文或字母开头" id="adminNo" />
+<form id="verifyCheck">
+    <div class="f-fl item-ifo">
+        <input type="text" maxlength="20" class="txt03 f-r3 required" tabindex="1" data-valid="isNonEmpty||between:3-20||isUname" data-error="用户名不能为空||用户名长度3-20位||只能输入中文、字母、数字、下划线，且以中文或字母开头"/>
     </div>
     <button id="btn_part1">确定</button>
 </form>
@@ -48,7 +58,14 @@ if(!verifyCheck._click()) return;
 <script type="text/javascript" src="https://demo.demohuo.top/jquery/23/2301/demo/js/jquery-1.11.1.min.js"></script>
 <script>
     $(function(){
-        //第一页的确定按钮
+        //verifyCheck();
+        verifyCheck({resultTips:function (obj,isRight,value) {
+            debugger;
+            if(!isRight){
+            	//自定义提示方式
+                alert(value);
+            }
+    	}});
         $("#btn_part1").click(function(){
             debugger;
             if(!verifyCheck._click()) return;
