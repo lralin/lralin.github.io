@@ -11,6 +11,8 @@ tags:
 
 CountDownLatch：CountDown英文解释为倒数，Latch是锁上，门闩的意思。在开发时，当我们有三个并发任务同时去执行，然后在下一步需要等待它们都执行完成才能继续执行，实现这个现在想想大概有几种方式，Thread.join等待线程，使用wait()notify()，Executor.invokeAll、然后对各个Future调用get等。而我们的CountDownLatch类就是专门用来控制这种情况的。初始化的时候创建一个倒计时次数count，通过调用countDown()方法对count的次数进行减1，当count次数为0的时候，调用await()的等待的线程会被释放。
 
+<!--more-->
+
 ### 代码
 
 1. 创建线程池
