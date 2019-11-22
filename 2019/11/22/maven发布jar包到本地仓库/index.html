@@ -79,20 +79,18 @@
 
 
 
-<meta name="description" content="简介contiperf是一个性能测试工具，可以设置线程数threads，总笔数invocations，总时长duration 等参数，配合@PerfTest 注解自由设置，并且还会生成一个折线图，目录位置一般就在target/contiperf-report 目录下面。">
+<meta name="description" content="简介有些API接口有第三方的jar包，这些jar并不存在于中央仓库。当我们没有私服的情况下，我们又要用maven管理jar包。这就需要自己把jar包发布到本地私服，然后才可以直接在项目的pom文件里面引用。">
 <meta name="keywords" content="junit,测试,性能测试">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Junit压力测试">
-<meta property="og:url" content="http://yoursite.com/2019/05/30/junit压力测试/index.html">
+<meta property="og:title" content="maven添加本地jar包到本地仓库">
+<meta property="og:url" content="http://yoursite.com/2019/11/22/maven发布jar包到本地仓库/index.html">
 <meta property="og:site_name" content="lralin">
-<meta property="og:description" content="简介contiperf是一个性能测试工具，可以设置线程数threads，总笔数invocations，总时长duration 等参数，配合@PerfTest 注解自由设置，并且还会生成一个折线图，目录位置一般就在target/contiperf-report 目录下面。">
+<meta property="og:description" content="简介有些API接口有第三方的jar包，这些jar并不存在于中央仓库。当我们没有私服的情况下，我们又要用maven管理jar包。这就需要自己把jar包发布到本地私服，然后才可以直接在项目的pom文件里面引用。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://raw.githubusercontent.com/lralin/TheFirst/master/markdown_img/ContiPerf_Report.png">
-<meta property="og:updated_time" content="2019-05-30T04:15:25.000Z">
+<meta property="og:updated_time" content="2019-11-22T10:25:25.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Junit压力测试">
-<meta name="twitter:description" content="简介contiperf是一个性能测试工具，可以设置线程数threads，总笔数invocations，总时长duration 等参数，配合@PerfTest 注解自由设置，并且还会生成一个折线图，目录位置一般就在target/contiperf-report 目录下面。">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/lralin/TheFirst/master/markdown_img/ContiPerf_Report.png">
+<meta name="twitter:title" content="maven添加本地jar包到本地仓库">
+<meta name="twitter:description" content="简介有些API接口有第三方的jar包，这些jar并不存在于中央仓库。当我们没有私服的情况下，我们又要用maven管理jar包。这就需要自己把jar包发布到本地私服，然后才可以直接在项目的pom文件里面引用。">
 
 
 
@@ -122,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/05/30/junit压力测试/">
+  <link rel="canonical" href="http://yoursite.com/2019/11/22/maven发布jar包到本地仓库/">
 
 
 
 
 
-  <title>Junit压力测试 | lralin</title>
+  <title>maven添加本地jar包到本地仓库 | lralin</title>
   
 
 
@@ -235,7 +233,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/30/junit压力测试/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/22/maven发布jar包到本地仓库/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="两个木">
@@ -252,7 +250,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Junit压力测试</h1>
+          <h1 class="post-title" itemprop="name headline">maven添加本地jar包到本地仓库</h1>
         
 
         <div class="post-meta">
@@ -264,8 +262,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-30T12:15:25+08:00">
-                2019-05-30
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-22T18:15:25+08:00">
+                2019-11-22
               </time>
             
 
@@ -302,22 +300,23 @@
       
 
       
-        <h5 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h5><p>contiperf是一个性能测试工具，可以设置线程数<code>threads</code>，总笔数<code>invocations</code>，总时长<code>duration</code> 等参数，配合<code>@PerfTest</code> 注解自由设置，并且还会生成一个折线图，目录位置一般就在<code>target/contiperf-report</code> 目录下面。</p>
+        <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>有些API接口有第三方的jar包，这些jar并不存在于中央仓库。当我们没有私服的情况下，我们又要用maven管理jar包。这就需要自己把jar包发布到本地私服，然后才可以直接在项目的pom文件里面引用。</p>
 <a id="more"></a>
-<h5 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h5><ol>
-<li><p>pom包：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.databene<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>contiperf<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.1.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h3><ol>
+<li><p>创建lib文件夹。放入bcprov-jdk15on-153.jar包和install.bat、install.sh脚本</p>
 </li>
-<li><p>Java代码中的实际调用关系</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RunWith</span>(SpringJUnit4ClassRunner.class)</span><br><span class="line"><span class="meta">@ContextConfiguration</span>(locations = &#123; <span class="string">"classpath:spring-dubbo-test.xml"</span> &#125;)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PhoneverifyDubboTest</span> </span>&#123;</span><br><span class="line">	<span class="comment">//使用@Rule注释激活ContiPerf</span></span><br><span class="line">	<span class="meta">@Rule</span></span><br><span class="line">	<span class="keyword">public</span> ContiPerfRule i = <span class="keyword">new</span> ContiPerfRule();</span><br><span class="line">	<span class="comment">//加上junit的注解，表示该测试启动100个线程，一共跑5000次</span></span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="meta">@PerfTest</span>(threads = <span class="number">100</span>, invocations = <span class="number">5000</span>)</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testTelecom</span><span class="params">()</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"lralin"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//表示该测试启动100个线程，一共执行50s</span></span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="meta">@PerfTest</span>(threads = <span class="number">100</span>, duration = <span class="number">50000</span>)</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testDuration</span><span class="params">()</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"lralin"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<li><p>编辑<code>install.bat</code>脚本</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">call mvn install:install-file -DgroupId=com.bcprov -DartifactId=jdk15on -Dversion=1.5.3 -Dpackaging=jar -Dfile=bcprov-jdk15on-153.jar -DgeneratePom=true</span><br><span class="line">PAUSE</span><br><span class="line"><span class="meta">#</span>如果有源文件也可以使用下面这句话</span><br><span class="line"><span class="meta">#</span>call mvn install:install-file -DgroupId=org.jtester -DartifactId=jtester -Dversion=1.1.8 -Dpackaging=jar -DpomFile=jtester-1.1.8.pom -Dfile=jtester-1.1.8.jar -Dsources=jtester-1.1.8-sources.jar</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>在<code>@PerfTest</code>配置中如果duration和invocations同时使用的话会在保证两个参数都符合的情况，才会停止。例如<code>@PerfTest(threads = 100, duration = 50000, invocations = 500)</code> ，如果50s内，500次请求还没结束的话，会一直等到500次执行完毕才会结束.</p>
+<li><p>编辑<code>install.sh</code>脚本</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mvn install:install-file -DgroupId=com.bcprov -DartifactId=jdk15on -Dversion=1.5.3 -Dpackaging=jar -Dfile=bcprov-jdk15on-153.jar -DgeneratePom=true</span><br><span class="line"><span class="meta">#</span>mvn install:install-file -DgroupId=org.jtester -DartifactId=jtester -Dversion=1.1.8 -Dpackaging=jar -DpomFile=jtester-1.1.8.pom -Dfile=jtester-1.1.8.jar -Dsources=jtester-1.1.8-sources.jar</span><br></pre></td></tr></table></figure>
 </li>
-<li>关于timer参数，主要是用于设置等待多久后又执行，例如<code>@PerfTest(invocations = 500, threads = 100, timer = RandomTimer.class, timerParams = {200, 300})</code> ，每执行完一次后，等待200~300ms继续执行下一次.</li>
-<li>可能测试用例刚开始启动的时候，响应时间比较慢，需要运行一段时间后才能响应速度才会变快，这时我们就需要去掉前一段时间。这时我们就可以用到ContiPerf的rampUp和warmUp参数，例如<code>@PerfTest(threads = 5, duration = 50000, rampUp = 2000)</code> ，启动时会先起一个线程，然后每个2000ms起一线程，到8000ms时5个线程同时执行，那么这个测试实际执行了58s，这时我们要去掉前8s，那么就要在注释中加入warmUp，即<code>@PerfTest(threads = 5, duration = 50000, rampUp = 2000, warmUp = 8000)</code>，那么统计结果的时候会去掉预热的8s.</li>
-<li>也可以使用@Required指定性能要求<br><code>@Required(max = 1000, average = 800, totalTime = 10000)</code>  要求每次执行的最长时间不能超过1s，平均时间不能超过0.8s，总时间不能超过10s;<br><code>@Required(percentile90 = 5000)</code>要求90%的测试不超过5s;<br><code>@Required(percentiles = &quot;70:300,95:550&quot;)</code>要求70%的测试不超过300ms，95%的测试不超过550ms;</li>
+<li><p>在maven都已经配置环境变量的情况下，window执行<code>install.bat</code>脚本，linux执行<code>install.sh</code></p>
+</li>
+<li><p>项目pom.xml文件就中可以配置</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.bcprov<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jdk15on<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.5.3<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
 </ol>
-<h5 id="折线图"><a href="#折线图" class="headerlink" title="折线图"></a>折线图</h5><p>文件目录<code>target/contiperf-report/index.html</code><br><img src="https://raw.githubusercontent.com/lralin/TheFirst/master/markdown_img/ContiPerf_Report.png" alt="Image text"></p>
 
       
     </div>
@@ -352,8 +351,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/05/24/mock模拟测试/" rel="next" title="Mock模拟测试">
-                <i class="fa fa-chevron-left"></i> Mock模拟测试
+              <a href="/2019/11/17/当前日期是否为工作日/" rel="next" title="某日是否为工作日">
+                <i class="fa fa-chevron-left"></i> 某日是否为工作日
               </a>
             
           </div>
@@ -361,10 +360,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/06/09/ES6变量解构赋值/" rel="prev" title="ES6变量解构赋值">
-                ES6变量解构赋值 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -489,7 +484,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#示例"><span class="nav-number">2.</span> <span class="nav-text">示例</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#折线图"><span class="nav-number">3.</span> <span class="nav-text">折线图</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#步骤"><span class="nav-number">2.</span> <span class="nav-text">步骤</span></a></li></ol></div>
             
 
           </div>
