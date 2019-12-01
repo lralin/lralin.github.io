@@ -67,7 +67,7 @@ tags:
 
    
 
-##### 镜像集群配置
+##### 集群构建指南
 
 [官方安装教程](https://www.rabbitmq.com/clustering.html)
 
