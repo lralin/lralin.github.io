@@ -334,7 +334,7 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpm -ivh rabbitmq-server-3.8.1-1.el7.noarch.rpm</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<h5 id="镜像集群配置"><a href="#镜像集群配置" class="headerlink" title="镜像集群配置"></a>镜像集群配置</h5><p><a href="https://www.rabbitmq.com/clustering.html" target="_blank" rel="noopener">官方安装教程</a></p>
+<h5 id="集群构建指南"><a href="#集群构建指南" class="headerlink" title="集群构建指南"></a>集群构建指南</h5><p><a href="https://www.rabbitmq.com/clustering.html" target="_blank" rel="noopener">官方安装教程</a></p>
 <ol>
 <li><p>RabbitMQ节点使用短域名或完全合格（FQDN）域名相互寻址。因此，所有群集成员的主机名以及所有可能使用命令行工具（例如rabbitmqctl）的机器都必须是可解析的。</p>
 <p>主机名解析可以使用操作系统提供的任何标准方法：</p>
@@ -361,9 +361,7 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> on rabbit1</span><br><span class="line">rabbitmqctl cluster_status</span><br><span class="line"><span class="meta">#</span> =&gt; Cluster status of node rabbit@rabbit1 ...</span><br><span class="line"><span class="meta">#</span> =&gt; [&#123;nodes,[&#123;disc,[rabbit@rabbit1,rabbit@rabbit2,rabbit@rabbit3]&#125;]&#125;,</span><br><span class="line"><span class="meta">#</span> =&gt;  &#123;running_nodes,[rabbit@rabbit3,rabbit@rabbit2,rabbit@rabbit1]&#125;]</span><br><span class="line"><span class="meta">#</span> =&gt; ...done.</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> on rabbit2</span><br><span class="line">rabbitmqctl cluster_status</span><br><span class="line"><span class="meta">#</span> =&gt; Cluster status of node rabbit@rabbit2 ...</span><br><span class="line"><span class="meta">#</span> =&gt; [&#123;nodes,[&#123;disc,[rabbit@rabbit1,rabbit@rabbit2,rabbit@rabbit3]&#125;]&#125;,</span><br><span class="line"><span class="meta">#</span> =&gt;  &#123;running_nodes,[rabbit@rabbit3,rabbit@rabbit1,rabbit@rabbit2]&#125;]</span><br><span class="line"><span class="meta">#</span> =&gt; ...done.</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> on rabbit3</span><br><span class="line">rabbitmqctl cluster_status</span><br><span class="line"><span class="meta">#</span> =&gt; Cluster status of node rabbit@rabbit3 ...</span><br><span class="line"><span class="meta">#</span> =&gt; [&#123;nodes,[&#123;disc,[rabbit@rabbit3,rabbit@rabbit2,rabbit@rabbit1]&#125;]&#125;,</span><br><span class="line"><span class="meta">#</span> =&gt;  &#123;running_nodes,[rabbit@rabbit2,rabbit@rabbit1,rabbit@rabbit3]&#125;]</span><br><span class="line"><span class="meta">#</span> =&gt; ...done.</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>可以看到我们每个节点都是disc磁盘类型。</p>
-<p>节点可以是磁盘节点或RAM节点。 （注意：磁盘和RAM可以互换使用）。 RAM节点仅将数据存储在内存中。这不包括消息，消息存储索引，队列索引和其他节点状态。</p>
-<p>在大多数情况下，您希望所有节点都是磁盘节点。 RAM节点是一种特殊情况，可用于提高队列，交换或绑定流失率较高的群集的性能。 RAM节点不提供更高的消息速率。如有疑问，请仅使用磁盘节点。</p>
-<p>由于RAM节点仅将内部数据库表存储在RAM中，因此它们必须在启动时从对等节点同步它们。这意味着一个群集必须至少包含一个磁盘节点。因此，不可能手动删除群集中最后剩余的磁盘节点。</p>
+<p>节点可以是磁盘节点或RAM节点。 （注意：磁盘和RAM可以互换使用）。 RAM节点仅将数据存储在内存中。这不包括消息，消息存储索引，队列索引和其他节点状态。<br>在大多数情况下，您希望所有节点都是磁盘节点。 RAM节点是一种特殊情况，可用于提高队列，交换或绑定流失率较高的群集的性能。 RAM节点不提供更高的消息速率。如有疑问，请仅使用磁盘节点。<br>由于RAM节点仅将内部数据库表存储在RAM中，因此它们必须在启动时从对等节点同步它们。这意味着一个群集必须至少包含一个磁盘节点。因此，不可能手动删除群集中最后剩余的磁盘节点。</p>
 </li>
 <li><p>到此我们集群就创建完成了。</p>
 </li>
@@ -535,7 +533,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#脚本安装"><span class="nav-number">1.</span> <span class="nav-text">脚本安装</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#rpm离线安装"><span class="nav-number">2.</span> <span class="nav-text">rpm离线安装</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#镜像集群配置"><span class="nav-number">3.</span> <span class="nav-text">镜像集群配置</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#脚本安装"><span class="nav-number">1.</span> <span class="nav-text">脚本安装</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#rpm离线安装"><span class="nav-number">2.</span> <span class="nav-text">rpm离线安装</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#集群构建指南"><span class="nav-number">3.</span> <span class="nav-text">集群构建指南</span></a></li></ol></div>
             
 
           </div>
