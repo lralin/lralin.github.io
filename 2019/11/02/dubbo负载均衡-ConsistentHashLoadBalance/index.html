@@ -305,6 +305,7 @@
 
       
         <h3 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h3><p>这是一个基于hash算法的负载均衡，首先根据每个节点的ip或者其他信息为节点生成一个hash，并将这个hash投射到[0, 2<sup>32</sup> - 1] 的圆环上。当有请求过来时，为该请求生成一个hash值。然后查找第一个大于或者等于该hash的缓存节点，并使用该节点的服务。如果该节点挂了，则在下一次查询或写入缓存时，为缓存项查找另一个大于其 hash 值的缓存节点即可。大致效果如下图所示，每个缓存节点在圆环上占据一个位置。如果缓存项的 key 的 hash 值小于缓存节点 hash 值，则到该缓存节点中存储或读取缓存项。比如下面绿色点对应的缓存项将会被存储到 cache-2 节点中。由于 cache-3 挂了，原本应该存到该节点中的缓存项最终会存储到 cache-4 节点中。</p>
+<a id="more"></a>
 <p><img src="http://dubbo.apache.org/docs/zh-cn/source_code_guide/sources/images/consistent-hash.jpg" alt="图一"></p>
 <p>下面来看看一致性 hash 在 Dubbo 中的应用。我们把上图的缓存节点替换成 Dubbo 的服务提供者，于是得到了下图：</p>
 <p><img src="http://dubbo.apache.org/docs/zh-cn/source_code_guide/sources/images/consistent-hash-invoker.jpg" alt="图二"></p>
@@ -443,7 +444,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -456,7 +457,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
