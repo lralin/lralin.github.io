@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/maozi.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/maozi.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/maozi.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="负载均衡,dubbo,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="简介RoundRobinLoadBalance是Dubbo中加权轮询负载均衡的实现。所谓轮询是指将请求轮流分配给每台服务器。轮询是简单的无状态负载均衡算法，适用于每台服务器性能相近的场景下。但实际情况，每台服务器的性能是不一样的，我们需要对每台服务器进行加权，以控制每台服务器的负载。经过加权后，每台服务器能够得到的请求数比例，接近或等于他们的权重比。比如服务器 A、B、C 权重比为 5:2:1。那">
+<meta name="keywords" content="负载均衡,dubbo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="dubbo负载均衡-RoundRobinLoadBalance">
+<meta property="og:url" content="http://yoursite.com/2019/12/15/dubbo负载均衡-RoundRobinLoadBalance/index.html">
+<meta property="og:site_name" content="lralin">
+<meta property="og:description" content="简介RoundRobinLoadBalance是Dubbo中加权轮询负载均衡的实现。所谓轮询是指将请求轮流分配给每台服务器。轮询是简单的无状态负载均衡算法，适用于每台服务器性能相近的场景下。但实际情况，每台服务器的性能是不一样的，我们需要对每台服务器进行加权，以控制每台服务器的负载。经过加权后，每台服务器能够得到的请求数比例，接近或等于他们的权重比。比如服务器 A、B、C 权重比为 5:2:1。那">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-12-15T06:16:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="dubbo负载均衡-RoundRobinLoadBalance">
+<meta name="twitter:description" content="简介RoundRobinLoadBalance是Dubbo中加权轮询负载均衡的实现。所谓轮询是指将请求轮流分配给每台服务器。轮询是简单的无状态负载均衡算法，适用于每台服务器性能相近的场景下。但实际情况，每台服务器的性能是不一样的，我们需要对每台服务器进行加权，以控制每台服务器的负载。经过加权后，每台服务器能够得到的请求数比例，接近或等于他们的权重比。比如服务器 A、B、C 权重比为 5:2:1。那">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/12/15/dubbo负载均衡-RoundRobinLoadBalance/">
+
+
+
+
+
+  <title>dubbo负载均衡-RoundRobinLoadBalance | lralin</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">lralin</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/15/dubbo负载均衡-RoundRobinLoadBalance/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="两个木">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/20180124140140.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lralin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">dubbo负载均衡-RoundRobinLoadBalance</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-15T14:16:25+08:00">
+                2019-12-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>RoundRobinLoadBalance是Dubbo中加权轮询负载均衡的实现。所谓轮询是指将请求轮流分配给每台服务器。轮询是简单的无状态负载均衡算法，适用于每台服务器性能相近的场景下。但实际情况，每台服务器的性能是不一样的，我们需要对每台服务器进行加权，以控制每台服务器的负载。经过加权后，每台服务器能够得到的请求数比例，接近或等于他们的权重比。比如服务器 A、B、C 权重比为 5:2:1。那么在8次请求中，服务器 A 将收到其中的5次请求，服务器 B 会收到其中的2次请求，服务器 C 则收到其中的1次请求。</p>
+<a id="more"></a>
+<p>加权轮询的实现，dubbo是有多个版本的。前几个版本都有不同的缺陷，我们直接看最终优化版，参考了Nginx 的平滑加权轮询负载均衡。</p>
+<p>每个服务器对应两个权重，分别为 weight 和 currentWeight。其中 weight 是固定的，currentWeight 会动态调整，初始值为0。当有新的请求进来时，遍历服务器列表，让它的 currentWeight 加上自身权重。遍历完成后，找到最大的 currentWeight，并将其减去权重总和，然后返回相应的服务器即可。</p>
+<p>举例来说，三台服务器[A,B,C]分别对应权重[5,1,1]。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">请求编号</th>
+<th style="text-align:center">currentWeight数组</th>
+<th style="text-align:center">选择结果</th>
+<th style="text-align:center">减去权重总和后的currentWeight数组</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">[5, 1, 1]</td>
+<td style="text-align:center">A</td>
+<td style="text-align:center">[-2, 1, 1]</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">[3, 2, 2]</td>
+<td style="text-align:center">A</td>
+<td style="text-align:center">[-4, 2, 2]</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">[1, 3, 3]</td>
+<td style="text-align:center">B</td>
+<td style="text-align:center">[1, -4, 3]</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">[6, -3, 4]</td>
+<td style="text-align:center">A</td>
+<td style="text-align:center">[-1, -3, 4]</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">[4, -2, 5]</td>
+<td style="text-align:center">C</td>
+<td style="text-align:center">[4, -2, -2]</td>
+</tr>
+<tr>
+<td style="text-align:center">6</td>
+<td style="text-align:center">[9, -1, -1]</td>
+<td style="text-align:center">A</td>
+<td style="text-align:center">[2, -1, -1]</td>
+</tr>
+<tr>
+<td style="text-align:center">7</td>
+<td style="text-align:center">[7, 0, 0]</td>
+<td style="text-align:center">A</td>
+<td style="text-align:center">[0, 0, 0]</td>
+</tr>
+</tbody>
+</table>
+<p>如上，经过平滑性处理后，得到的服务器序列为 [A, A, B, A, C, A, A]，相比之前的序列 [A, A, A, A, A, B, C]，分布性要好一些。初始情况下 currentWeight = [0, 0, 0]，第7个请求处理完后，currentWeight 再次变为 [0, 0, 0]。</p>
+<h3 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RoundRobinLoadBalance</span> <span class="keyword">extends</span> <span class="title">AbstractLoadBalance</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String NAME = <span class="string">"roundrobin"</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> RECYCLE_PERIOD = <span class="number">60000</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">WeightedRoundRobin</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 服务提供者权重</span></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">int</span> weight;</span><br><span class="line">        <span class="comment">// 当前权重</span></span><br><span class="line">        <span class="keyword">private</span> AtomicLong current = <span class="keyword">new</span> AtomicLong(<span class="number">0</span>);</span><br><span class="line">        <span class="comment">// 最后一次更新时间</span></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">long</span> lastUpdate;</span><br><span class="line">        </span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setWeight</span><span class="params">(<span class="keyword">int</span> weight)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.weight = weight;</span><br><span class="line">            <span class="comment">// 初始情况下，current = 0</span></span><br><span class="line">            current.set(<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">increaseCurrent</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="comment">// current = current + weight；</span></span><br><span class="line">            <span class="keyword">return</span> current.addAndGet(weight);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sel</span><span class="params">(<span class="keyword">int</span> total)</span> </span>&#123;</span><br><span class="line">            <span class="comment">// current = current - total;</span></span><br><span class="line">            current.addAndGet(-<span class="number">1</span> * total);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 嵌套 Map 结构，存储的数据结构示例如下：</span></span><br><span class="line">    <span class="comment">// &#123;</span></span><br><span class="line">    <span class="comment">//     "UserService.query": &#123;</span></span><br><span class="line">    <span class="comment">//         "url1": WeightedRoundRobin@123, </span></span><br><span class="line">    <span class="comment">//         "url2": WeightedRoundRobin@456, </span></span><br><span class="line">    <span class="comment">//     &#125;,</span></span><br><span class="line">    <span class="comment">//     "UserService.update": &#123;</span></span><br><span class="line">    <span class="comment">//         "url1": WeightedRoundRobin@123, </span></span><br><span class="line">    <span class="comment">//         "url2": WeightedRoundRobin@456,</span></span><br><span class="line">    <span class="comment">//     &#125;</span></span><br><span class="line">    <span class="comment">// &#125;</span></span><br><span class="line">    <span class="comment">// 最外层为服务类名 + 方法名，第二层为 url 到 WeightedRoundRobin 的映射关系。</span></span><br><span class="line">    <span class="comment">// 这里我们可以将 url 看成是服务提供者的 id</span></span><br><span class="line">    <span class="keyword">private</span> ConcurrentMap&lt;String, ConcurrentMap&lt;String, WeightedRoundRobin&gt;&gt; methodWeightMap = <span class="keyword">new</span> ConcurrentHashMap&lt;String, ConcurrentMap&lt;String, WeightedRoundRobin&gt;&gt;();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 原子更新锁</span></span><br><span class="line">    <span class="keyword">private</span> AtomicBoolean updateLock = <span class="keyword">new</span> AtomicBoolean();</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> &lt;T&gt; <span class="function">Invoker&lt;T&gt; <span class="title">doSelect</span><span class="params">(List&lt;Invoker&lt;T&gt;&gt; invokers, URL url, Invocation invocation)</span> </span>&#123;</span><br><span class="line">        String key = invokers.get(<span class="number">0</span>).getUrl().getServiceKey() + <span class="string">"."</span> + invocation.getMethodName();</span><br><span class="line">        <span class="comment">// 获取 url 到 WeightedRoundRobin 映射表，如果为空，则创建一个新的</span></span><br><span class="line">        ConcurrentMap&lt;String, WeightedRoundRobin&gt; map = methodWeightMap.get(key);</span><br><span class="line">        <span class="keyword">if</span> (map == <span class="keyword">null</span>) &#123;</span><br><span class="line">            methodWeightMap.putIfAbsent(key, <span class="keyword">new</span> ConcurrentHashMap&lt;String, WeightedRoundRobin&gt;());</span><br><span class="line">            map = methodWeightMap.get(key);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> totalWeight = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">long</span> maxCurrent = Long.MIN_VALUE;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 获取当前时间</span></span><br><span class="line">        <span class="keyword">long</span> now = System.currentTimeMillis();</span><br><span class="line">        Invoker&lt;T&gt; selectedInvoker = <span class="keyword">null</span>;</span><br><span class="line">        WeightedRoundRobin selectedWRR = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 下面这个循环主要做了这样几件事情：</span></span><br><span class="line">        <span class="comment">//   1. 遍历 Invoker 列表，检测当前 Invoker 是否有</span></span><br><span class="line">        <span class="comment">//      相应的 WeightedRoundRobin，没有则创建</span></span><br><span class="line">        <span class="comment">//   2. 检测 Invoker 权重是否发生了变化，若变化了，</span></span><br><span class="line">        <span class="comment">//      则更新 WeightedRoundRobin 的 weight 字段</span></span><br><span class="line">        <span class="comment">//   3. 让 current 字段加上自身权重，等价于 current += weight</span></span><br><span class="line">        <span class="comment">//   4. 设置 lastUpdate 字段，即 lastUpdate = now</span></span><br><span class="line">        <span class="comment">//   5. 寻找具有最大 current 的 Invoker，以及 Invoker 对应的 WeightedRoundRobin，</span></span><br><span class="line">        <span class="comment">//      暂存起来，留作后用</span></span><br><span class="line">        <span class="comment">//   6. 计算权重总和</span></span><br><span class="line">        <span class="keyword">for</span> (Invoker&lt;T&gt; invoker : invokers) &#123;</span><br><span class="line">            String identifyString = invoker.getUrl().toIdentityString();</span><br><span class="line">            WeightedRoundRobin weightedRoundRobin = map.get(identifyString);</span><br><span class="line">            <span class="keyword">int</span> weight = getWeight(invoker, invocation);</span><br><span class="line">            <span class="keyword">if</span> (weight &lt; <span class="number">0</span>) &#123;</span><br><span class="line">                weight = <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 检测当前 Invoker 是否有对应的 WeightedRoundRobin，没有则创建</span></span><br><span class="line">            <span class="keyword">if</span> (weightedRoundRobin == <span class="keyword">null</span>) &#123;</span><br><span class="line">                weightedRoundRobin = <span class="keyword">new</span> WeightedRoundRobin();</span><br><span class="line">                <span class="comment">// 设置 Invoker 权重</span></span><br><span class="line">                weightedRoundRobin.setWeight(weight);</span><br><span class="line">                <span class="comment">// 存储 url 唯一标识 identifyString 到 weightedRoundRobin 的映射关系</span></span><br><span class="line">                map.putIfAbsent(identifyString, weightedRoundRobin);</span><br><span class="line">                weightedRoundRobin = map.get(identifyString);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// Invoker 权重不等于 WeightedRoundRobin 中保存的权重，说明权重变化了，此时进行更新</span></span><br><span class="line">            <span class="keyword">if</span> (weight != weightedRoundRobin.getWeight()) &#123;</span><br><span class="line">                weightedRoundRobin.setWeight(weight);</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 让 current 加上自身权重，等价于 current += weight</span></span><br><span class="line">            <span class="keyword">long</span> cur = weightedRoundRobin.increaseCurrent();</span><br><span class="line">            <span class="comment">// 设置 lastUpdate，表示近期更新过</span></span><br><span class="line">            weightedRoundRobin.setLastUpdate(now);</span><br><span class="line">            <span class="comment">// 找出最大的 current </span></span><br><span class="line">            <span class="keyword">if</span> (cur &gt; maxCurrent) &#123;</span><br><span class="line">                maxCurrent = cur;</span><br><span class="line">                <span class="comment">// 将具有最大 current 权重的 Invoker 赋值给 selectedInvoker</span></span><br><span class="line">                selectedInvoker = invoker;</span><br><span class="line">                <span class="comment">// 将 Invoker 对应的 weightedRoundRobin 赋值给 selectedWRR，留作后用</span></span><br><span class="line">                selectedWRR = weightedRoundRobin;</span><br><span class="line">            &#125;</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// 计算权重总和</span></span><br><span class="line">            totalWeight += weight;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 对 &lt;identifyString, WeightedRoundRobin&gt; 进行检查，过滤掉长时间未被更新的节点。</span></span><br><span class="line">        <span class="comment">// 该节点可能挂了，invokers 中不包含该节点，所以该节点的 lastUpdate 长时间无法被更新。</span></span><br><span class="line">        <span class="comment">// 若未更新时长超过阈值后，就会被移除掉，默认阈值为60秒。</span></span><br><span class="line">        <span class="keyword">if</span> (!updateLock.get() &amp;&amp; invokers.size() != map.size()) &#123;</span><br><span class="line">            <span class="keyword">if</span> (updateLock.compareAndSet(<span class="keyword">false</span>, <span class="keyword">true</span>)) &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    ConcurrentMap&lt;String, WeightedRoundRobin&gt; newMap = <span class="keyword">new</span> ConcurrentHashMap&lt;String, WeightedRoundRobin&gt;();</span><br><span class="line">                    <span class="comment">// 拷贝</span></span><br><span class="line">                    newMap.putAll(map);</span><br><span class="line">                    </span><br><span class="line">                    <span class="comment">// 遍历修改，即移除过期记录</span></span><br><span class="line">                    Iterator&lt;Entry&lt;String, WeightedRoundRobin&gt;&gt; it = newMap.entrySet().iterator();</span><br><span class="line">                    <span class="keyword">while</span> (it.hasNext()) &#123;</span><br><span class="line">                        Entry&lt;String, WeightedRoundRobin&gt; item = it.next();</span><br><span class="line">                        <span class="keyword">if</span> (now - item.getValue().getLastUpdate() &gt; RECYCLE_PERIOD) &#123;</span><br><span class="line">                            it.remove();</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                    </span><br><span class="line">                    <span class="comment">// 更新引用</span></span><br><span class="line">                    methodWeightMap.put(key, newMap);</span><br><span class="line">                &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                    updateLock.set(<span class="keyword">false</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (selectedInvoker != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">// 让 current 减去权重总和，等价于 current -= totalWeight</span></span><br><span class="line">            selectedWRR.sel(totalWeight);</span><br><span class="line">            <span class="comment">// 返回具有最大 current 的 Invoker</span></span><br><span class="line">            <span class="keyword">return</span> selectedInvoker;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// should not happen here</span></span><br><span class="line">        <span class="keyword">return</span> invokers.get(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>以上就是dubbo负载均衡用的方法。实现过程第一次看可能比较绕，多看几次就能看懂精髓。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/负载均衡/" rel="tag"># 负载均衡</a>
+          
+            <a href="/tags/dubbo/" rel="tag"># dubbo</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/30/RabbitMQ安装教程/" rel="next" title="RabbitMQ安装教程">
+                <i class="fa fa-chevron-left"></i> RabbitMQ安装教程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/20180124140140.jpg" alt="两个木">
+            
+              <p class="site-author-name" itemprop="name">两个木</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#源码分析"><span class="nav-number">2.</span> <span class="nav-text">源码分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">两个木</span>
+
+  
+</div>
+
+
+	<div class="powered-by">越努力越幸运</div>
+  <!--<div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>-->
+
+
+<!--
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+-->
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+<!-- 自定义背景 -->
+
+  
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_snow.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
