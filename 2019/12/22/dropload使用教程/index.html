@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="java,mysql,">
+  <meta name="keywords" content="javascript,分页加载,">
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="背景最近项目上需要做一个Excel批量导入一批企业数据到mysql数据库，并对企业名称和企业注册号这两个特定字段去重的需求。 正文 首先我会想到的是直接用java去重；先对当前批次的数据进行内部去重，然后和数据库数据进行对比去重，最后批量插入。">
-<meta name="keywords" content="java,mysql">
+<meta name="description" content="前言最新项目在开发一个手机端的页面，对于下拉加载数据是必须的。本想自己手写一个，但是本着不重复造轮子的想法，就像在GitHub上找找有没有比较好的插件。一查就发现了这个dropload，支持上拉和下拉加载数据。">
+<meta name="keywords" content="javascript,分页加载">
 <meta property="og:type" content="article">
-<meta property="og:title" content="批量插入的去重解决方案">
-<meta property="og:url" content="http://yoursite.com/2019/11/10/关于批量插入的去重问题/index.html">
+<meta property="og:title" content="dropload手机滚动下拉插件">
+<meta property="og:url" content="http://yoursite.com/2019/12/22/dropload使用教程/index.html">
 <meta property="og:site_name" content="lralin">
-<meta property="og:description" content="背景最近项目上需要做一个Excel批量导入一批企业数据到mysql数据库，并对企业名称和企业注册号这两个特定字段去重的需求。 正文 首先我会想到的是直接用java去重；先对当前批次的数据进行内部去重，然后和数据库数据进行对比去重，最后批量插入。">
+<meta property="og:description" content="前言最新项目在开发一个手机端的页面，对于下拉加载数据是必须的。本想自己手写一个，但是本着不重复造轮子的想法，就像在GitHub上找找有没有比较好的插件。一查就发现了这个dropload，支持上拉和下拉加载数据。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-11-10T10:15:25.000Z">
+<meta property="og:updated_time" content="2019-12-22T13:00:25.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="批量插入的去重解决方案">
-<meta name="twitter:description" content="背景最近项目上需要做一个Excel批量导入一批企业数据到mysql数据库，并对企业名称和企业注册号这两个特定字段去重的需求。 正文 首先我会想到的是直接用java去重；先对当前批次的数据进行内部去重，然后和数据库数据进行对比去重，最后批量插入。">
+<meta name="twitter:title" content="dropload手机滚动下拉插件">
+<meta name="twitter:description" content="前言最新项目在开发一个手机端的页面，对于下拉加载数据是必须的。本想自己手写一个，但是本着不重复造轮子的想法，就像在GitHub上找找有没有比较好的插件。一查就发现了这个dropload，支持上拉和下拉加载数据。">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/11/10/关于批量插入的去重问题/">
+  <link rel="canonical" href="http://yoursite.com/2019/12/22/dropload使用教程/">
 
 
 
 
 
-  <title>批量插入的去重解决方案 | lralin</title>
+  <title>dropload手机滚动下拉插件 | lralin</title>
   
 
 
@@ -233,7 +233,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/10/关于批量插入的去重问题/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/22/dropload使用教程/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="两个木">
@@ -250,7 +250,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">批量插入的去重解决方案</h1>
+          <h1 class="post-title" itemprop="name headline">dropload手机滚动下拉插件</h1>
         
 
         <div class="post-meta">
@@ -262,8 +262,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-10T18:15:25+08:00">
-                2019-11-10
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-22T20:35:25+08:00">
+                2019-12-22
               </time>
             
 
@@ -300,22 +300,18 @@
       
 
       
-        <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>最近项目上需要做一个Excel批量导入一批企业数据到mysql数据库，并对企业名称和企业注册号这两个特定字段去重的需求。</p>
-<h3 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h3><ol>
-<li>首先我会想到的是直接用java去重；先对当前批次的数据进行内部去重，然后和数据库数据进行对比去重，最后批量插入。</li>
-</ol>
+        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最新项目在开发一个手机端的页面，对于下拉加载数据是必须的。本想自己手写一个，但是本着不重复造轮子的想法，就像在GitHub上找找有没有比较好的插件。一查就发现了这个<a href="https://github.com/ximan/dropload" target="_blank" rel="noopener">dropload</a>，支持上拉和下拉加载数据。</p>
 <a id="more"></a>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//批量插入的SQL</span><br><span class="line"><span class="tag">&lt;<span class="name">insert</span> <span class="attr">id</span>=<span class="string">"batchInsert"</span>&gt;</span></span><br><span class="line">		insert into test_ent(ent_name,creditcode,remark)</span><br><span class="line">		values</span><br><span class="line">		<span class="tag">&lt;<span class="name">foreach</span> <span class="attr">collection</span>=<span class="string">"entList"</span> <span class="attr">index</span>=<span class="string">"index"</span> <span class="attr">item</span>=<span class="string">"item"</span></span></span><br><span class="line"><span class="tag">			<span class="attr">separator</span>=<span class="string">","</span>&gt;</span></span><br><span class="line">			(#&#123;item.entName&#125;,#&#123;item.creditcode&#125;,#&#123;item.remark&#125;)</span><br><span class="line">		<span class="tag">&lt;/<span class="name">foreach</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">insert</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>那么这里和数据库对比的时候会造成频繁的进行交互，我们都知道，这是不好的。</p>
-<ol>
-<li>又想不那频繁的与数据库进行交互，又能去重，还能批量插入，是否可以直接用一条SQL实现呢？熟悉mysql的人应该知道insert ignore，它是对主键或者唯一索引的字段存在相同数据，则忽略该条数据，否则插入。正好他是复合我们的去重要求的，我们只需对企业名称和企业注册号加上唯一索引就行了。最后再改装成批量的SQL就完美了。</li>
-</ol>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//其实就只需在上面sql的insert前面加上ignore关键字就行了。</span><br><span class="line"><span class="tag">&lt;<span class="name">insert</span> <span class="attr">id</span>=<span class="string">"batchInsert"</span>&gt;</span></span><br><span class="line">		insert ignore into test_ent(ent_name,creditcode,remark)</span><br><span class="line">		values</span><br><span class="line">		<span class="tag">&lt;<span class="name">foreach</span> <span class="attr">collection</span>=<span class="string">"entList"</span> <span class="attr">index</span>=<span class="string">"index"</span> <span class="attr">item</span>=<span class="string">"item"</span></span></span><br><span class="line"><span class="tag">			<span class="attr">separator</span>=<span class="string">","</span>&gt;</span></span><br><span class="line">			(#&#123;item.entName&#125;,#&#123;item.creditcode&#125;,#&#123;item.remark&#125;)</span><br><span class="line">		<span class="tag">&lt;/<span class="name">foreach</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">insert</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<ol>
-<li><p>如果我想对该表的多个字段进行去重呢？我们知道一个表加过多的索引是不好的一种行为，完全会印象数据的更新和插入，既然要批量插入，说明该表是会被频繁更新的。于是就有了<code>INSERT INTO test_ent(ent_name,creditcode,remark) SELECT &#39;企业1&#39;,&#39;社会信用代码1&#39;,&#39;备注1&#39; FROM dual WHERE NOT EXISTS(SELECT ent_name,creditcode,remark FROM table WHERE ent_name=&#39;企业1&#39; and creditcode=&#39;社会信用代码1&#39; and remark=&#39;备注1&#39;);</code>。那么如何把它改成批量呢？我现在唯一能想到的办法就是把多个插入sql放在同一个事物里面。</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">insert</span> <span class="attr">id</span>=<span class="string">"batchInsert"</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">foreach</span> <span class="attr">collection</span>=<span class="string">"entList"</span> <span class="attr">index</span>=<span class="string">"index"</span> <span class="attr">item</span>=<span class="string">"item"</span></span></span><br><span class="line"><span class="tag">			<span class="attr">separator</span>=<span class="string">";"</span>&gt;</span></span><br><span class="line">			INSERT INTO test_ent(ent_name,creditcode,remark) SELECT #&#123;item.entName&#125;,#&#123;item.creditcode&#125;,#&#123;item.remark&#125; FROM dual WHERE NOT EXISTS(SELECT ent_name,creditcode,remark FROM table WHERE ent_name=#&#123;item.entName&#125; and creditcode=#&#123;item.creditcode&#125; and remark=#&#123;item.remark&#125;)</span><br><span class="line">		<span class="tag">&lt;/<span class="name">foreach</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">insert</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="使用说明"><a href="#使用说明" class="headerlink" title="使用说明"></a>使用说明</h3><ol>
+<li><p>引入js和css</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;link rel=<span class="string">"stylesheet"</span> href=<span class="string">"../dist/dropload.css"</span>&gt;</span><br><span class="line">&lt;script src="../dist/dropload.min.js"&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>如果有更好的批量去重方式，欢迎提供。</p>
+<li><p>渲染数据</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="string">'.element'</span>).dropload(&#123;</span><br><span class="line">    scrollArea : <span class="built_in">window</span>,</span><br><span class="line">    loadDownFn : <span class="function"><span class="keyword">function</span>(<span class="params">me</span>)</span>&#123;</span><br><span class="line">        $.ajax(&#123;</span><br><span class="line">            type: <span class="string">'GET'</span>,</span><br><span class="line">            url: <span class="string">'json/more.json'</span>,</span><br><span class="line">            dataType: <span class="string">'json'</span>,</span><br><span class="line">            success: <span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123;</span><br><span class="line">                alert(data);</span><br><span class="line">                <span class="keyword">if</span>($.isEmptyObject(data))&#123;</span><br><span class="line">                  <span class="comment">//如果数据为空，则必须锁定</span></span><br><span class="line">                  me.lock();</span><br><span class="line">                  <span class="comment">//致为无数据，防止循环加载</span></span><br><span class="line">                  me.noData();</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">// 每次数据加载完，必须重置</span></span><br><span class="line">                me.resetload();</span><br><span class="line">            &#125;,</span><br><span class="line">            error: <span class="function"><span class="keyword">function</span>(<span class="params">xhr, type</span>)</span>&#123;</span><br><span class="line">                alert(<span class="string">'Ajax error!'</span>);</span><br><span class="line">                <span class="comment">// 即使加载出错，也得重置</span></span><br><span class="line">                me.resetload();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p><code>me.resetload();</code>因为必须重置，如果是用ajax加载数据的话就直接放在complete方法里重置就好。</p>
+</li>
+<li><p>参数列表</p>
+<p>|    参数    |     说明     | 默认值                                                       | 可填值                                                 |<br>| :——–: | :———-: | :———————————————————– | :—————————————————– |<br>| scrollArea |   滑动区域   | 绑定元素自身                                                 | window                                                 |<br>|   domUp    |   上方DOM    | {     <br>domClass : ‘dropload-up’,     <br>domRefresh : ‘<div class="dropload-refresh">↓下拉刷新</div>‘,     domUpdate : ‘<div class="dropload-update">↑释放更新</div>‘,     domLoad : ‘<div class="dropload-load">○加载中…</div>‘ <br>} | 数组                                                   |<br>|  domDown   |   下方DOM    | {<br>domClass : ‘dropload-down’,<br>domRefresh : ‘<div class="dropload-refresh">↑上拉加载更多</div>‘,<br>domLoad : ‘<div class="dropload-load">○加载中…</div>‘,<br>domNoData : ‘<div class="dropload-noData">暂无数据</div>‘<br>} | 数组                                                   |<br>|  autoLoad  |   自动加载   | true                                                         | true和false                                            |<br>|  distance  |   拉动距离   | 50                                                           | 数字                                                   |<br>| threshold  | 提前加载距离 | 加载区高度2/3                                                | 正整数                                                 |<br>|  loadUpFn  | 上方function | 空                                                           | function(me){<br>//你的代码<br>me.resetload();<br>} |<br>| loadDownFn | 下方function | 空                                                           | function(me){<br>//你的代码<br>me.resetload();<br>} |</p>
 </li>
 </ol>
 
@@ -335,9 +331,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/java/" rel="tag"># java</a>
+            <a href="/tags/javascript/" rel="tag"># javascript</a>
           
-            <a href="/tags/mysql/" rel="tag"># mysql</a>
+            <a href="/tags/分页加载/" rel="tag"># 分页加载</a>
           
         </div>
       
@@ -350,8 +346,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/11/02/dubbo负载均衡-ConsistentHashLoadBalance/" rel="next" title="dubbo负载均衡-ConsistentHashLoadBalance">
-                <i class="fa fa-chevron-left"></i> dubbo负载均衡-ConsistentHashLoadBalance
+              <a href="/2019/12/15/dubbo负载均衡-RoundRobinLoadBalance/" rel="next" title="dubbo负载均衡-RoundRobinLoadBalance">
+                <i class="fa fa-chevron-left"></i> dubbo负载均衡-RoundRobinLoadBalance
               </a>
             
           </div>
@@ -359,10 +355,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/11/17/当前日期是否为工作日/" rel="prev" title="某日是否为工作日">
-                某日是否为工作日 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -487,7 +479,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#正文"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用说明"><span class="nav-number">2.</span> <span class="nav-text">使用说明</span></a></li></ol></div>
             
 
           </div>
