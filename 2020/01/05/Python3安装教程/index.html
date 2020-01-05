@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="安装依赖包 首先安装gcc编译器，gcc有些系统版本已经默认安装，通过  gcc –version  查看，没安装的先安装gcc。 1yum -y install gcc  安装其它依赖包，（注：不要缺少，否则有可能安装python出错，python3.7.0以下的版本可不装 libffi-devel ） 1yum -y install zlib-devel bzip2-devel openssl">
+<meta name="description" content="安装依赖包 首先安装gcc编译器，gcc有些系统版本已经默认安装，通过  gcc –version  查看，没安装的先安装gcc。 1yum -y install gcc">
 <meta name="keywords" content="python,linux">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Python3安装教程">
 <meta property="og:url" content="http://yoursite.com/2020/01/05/Python3安装教程/index.html">
 <meta property="og:site_name" content="lralin">
-<meta property="og:description" content="安装依赖包 首先安装gcc编译器，gcc有些系统版本已经默认安装，通过  gcc –version  查看，没安装的先安装gcc。 1yum -y install gcc  安装其它依赖包，（注：不要缺少，否则有可能安装python出错，python3.7.0以下的版本可不装 libffi-devel ） 1yum -y install zlib-devel bzip2-devel openssl">
+<meta property="og:description" content="安装依赖包 首先安装gcc编译器，gcc有些系统版本已经默认安装，通过  gcc –version  查看，没安装的先安装gcc。 1yum -y install gcc">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2020-01-05T04:15:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Python3安装教程">
-<meta name="twitter:description" content="安装依赖包 首先安装gcc编译器，gcc有些系统版本已经默认安装，通过  gcc –version  查看，没安装的先安装gcc。 1yum -y install gcc  安装其它依赖包，（注：不要缺少，否则有可能安装python出错，python3.7.0以下的版本可不装 libffi-devel ） 1yum -y install zlib-devel bzip2-devel openssl">
+<meta name="twitter:description" content="安装依赖包 首先安装gcc编译器，gcc有些系统版本已经默认安装，通过  gcc –version  查看，没安装的先安装gcc。 1yum -y install gcc">
 
 
 
@@ -303,6 +303,7 @@
         <h5 id="安装依赖包"><a href="#安装依赖包" class="headerlink" title="安装依赖包"></a>安装依赖包</h5><ol>
 <li><p>首先安装gcc编译器，gcc有些系统版本已经默认安装，通过  gcc –version  查看，没安装的先安装gcc。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install gcc</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
 </li>
 <li><p>安装其它依赖包，（注：不要缺少，否则有可能安装python出错，python3.7.0以下的版本可不装 libffi-devel ）</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel libffi-devel</span><br></pre></td></tr></table></figure>
