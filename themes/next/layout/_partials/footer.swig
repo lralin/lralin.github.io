@@ -22,10 +22,11 @@
 </div>
 
 {% if theme.footer.powered %}
-	<div class="powered-by">越努力越幸运</div>
-  <!--<div class="powered-by">{#
-  #}{{ __('footer.powered', '<a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a>') }}{#
-#}</div>-->
+  <div class="powered-by">越努力越幸运</div>
+  <br/>
+  <div class="powered-by">{#
+  #}{{ __('footer.powered', '<a class="theme-link" target="_blank" href="http://www.beian.miit.gov.cn">粤ICP备18022577号</a>') }}{#
+#}</div>
 {% endif %}
 
 <!--{% if theme.footer.powered and theme.footer.theme.enable %}
