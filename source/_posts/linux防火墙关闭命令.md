@@ -1,6 +1,6 @@
 ---
 title: 防火墙关闭命令
-date: 2020-08-25 17:55:25
+date: 2019-08-25 17:55:25
 updated: 2019-08-25 17:55:25
 tags: 
 - shell
@@ -14,7 +14,9 @@ systemctl status firewalld
 
 service  iptables status
 ```
-2. 暂时关闭防火墙
+<!--more-->
+
+1. 暂时关闭防火墙
 ```
 systemctl stop firewalld
 
