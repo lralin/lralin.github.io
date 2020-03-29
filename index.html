@@ -229,6 +229,138 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/29/mybatis-association关联查询/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="两个木">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/20180124140140.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lralin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/29/mybatis-association关联查询/" itemprop="url">mybatis关联查询association</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-29T14:11:25+08:00">
+                2020-03-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h5 id="mybatis的association两种方式"><a href="#mybatis的association两种方式" class="headerlink" title="mybatis的association两种方式"></a>mybatis的association两种方式</h5><ol>
+<li><p>嵌套的resultMap</p>
+<p>bean如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Product</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String spId;</span><br><span class="line">    <span class="keyword">private</span> String systemCode;</span><br><span class="line">    <span class="keyword">private</span> List&lt;Plan&gt; plans;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getSystemCode</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> systemCode;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSystemCode</span><span class="params">(String systemCode)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.systemCode = systemCode;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getSpId</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> spId;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSpId</span><span class="params">(String spId)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.spId = spId;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Plan&gt; <span class="title">getPlans</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> plans;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setPlans</span><span class="params">(List&lt;Plan&gt; plans)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.plans = plans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Plan</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String statusName;</span><br><span class="line">    <span class="keyword">private</span> String cardType;</span><br><span class="line">    <span class="keyword">private</span> List&lt;Card&gt; cards;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getStatusName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> statusName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setStatusName</span><span class="params">(String statusName)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.statusName = statusName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getCardType</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> cardType;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setCardType</span><span class="params">(String cardType)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.cardType = cardType;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;Card&gt; <span class="title">getCards</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> cards;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setCards</span><span class="params">(List&lt;Card&gt; cards)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.cards = cards;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Card</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String cardTypeId;</span><br><span class="line">    <span class="keyword">private</span> String cardTypeValue;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getCardTypeId</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> cardTypeId;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setCardTypeId</span><span class="params">(String cardTypeId)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.cardTypeId = cardTypeId;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getCardTypeValue</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> cardTypeValue;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setCardTypeValue</span><span class="params">(String cardTypeValue)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.cardTypeValue = cardTypeValue;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>xml如下</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">resultMap</span> <span class="attr">type</span>=<span class="string">"Product"</span> <span class="attr">id</span>=<span class="string">"ProductResult"</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">result</span> <span class="attr">property</span>=<span class="string">"spId"</span> <span class="attr">column</span>=<span class="string">"sp_id"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">result</span> <span class="attr">property</span>=<span class="string">"systemCode"</span> <span class="attr">column</span>=<span class="string">"system_code"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">association</span> <span class="attr">property</span>=<span class="string">"plans"</span> <span class="attr">resultMap</span>=<span class="string">"PlanResult"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">resultMap</span>&gt;</span></span><br><span class="line">   </span><br><span class="line">  <span class="tag">&lt;<span class="name">resultMap</span> <span class="attr">type</span>=<span class="string">"Plan"</span> <span class="attr">id</span>=<span class="string">"PlanResult"</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">result</span> <span class="attr">property</span>=<span class="string">"cardType"</span> <span class="attr">column</span>=<span class="string">"card_type"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">result</span> <span class="attr">property</span>=<span class="string">"statusName"</span> <span class="attr">column</span>=<span class="string">"status_name"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">association</span> <span class="attr">property</span>=<span class="string">"cards"</span> <span class="attr">resultMap</span>=<span class="string">"CardResult"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">resultMap</span>&gt;</span></span><br><span class="line">   </span><br><span class="line">  <span class="tag">&lt;<span class="name">resultMap</span> <span class="attr">type</span>=<span class="string">"Card"</span> <span class="attr">id</span>=<span class="string">"CardResult"</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">result</span> <span class="attr">property</span>=<span class="string">"cardTypeId"</span> <span class="attr">column</span>=<span class="string">"card_type_id"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">result</span> <span class="attr">property</span>=<span class="string">"cardTypeValue"</span> <span class="attr">column</span>=<span class="string">"card_type_value"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">resultMap</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">"listProduct"</span> <span class="attr">resultMap</span>=<span class="string">"ProductResult"</span>&gt;</span></span><br><span class="line">      select t1.sp_id,</span><br><span class="line">             t1.system_code,</span><br><span class="line">             t2.status_name,</span><br><span class="line">             t2.card_type,</span><br><span class="line">             t3.card_type_id,</span><br><span class="line">             t3.card_type_value</span><br><span class="line">      from zy_cfg_system_prod_rel t1</span><br><span class="line">      left join zy_cfg_prod_settle_plan t2 on t1.sp_id=t2.sp_id</span><br><span class="line">      left join zy_cfg_card_config_inf t3 on t2.card_type=t3.card_type_id;</span><br><span class="line">  <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>嵌套的select语句</p>
+<p>javabean的结构还是一样，配置文件如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">resultMap</span> <span class="attr">type</span>=<span class="string">"Product"</span> <span class="attr">id</span>=<span class="string">"ProductResult"</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">result</span> <span class="attr">property</span>=<span class="string">"spId"</span> <span class="attr">column</span>=<span class="string">"sp_id"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">result</span> <span class="attr">property</span>=<span class="string">"systemCode"</span> <span class="attr">column</span>=<span class="string">"system_code"</span>/&gt;</span></span><br><span class="line"><span class="comment">&lt;!--column如果想传入多个参数的话，可以 column="&#123;spId=sp_id,systemCode=system_code&#125;" 来传参--&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">association</span> <span class="attr">property</span>=<span class="string">"plans"</span> <span class="attr">column</span>=<span class="string">"sp_id"</span> <span class="attr">select</span>=<span class="string">"listPlan"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">resultMap</span>&gt;</span></span><br><span class="line">   </span><br><span class="line">  <span class="tag">&lt;<span class="name">resultMap</span> <span class="attr">type</span>=<span class="string">"Plan"</span> <span class="attr">id</span>=<span class="string">"PlanResult"</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">result</span> <span class="attr">property</span>=<span class="string">"cardType"</span> <span class="attr">column</span>=<span class="string">"card_type"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">result</span> <span class="attr">property</span>=<span class="string">"statusName"</span> <span class="attr">column</span>=<span class="string">"status_name"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">association</span> <span class="attr">property</span>=<span class="string">"cards"</span> <span class="attr">column</span>=<span class="string">"card_type"</span> <span class="attr">select</span>=<span class="string">"listCard"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">resultMap</span>&gt;</span></span><br><span class="line">   </span><br><span class="line">  <span class="tag">&lt;<span class="name">resultMap</span> <span class="attr">type</span>=<span class="string">"Card"</span> <span class="attr">id</span>=<span class="string">"CardResult"</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">result</span> <span class="attr">property</span>=<span class="string">"cardTypeId"</span> <span class="attr">column</span>=<span class="string">"card_type_id"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">result</span> <span class="attr">property</span>=<span class="string">"cardTypeValue"</span> <span class="attr">column</span>=<span class="string">"card_type_value"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">resultMap</span>&gt;</span></span><br><span class="line">   </span><br><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">"listProduct"</span> <span class="attr">resultMap</span>=<span class="string">"ProductResult"</span>&gt;</span></span><br><span class="line">      select sp_id,system_code from zy_cfg_system_prod_rel</span><br><span class="line">  <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line">   </span><br><span class="line">  <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">"listPlan"</span> <span class="attr">resultMap</span>=<span class="string">"PlanResult"</span>&gt;</span></span><br><span class="line">      select status_name,card_type from zy_cfg_prod_settle_plan where sp_id=#&#123;spId&#125;</span><br><span class="line">  <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line">   </span><br><span class="line">  <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">"listCard"</span> <span class="attr">resultMap</span>=<span class="string">"CardResult"</span>&gt;</span></span><br><span class="line">      select card_type_id,card_type_value from zy_cfg_card_config_inf where card_type_id=#&#123;cardType&#125;</span><br><span class="line">  <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><p>尽量不要用嵌套的select语句，优先使用嵌套的resultMap。</p>
+</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/22/工厂模式/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1343,130 +1475,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/22/maven发布jar包到本地仓库/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="两个木">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/20180124140140.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="lralin">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/11/22/maven发布jar包到本地仓库/" itemprop="url">maven添加本地jar包到本地仓库</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-22T18:15:25+08:00">
-                2019-11-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>有些API接口有第三方的jar包，这些jar并不存在于中央仓库。当我们没有私服的情况下，我们又要用maven管理jar包。这就需要自己把jar包发布到本地私服，然后才可以直接在项目的pom文件里面引用。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/11/22/maven发布jar包到本地仓库/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1519,7 +1527,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-count">37</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1532,7 +1540,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-count">40</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
