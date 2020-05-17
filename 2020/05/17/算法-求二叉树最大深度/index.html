@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="python,linux,">
+  <meta name="keywords" content="Hexo, NexT">
 
 
 
@@ -79,18 +79,17 @@
 
 
 
-<meta name="description" content="安装依赖包 首先安装gcc编译器，gcc有些系统版本已经默认安装，通过  gcc –version  查看，没安装的先安装gcc。 1yum -y install gcc">
-<meta name="keywords" content="python,linux">
+<meta name="description" content="递归这是一个leetcode的题目。给定一个二叉树，找出其最大深度。二叉树的深度为根节点到最远叶子节点的最长路径上的节点数。说明: 叶子节点是指没有子节点的节点。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Python3安装教程">
-<meta property="og:url" content="http://yoursite.com/2020/01/05/Python3安装教程/index.html">
+<meta property="og:title" content="二叉树的最大深度">
+<meta property="og:url" content="http://yoursite.com/2020/05/17/算法-求二叉树最大深度/index.html">
 <meta property="og:site_name" content="lralin">
-<meta property="og:description" content="安装依赖包 首先安装gcc编译器，gcc有些系统版本已经默认安装，通过  gcc –version  查看，没安装的先安装gcc。 1yum -y install gcc">
+<meta property="og:description" content="递归这是一个leetcode的题目。给定一个二叉树，找出其最大深度。二叉树的深度为根节点到最远叶子节点的最长路径上的节点数。说明: 叶子节点是指没有子节点的节点。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-01-05T04:15:25.000Z">
+<meta property="og:updated_time" content="2020-05-17T08:50:25.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Python3安装教程">
-<meta name="twitter:description" content="安装依赖包 首先安装gcc编译器，gcc有些系统版本已经默认安装，通过  gcc –version  查看，没安装的先安装gcc。 1yum -y install gcc">
+<meta name="twitter:title" content="二叉树的最大深度">
+<meta name="twitter:description" content="递归这是一个leetcode的题目。给定一个二叉树，找出其最大深度。二叉树的深度为根节点到最远叶子节点的最长路径上的节点数。说明: 叶子节点是指没有子节点的节点。">
 
 
 
@@ -120,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/01/05/Python3安装教程/">
+  <link rel="canonical" href="http://yoursite.com/2020/05/17/算法-求二叉树最大深度/">
 
 
 
 
 
-  <title>Python3安装教程 | lralin</title>
+  <title>二叉树的最大深度 | lralin</title>
   
 
 
@@ -233,7 +232,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/05/Python3安装教程/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/17/算法-求二叉树最大深度/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="两个木">
@@ -250,7 +249,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Python3安装教程</h1>
+          <h1 class="post-title" itemprop="name headline">二叉树的最大深度</h1>
         
 
         <div class="post-meta">
@@ -262,8 +261,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-05T12:15:25+08:00">
-                2020-01-05
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-17T15:50:25+08:00">
+                2020-05-17
               </time>
             
 
@@ -300,35 +299,13 @@
       
 
       
-        <h5 id="安装依赖包"><a href="#安装依赖包" class="headerlink" title="安装依赖包"></a>安装依赖包</h5><ol>
-<li><p>首先安装gcc编译器，gcc有些系统版本已经默认安装，通过  gcc –version  查看，没安装的先安装gcc。</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install gcc</span><br></pre></td></tr></table></figure>
+        <h4 id="递归"><a href="#递归" class="headerlink" title="递归"></a>递归</h4><p>这是一个leetcode的题目。给定一个二叉树，找出其最大深度。二叉树的深度为根节点到最远叶子节点的最长路径上的节点数。说明: 叶子节点是指没有子节点的节点。</p>
 <a id="more"></a>
-</li>
-<li><p>安装其它依赖包，（注：不要缺少，否则有可能安装python出错，python3.7.0以下的版本可不装 libffi-devel ）</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel libffi-devel</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<h5 id="下载python3-7-0源码，根据需求下载"><a href="#下载python3-7-0源码，根据需求下载" class="headerlink" title="下载python3.7.0源码，根据需求下载"></a>下载python3.7.0源码，根据需求下载</h5><ol>
-<li><p>在<code>https://www.python.org/ftp/python/</code>中选择自己需要的python源码包，我下载的是python3.8.1</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://www.python.org/ftp/python/3.8.1/Python-3.8.1.tgz</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<h6 id="解压Python-3-8-1-tgz"><a href="#解压Python-3-8-1-tgz" class="headerlink" title="解压Python-3.8.1.tgz"></a>解压Python-3.8.1.tgz</h6><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tar -zxvf Python-3.8.1.tgz</span><br></pre></td></tr></table></figure>
-<h5 id="建立一个空文件夹，用于存放python3程序"><a href="#建立一个空文件夹，用于存放python3程序" class="headerlink" title="建立一个空文件夹，用于存放python3程序"></a>建立一个空文件夹，用于存放python3程序</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir /usr/local/python3</span><br></pre></td></tr></table></figure>
-<h5 id="执行配置文件，编译，编译安装"><a href="#执行配置文件，编译，编译安装" class="headerlink" title="执行配置文件，编译，编译安装"></a>执行配置文件，编译，编译安装</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd Python-3.8.1</span><br><span class="line">./configure --prefix=/usr/local/python3 --with-ssl</span><br><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure>
-<p>安装完成没有提示错误便安装成功了，加with-ssl是为了保证有些源必须用https访问。</p>
-<h5 id="建立软连接"><a href="#建立软连接" class="headerlink" title="建立软连接"></a>建立软连接</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ln -s /usr/local/python3/bin/python3.8 /usr/bin/python3</span><br><span class="line">ln -s /usr/local/python3/bin/pip3.8 /usr/bin/pip3</span><br></pre></td></tr></table></figure>
-<h5 id="测试一下python3是否可以用"><a href="#测试一下python3是否可以用" class="headerlink" title="测试一下python3是否可以用"></a>测试一下python3是否可以用</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 --version</span><br></pre></td></tr></table></figure>
-<h5 id="配置-国内源"><a href="#配置-国内源" class="headerlink" title="配置 国内源"></a>配置 国内源</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -i https://pypi.tuna.tsinghua.edu.cn/simple [安装包名称]</span><br></pre></td></tr></table></figure>
-<p>可选源：</p>
-<ol>
-<li>阿里云<code>http://mirrors.aliyun.com/pypi/simple/</code></li>
-<li>豆瓣<code>http://pypi.douban.com/simple/</code></li>
-<li>清华大学<code>https://pypi.tuna.tsinghua.edu.cn/simple/</code></li>
-<li>中国科学技术大学<code>http://pypi.mirrors.ustc.edu.cn/simple/</code></li>
-<li>华中科技大学<code>http://pypi.hustunique.com/</code></li>
-</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** 树的定义 */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TreeNode</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> val;</span><br><span class="line">	TreeNode left;</span><br><span class="line">	TreeNode right;</span><br><span class="line">	ThreeNode(<span class="keyword">int</span> x)&#123;</span><br><span class="line">		<span class="keyword">this</span>.val = x;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>看到树，一般最先想到的是使用递归来解题。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxDepth</span><span class="params">(TreeNode root)</span></span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(root==<span class="keyword">null</span>)&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> Math.max(maxDepth(root.left,maxDepth(root.right)+<span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="迭代"><a href="#迭代" class="headerlink" title="迭代"></a>迭代</h4><p>利用栈先进后出的原理，来对树的深度进行遍历。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">maxDepth</span><span class="params">(TreeNode root)</span></span>&#123;</span><br><span class="line">			LinkedList&lt;Pair&lt;TreeNode, Integer&gt;&gt; stack = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">       stack.add(<span class="keyword">new</span> Pair&lt;&gt;(root, <span class="number">1</span>));</span><br><span class="line">       <span class="keyword">int</span> dept = <span class="number">0</span>;</span><br><span class="line">       <span class="keyword">while</span> (!stack.isEmpty()) &#123;</span><br><span class="line">           Pair&lt;TreeNode, Integer&gt; node = stack.poll();</span><br><span class="line">           root = node.getKey();</span><br><span class="line">           <span class="keyword">int</span> curr = node.getValue();</span><br><span class="line">           <span class="keyword">if</span> (root != <span class="keyword">null</span>) &#123;</span><br><span class="line">               dept = Math.max(dept, curr);</span><br><span class="line">               stack.add(<span class="keyword">new</span> Pair&lt;&gt;(root.left, curr + <span class="number">1</span>));</span><br><span class="line">               stack.add(<span class="keyword">new</span> Pair&lt;&gt;(root.right, curr + <span class="number">1</span>));</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> dept;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -344,14 +321,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/python/" rel="tag"># python</a>
-          
-            <a href="/tags/linux/" rel="tag"># linux</a>
-          
-        </div>
-      
 
       
       
@@ -361,8 +330,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/12/27/2019总结/" rel="next" title="2019随想">
-                <i class="fa fa-chevron-left"></i> 2019随想
+              <a href="/2020/05/10/算法-斐波那契数列/" rel="next" title="斐波那契数列">
+                <i class="fa fa-chevron-left"></i> 斐波那契数列
               </a>
             
           </div>
@@ -370,10 +339,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/02/23/微信小程序-第一篇/" rel="prev" title="微信小程序-第一篇">
-                微信小程序-第一篇 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -498,7 +463,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#安装依赖包"><span class="nav-number">1.</span> <span class="nav-text">安装依赖包</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#下载python3-7-0源码，根据需求下载"><span class="nav-number">2.</span> <span class="nav-text">下载python3.7.0源码，根据需求下载</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#解压Python-3-8-1-tgz"><span class="nav-number">2.1.</span> <span class="nav-text">解压Python-3.8.1.tgz</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#建立一个空文件夹，用于存放python3程序"><span class="nav-number">3.</span> <span class="nav-text">建立一个空文件夹，用于存放python3程序</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#执行配置文件，编译，编译安装"><span class="nav-number">4.</span> <span class="nav-text">执行配置文件，编译，编译安装</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#建立软连接"><span class="nav-number">5.</span> <span class="nav-text">建立软连接</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#测试一下python3是否可以用"><span class="nav-number">6.</span> <span class="nav-text">测试一下python3是否可以用</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#配置-国内源"><span class="nav-number">7.</span> <span class="nav-text">配置 国内源</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#递归"><span class="nav-number">1.</span> <span class="nav-text">递归</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#迭代"><span class="nav-number">2.</span> <span class="nav-text">迭代</span></a></li></ol></div>
             
 
           </div>
