@@ -229,6 +229,134 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/07/验证码识别/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="两个木">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/20180124140140.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lralin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/06/07/验证码识别/" itemprop="url">验证码自动识别</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-07T10:47:25+08:00">
+                2020-06-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h4><p>最近突然被朋友说要做一个豆瓣自动回帖的功能。而频繁顶帖超过三次的话会出现验证码，这就涉及到了文本OCR，正好百度有个免费的OCR识别接口。说做就做，获取token，调用接口，发现识别正确率并不高。资料一查，原来百度OCR只识别文字，并没有对图片进行二值化和降噪。</p>
+<h4 id="二值化"><a href="#二值化" class="headerlink" title="二值化"></a>二值化</h4><p>验证码的识别有很多python版本，但是Java版本很少，处理的比较好的那就更少了。所以我们就仿造python的逻辑写了个Java版本的二值化</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">byte</span>[] imageProcessing(String url) <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">  	Connection.Response execute1 = Jsoup.connect(url).timeout(<span class="number">5000</span>)</span><br><span class="line">				.header(<span class="string">"Host"</span>, <span class="string">"www.douban.com"</span>)</span><br><span class="line">				.header(<span class="string">"Referer"</span>, <span class="string">"https://www.douban.com/"</span>)</span><br><span class="line">				.header(<span class="string">"User-Agent"</span>, <span class="string">"Mozilla/5.0 (Windows NT 10.0; WOW64; rv:58.0) Gecko/20100101 Firefox/58.0/"</span>)</span><br><span class="line">				.ignoreContentType(<span class="keyword">true</span>)</span><br><span class="line">				.execute();</span><br><span class="line">		BufferedInputStream bufferedInputStream = execute1.bodyStream();</span><br><span class="line">		BufferedImage bufferedImage = ImageIO.read(bufferedInputStream);</span><br><span class="line">		<span class="comment">//BufferedImage bufferedImage = ImageIO.read(new File("C:\\Users\\Pictures\\captchaImage.jpg"));</span></span><br><span class="line">		<span class="keyword">int</span> h = bufferedImage.getHeight();</span><br><span class="line">		<span class="keyword">int</span> w = bufferedImage.getWidth();</span><br><span class="line">		BufferedImage binaryBufferedImage = <span class="keyword">new</span> BufferedImage(w, h, BufferedImage.TYPE_BYTE_BINARY);</span><br><span class="line">		<span class="comment">// 二值化</span></span><br><span class="line">		<span class="keyword">int</span> threshold = <span class="number">30</span>;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> x = <span class="number">0</span>; x &lt; w; x++) &#123;</span><br><span class="line">			<span class="keyword">for</span> (<span class="keyword">int</span> y = <span class="number">0</span>; y &lt; h; y++) &#123;</span><br><span class="line">				<span class="keyword">int</span> argb = bufferedImage.getRGB(x, y);</span><br><span class="line">				<span class="keyword">int</span> r = (argb &amp; <span class="number">0xff0000</span>) &gt;&gt; <span class="number">16</span>;</span><br><span class="line">				<span class="keyword">int</span> g = (argb &amp; <span class="number">0xff00</span>) &gt;&gt; <span class="number">8</span>;</span><br><span class="line">				<span class="keyword">int</span> b = (argb &amp; <span class="number">0xff</span>);</span><br><span class="line">				<span class="keyword">if</span> (r &gt; threshold || g &gt; threshold || b &gt; threshold) &#123;</span><br><span class="line">					binaryBufferedImage.setRGB(x, y, <span class="keyword">new</span> Color(<span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>).getRGB());</span><br><span class="line">				&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">					binaryBufferedImage.setRGB(x, y, <span class="keyword">new</span> Color(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>).getRGB());</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">    <span class="comment">//降噪</span></span><br><span class="line">		BufferedImage denoise = denoise(binaryBufferedImage);</span><br><span class="line">		ByteArrayOutputStream bos = <span class="keyword">new</span> ByteArrayOutputStream();</span><br><span class="line">		ImageIO.write(denoise, <span class="string">"jpg"</span>, bos);</span><br><span class="line">		<span class="keyword">return</span> bos.toByteArray();</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="降噪"><a href="#降噪" class="headerlink" title="降噪"></a>降噪</h4><p>降噪的作用其实不是很大，但为了提高识别率，所以我们还是加了一下。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 降噪，以1个像素点为单位（实际使用中可以循环降噪，或者把单位可以扩大为多个像素点）</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> image</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> BufferedImage <span class="title">denoise</span><span class="params">(BufferedImage image)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span> w = image.getWidth();</span><br><span class="line">	<span class="keyword">int</span> h = image.getHeight();</span><br><span class="line">	<span class="keyword">int</span> white = <span class="keyword">new</span> Color(<span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>).getRGB();</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (isWhite(image.getRGB(<span class="number">1</span>, <span class="number">0</span>)) &amp;&amp; isWhite(image.getRGB(<span class="number">0</span>, <span class="number">1</span>)) &amp;&amp; isWhite(image.getRGB(<span class="number">1</span>, <span class="number">1</span>))) &#123;</span><br><span class="line">		image.setRGB(<span class="number">0</span>, <span class="number">0</span>, white);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (isWhite(image.getRGB(w - <span class="number">2</span>, <span class="number">0</span>)) &amp;&amp; isWhite(image.getRGB(w - <span class="number">1</span>, <span class="number">1</span>)) &amp;&amp; isWhite(image.getRGB(w - <span class="number">2</span>, <span class="number">1</span>))) &#123;</span><br><span class="line">		image.setRGB(w - <span class="number">1</span>, <span class="number">0</span>, white);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (isWhite(image.getRGB(<span class="number">0</span>, h - <span class="number">2</span>)) &amp;&amp; isWhite(image.getRGB(<span class="number">1</span>, h - <span class="number">1</span>)) &amp;&amp; isWhite(image.getRGB(<span class="number">1</span>, h - <span class="number">2</span>))) &#123;</span><br><span class="line">		image.setRGB(<span class="number">0</span>, h - <span class="number">1</span>, white);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (isWhite(image.getRGB(w - <span class="number">2</span>, h - <span class="number">1</span>)) &amp;&amp; isWhite(image.getRGB(w - <span class="number">1</span>, h - <span class="number">2</span>)) &amp;&amp; isWhite(image.getRGB(w - <span class="number">2</span>, h - <span class="number">2</span>))) &#123;</span><br><span class="line">		image.setRGB(w - <span class="number">1</span>, h - <span class="number">1</span>, white);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> x = <span class="number">1</span>; x &lt; w - <span class="number">1</span>; x++) &#123;</span><br><span class="line">		<span class="keyword">int</span> y = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">if</span> (isBlack(image.getRGB(x, y))) &#123;</span><br><span class="line">			<span class="keyword">int</span> size = <span class="number">0</span>;</span><br><span class="line">			<span class="keyword">if</span> (isWhite(image.getRGB(x - <span class="number">1</span>, y))) &#123;</span><br><span class="line">				size++;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (isWhite(image.getRGB(x + <span class="number">1</span>, y))) &#123;</span><br><span class="line">				size++;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (isWhite(image.getRGB(x, y + <span class="number">1</span>))) &#123;</span><br><span class="line">				size++;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (isWhite(image.getRGB(x - <span class="number">1</span>, y + <span class="number">1</span>))) &#123;</span><br><span class="line">				size++;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (isWhite(image.getRGB(x + <span class="number">1</span>, y + <span class="number">1</span>))) &#123;</span><br><span class="line">				size++;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (size &gt;= <span class="number">5</span>) &#123;</span><br><span class="line">				image.setRGB(x, y, white);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> x = <span class="number">1</span>; x &lt; w - <span class="number">1</span>; x++) &#123;</span><br><span class="line">		<span class="keyword">int</span> y = h - <span class="number">1</span>;</span><br><span class="line">		<span class="keyword">if</span> (isBlack(image.getRGB(x, y))) &#123;</span><br><span class="line">			<span class="keyword">int</span> size = <span class="number">0</span>;</span><br><span class="line">			<span class="keyword">if</span> (isWhite(image.getRGB(x - <span class="number">1</span>, y))) &#123;</span><br><span class="line">				size++;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (isWhite(image.getRGB(x + <span class="number">1</span>, y))) &#123;</span><br><span class="line">				size++;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (isWhite(image.getRGB(x, y - <span class="number">1</span>))) &#123;</span><br><span class="line">				size++;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (isWhite(image.getRGB(x + <span class="number">1</span>, y - <span class="number">1</span>))) &#123;</span><br><span class="line">				size++;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (isWhite(image.getRGB(x - <span class="number">1</span>, y - <span class="number">1</span>))) &#123;</span><br><span class="line">				size++;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (size &gt;= <span class="number">5</span>) &#123;</span><br><span class="line">				image.setRGB(x, y, white);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> y = <span class="number">1</span>; y &lt; h - <span class="number">1</span>; y++) &#123;</span><br><span class="line">		<span class="keyword">int</span> x = <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">if</span> (isBlack(image.getRGB(x, y))) &#123;</span><br><span class="line">			<span class="keyword">int</span> size = <span class="number">0</span>;</span><br><span class="line">			<span class="keyword">if</span> (isWhite(image.getRGB(x + <span class="number">1</span>, y))) &#123;</span><br><span class="line">				size++;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (isWhite(image.getRGB(x, y + <span class="number">1</span>))) &#123;</span><br><span class="line">				size++;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (isWhite(image.getRGB(x, y - <span class="number">1</span>))) &#123;</span><br><span class="line">				size++;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (isWhite(image.getRGB(x + <span class="number">1</span>, y - <span class="number">1</span>))) &#123;</span><br><span class="line">				size++;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (isWhite(image.getRGB(x + <span class="number">1</span>, y + <span class="number">1</span>))) &#123;</span><br><span class="line">				size++;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (size &gt;= <span class="number">5</span>) &#123;</span><br><span class="line">				image.setRGB(x, y, white);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> y = <span class="number">1</span>; y &lt; h - <span class="number">1</span>; y++) &#123;</span><br><span class="line">		<span class="keyword">int</span> x = w - <span class="number">1</span>;</span><br><span class="line">		<span class="keyword">if</span> (isBlack(image.getRGB(x, y))) &#123;</span><br><span class="line">			<span class="keyword">int</span> size = <span class="number">0</span>;</span><br><span class="line">			<span class="keyword">if</span> (isWhite(image.getRGB(x - <span class="number">1</span>, y))) &#123;</span><br><span class="line">				size++;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (isWhite(image.getRGB(x, y + <span class="number">1</span>))) &#123;</span><br><span class="line">				size++;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (isWhite(image.getRGB(x, y - <span class="number">1</span>))) &#123;</span><br><span class="line">				size++;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="comment">//斜上下为空时，去掉此点</span></span><br><span class="line">			<span class="keyword">if</span> (isWhite(image.getRGB(x - <span class="number">1</span>, y + <span class="number">1</span>))) &#123;</span><br><span class="line">				size++;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (isWhite(image.getRGB(x - <span class="number">1</span>, y - <span class="number">1</span>))) &#123;</span><br><span class="line">				size++;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (size &gt;= <span class="number">5</span>) &#123;</span><br><span class="line">				image.setRGB(x, y, white);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//降噪，以1个像素点为单位</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> y = <span class="number">1</span>; y &lt; h - <span class="number">1</span>; y++) &#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> x = <span class="number">1</span>; x &lt; w - <span class="number">1</span>; x++) &#123;</span><br><span class="line">			<span class="keyword">if</span> (isBlack(image.getRGB(x, y))) &#123;</span><br><span class="line">				<span class="keyword">int</span> size = <span class="number">0</span>;</span><br><span class="line">				<span class="comment">//上下左右均为空时，去掉此点</span></span><br><span class="line">				<span class="keyword">if</span> (isWhite(image.getRGB(x - <span class="number">1</span>, y))) &#123;</span><br><span class="line">					size++;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">if</span> (isWhite(image.getRGB(x + <span class="number">1</span>, y))) &#123;</span><br><span class="line">					size++;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="comment">//上下均为空时，去掉此点</span></span><br><span class="line">				<span class="keyword">if</span> (isWhite(image.getRGB(x, y + <span class="number">1</span>))) &#123;</span><br><span class="line">					size++;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">if</span> (isWhite(image.getRGB(x, y - <span class="number">1</span>))) &#123;</span><br><span class="line">					size++;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="comment">//斜上下为空时，去掉此点</span></span><br><span class="line">				<span class="keyword">if</span> (isWhite(image.getRGB(x - <span class="number">1</span>, y + <span class="number">1</span>))) &#123;</span><br><span class="line">					size++;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">if</span> (isWhite(image.getRGB(x + <span class="number">1</span>, y - <span class="number">1</span>))) &#123;</span><br><span class="line">					size++;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">if</span> (isWhite(image.getRGB(x + <span class="number">1</span>, y + <span class="number">1</span>))) &#123;</span><br><span class="line">					size++;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">if</span> (isWhite(image.getRGB(x - <span class="number">1</span>, y - <span class="number">1</span>))) &#123;</span><br><span class="line">					size++;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">if</span> (size &gt;= <span class="number">8</span>) &#123;</span><br><span class="line">					image.setRGB(x, y, white);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> image;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isBlack</span><span class="params">(<span class="keyword">int</span> colorInt)</span> </span>&#123;</span><br><span class="line">	Color color = <span class="keyword">new</span> Color(colorInt);</span><br><span class="line">	<span class="keyword">if</span> (color.getRed() + color.getGreen() + color.getBlue() &lt;= <span class="number">300</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">isWhite</span><span class="params">(<span class="keyword">int</span> colorInt)</span> </span>&#123;</span><br><span class="line">	Color color = <span class="keyword">new</span> Color(colorInt);</span><br><span class="line">	<span class="keyword">if</span> (color.getRed() + color.getGreen() + color.getBlue() &gt; <span class="number">300</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>百度OCR</p>
+<p><a href="https://cloud.baidu.com/doc/OCR/s/zk3h7xz52" target="_blank" rel="noopener">百度普通文本OCR</a>识别，个人用户每天有50,000次免费调用，所以对于并发量不是很大的需求，这么多的免费次数还是够用的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String TOKEN_KEY = <span class="string">"TOKEN_KEY"</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String HTTPS_AIP_BAIDUBCE_COM = <span class="string">"https://aip.baidubce.com"</span>;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> Cache&lt;String, String&gt; accessTokenCache = CacheBuilder.newBuilder().expireAfterAccess(<span class="number">2591000</span>, TimeUnit.SECONDS).build();</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> LoadingCache&lt;String, AtomicLong&gt; tokenCntCache = CacheBuilder.newBuilder().expireAfterAccess(<span class="number">24</span>, TimeUnit.HOURS).build(<span class="keyword">new</span> CacheLoader&lt;String, AtomicLong&gt;() &#123;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> AtomicLong <span class="title">load</span><span class="params">(String s)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> AtomicLong(<span class="number">0</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 重要提示代码中所需工具类</span></span><br><span class="line"><span class="comment"> * FileUtil,Base64Util,HttpUtil,GsonUtils请从</span></span><br><span class="line"><span class="comment"> * https://ai.baidu.com/file/658A35ABAB2D404FBF903F64D47C1F72</span></span><br><span class="line"><span class="comment"> * https://ai.baidu.com/file/C8D81F3301E24D2892968F09AE1AD6E2</span></span><br><span class="line"><span class="comment"> * https://ai.baidu.com/file/544D677F5D4E4F17B4122FBD60DB82B3</span></span><br><span class="line"><span class="comment"> * https://ai.baidu.com/file/470B3ACCA3FE43788B5A963BF0B625F3</span></span><br><span class="line"><span class="comment"> * 下载</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">generalBasic</span><span class="params">(String captchaUrl)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">	<span class="comment">// 请求url</span></span><br><span class="line">	String url = HTTPS_AIP_BAIDUBCE_COM + <span class="string">"/rest/2.0/ocr/v1/general_basic"</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 本地文件路径</span></span><br><span class="line">	<span class="keyword">byte</span>[] imgData = BinaryImage.imageProcessing(captchaUrl);</span><br><span class="line">	String imgStr = Base64Util.encode(imgData);</span><br><span class="line">	<span class="comment">// 注意这里仅为了简化编码每一次请求都去获取access_token，线上环境access_token有过期时间， 客户端可自行缓存，过期后重新获取。</span></span><br><span class="line">	String accessToken = getAccessToken();</span><br><span class="line">	<span class="keyword">if</span> (accessToken == <span class="keyword">null</span>) &#123;</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"百度token获取失败"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	StringBuilder requestUrl = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">	requestUrl.append(url)</span><br><span class="line">			.append(<span class="string">"?access_token="</span>).append(accessToken);</span><br><span class="line">	Connection.Response post = Jsoup.connect(requestUrl.toString()).timeout(<span class="number">5000</span>).header(<span class="string">"Content-Type"</span>, <span class="string">"application/x-www-form-urlencoded"</span>)</span><br><span class="line">			.data(<span class="string">"image"</span>, imgStr)</span><br><span class="line">			.data(<span class="string">"language_type"</span>, <span class="string">"ENG"</span>)</span><br><span class="line">			.method(Connection.Method.POST)</span><br><span class="line">			.ignoreContentType(<span class="keyword">true</span>)</span><br><span class="line">			.execute();</span><br><span class="line">	String body = post.body();</span><br><span class="line">	CaptchaResultInfo captchaResultInfo = GsonUtils.fromJson(body, CaptchaResultInfo.class);</span><br><span class="line">	<span class="keyword">if</span> (captchaResultInfo != <span class="keyword">null</span> &amp;&amp; captchaResultInfo.getWordsResult() != <span class="keyword">null</span> &amp;&amp; captchaResultInfo.getWordsResult().get(<span class="number">0</span>) != <span class="keyword">null</span>) &#123;</span><br><span class="line">		CaptchaResultInfo.WordsResult wordsResult = captchaResultInfo.getWordsResult().get(<span class="number">0</span>);</span><br><span class="line">		body = wordsResult.getWords().replaceAll(<span class="string">"[^0-9a-zA-Z]"</span>, <span class="string">""</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> body;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> String <span class="title">getAccessToken</span><span class="params">()</span> <span class="keyword">throws</span> IOException, ExecutionException </span>&#123;</span><br><span class="line">	String url = HTTPS_AIP_BAIDUBCE_COM + <span class="string">"/oauth/2.0/token?grant_type=client_credentials&amp;client_id=xxxxx&amp;client_secret=xxxx"</span>;</span><br><span class="line">	SimpleDateFormat sdf = <span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyyMMdd"</span>);</span><br><span class="line">	<span class="keyword">long</span> andIncrement = tokenCntCache.get(TOKEN_KEY + sdf).getAndIncrement();</span><br><span class="line">	<span class="keyword">if</span> (andIncrement &gt; <span class="number">30000</span>) &#123;</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"百度OCR免费次数达到上限，请明天再试。"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	String ifPresent = accessTokenCache.getIfPresent(TOKEN_KEY);</span><br><span class="line">	<span class="keyword">if</span> (ifPresent == <span class="keyword">null</span> || ifPresent.length() == <span class="number">0</span>) &#123;</span><br><span class="line">		ifPresent = get(TOKEN_KEY, url);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> ifPresent;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">synchronized</span> String <span class="title">get</span><span class="params">(String key, String url)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">	String ifPresent = accessTokenCache.getIfPresent(key);</span><br><span class="line">	<span class="keyword">if</span> (ifPresent != <span class="keyword">null</span> &amp;&amp; ifPresent.length() != <span class="number">0</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span> ifPresent;</span><br><span class="line">	&#125;</span><br><span class="line">	Connection.Response execute = Jsoup.connect(url).timeout(<span class="number">5000</span>).ignoreContentType(<span class="keyword">true</span>).execute();</span><br><span class="line">	String body = execute.body();</span><br><span class="line">	AccessTokenInfo accessTokenInfo = GsonUtils.fromJson(body, AccessTokenInfo.class);</span><br><span class="line">	<span class="keyword">if</span> (accessTokenInfo != <span class="keyword">null</span> &amp;&amp; accessTokenInfo.getAccessToken() != <span class="keyword">null</span> &amp;&amp; accessTokenInfo.getAccessToken().length() != <span class="number">0</span>) &#123;</span><br><span class="line">     String accessToken = accessTokenInfo.getAccessToken();</span><br><span class="line">     accessTokenCache.put(TOKEN_KEY,accessToken);</span><br><span class="line">		<span class="keyword">return</span> accessToken ;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>整体来说，虽然识别率达不到百分百，但是多尝试几次不同的验证码识别，基本可以识别出来，一般的需求还是够用。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/31/算法-两数之和/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1339,130 +1467,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/23/微信小程序-第一篇/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="两个木">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/20180124140140.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="lralin">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/02/23/微信小程序-第一篇/" itemprop="url">微信小程序-第一篇</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-23T20:05:25+08:00">
-                2020-02-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>小程序一出来就关注了，中间折腾了一段时间。发现还要有备案的域名才能和后台交互，而且当时没有什么好的点子，不知道做什么好，就处于放弃状态了。趁这段疫情在家里无聊，突然有了一个想法，做个预约类的小程序，例如预约个桌游的位置，预约个书店的座位等一些需要耗时较长的事情。而且域名的备案也批下来了。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2020/02/23/微信小程序-第一篇/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1515,7 +1519,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-count">43</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
