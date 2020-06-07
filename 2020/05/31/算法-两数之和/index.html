@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="概要这是一道常见的算法题，也是leetcode的第一道题，求一个数组中两数之和等于目标值的下标。最容易想到的就是两次暴力循环，直接处理。而最优解是配合hash循环一次就够了。 解题 暴力解法 12345678for (int i = 0; i &amp;lt; nums.length; i++) &amp;#123;  for (int j = i + 1; j &amp;lt; nums.length; j++) &amp;#">
+<meta name="description" content="概要这是一道常见的算法题，也是leetcode的第一道题，求一个数组中两数之和等于目标值的下标。最容易想到的就是两次暴力循环，直接处理。而最优解是配合hash循环一次就够了。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="两数之和">
 <meta property="og:url" content="http://yoursite.com/2020/05/31/算法-两数之和/index.html">
 <meta property="og:site_name" content="lralin">
-<meta property="og:description" content="概要这是一道常见的算法题，也是leetcode的第一道题，求一个数组中两数之和等于目标值的下标。最容易想到的就是两次暴力循环，直接处理。而最优解是配合hash循环一次就够了。 解题 暴力解法 12345678for (int i = 0; i &amp;lt; nums.length; i++) &amp;#123;  for (int j = i + 1; j &amp;lt; nums.length; j++) &amp;#">
+<meta property="og:description" content="概要这是一道常见的算法题，也是leetcode的第一道题，求一个数组中两数之和等于目标值的下标。最容易想到的就是两次暴力循环，直接处理。而最优解是配合hash循环一次就够了。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2020-05-31T06:17:25.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="两数之和">
-<meta name="twitter:description" content="概要这是一道常见的算法题，也是leetcode的第一道题，求一个数组中两数之和等于目标值的下标。最容易想到的就是两次暴力循环，直接处理。而最优解是配合hash循环一次就够了。 解题 暴力解法 12345678for (int i = 0; i &amp;lt; nums.length; i++) &amp;#123;  for (int j = i + 1; j &amp;lt; nums.length; j++) &amp;#">
+<meta name="twitter:description" content="概要这是一道常见的算法题，也是leetcode的第一道题，求一个数组中两数之和等于目标值的下标。最容易想到的就是两次暴力循环，直接处理。而最优解是配合hash循环一次就够了。">
 
 
 
@@ -300,6 +300,7 @@
 
       
         <h4 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h4><p>这是一道常见的算法题，也是leetcode的第一道题，求一个数组中两数之和等于目标值的下标。最容易想到的就是两次暴力循环，直接处理。而最优解是配合hash循环一次就够了。</p>
+<a id="more"></a>
 <h4 id="解题"><a href="#解题" class="headerlink" title="解题"></a>解题</h4><ol>
 <li><p>暴力解法</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt; nums.length; j++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (nums[i] + nums[j] == target) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[]&#123;i, j&#125;;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> <span class="keyword">null</span>;</span><br></pre></td></tr></table></figure>
