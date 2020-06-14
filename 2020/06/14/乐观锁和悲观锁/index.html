@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="java,idea,">
+  <meta name="keywords" content="java,锁,">
 
 
 
@@ -79,20 +79,18 @@
 
 
 
-<meta name="description" content="前言相信用过这个插件的人都说好，能快速的一键发布代码到开发环境，快速的登录到服务器，只需简单的配置，没有Jenkins那么复杂，自从用了cloud toolkit之后，发布开发环境的代码就不想用Jenkins了。">
-<meta name="keywords" content="java,idea">
+<meta name="description" content="概述曾在面试时，被问及锁的问题，当时只是模糊的描述了一下，事实证明基础知识还是不能太薄弱。今天就来恶补一下乐观锁和悲观锁。">
+<meta name="keywords" content="java,锁">
 <meta property="og:type" content="article">
-<meta property="og:title" content="idea插件Alibaba Cloud Toolkit">
-<meta property="og:url" content="http://yoursite.com/2020/03/01/idea插件Alibaba Cloud Toolkit/index.html">
+<meta property="og:title" content="乐观锁和悲观锁">
+<meta property="og:url" content="http://yoursite.com/2020/06/14/乐观锁和悲观锁/index.html">
 <meta property="og:site_name" content="lralin">
-<meta property="og:description" content="前言相信用过这个插件的人都说好，能快速的一键发布代码到开发环境，快速的登录到服务器，只需简单的配置，没有Jenkins那么复杂，自从用了cloud toolkit之后，发布开发环境的代码就不想用Jenkins了。">
+<meta property="og:description" content="概述曾在面试时，被问及锁的问题，当时只是模糊的描述了一下，事实证明基础知识还是不能太薄弱。今天就来恶补一下乐观锁和悲观锁。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://wx3.sinaimg.cn/mw690/006pJIq7gy1gcedzq5ylrj31440u0n0a.jpg">
-<meta property="og:updated_time" content="2020-03-01T03:19:25.000Z">
+<meta property="og:updated_time" content="2020-06-14T02:57:25.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="idea插件Alibaba Cloud Toolkit">
-<meta name="twitter:description" content="前言相信用过这个插件的人都说好，能快速的一键发布代码到开发环境，快速的登录到服务器，只需简单的配置，没有Jenkins那么复杂，自从用了cloud toolkit之后，发布开发环境的代码就不想用Jenkins了。">
-<meta name="twitter:image" content="https://wx3.sinaimg.cn/mw690/006pJIq7gy1gcedzq5ylrj31440u0n0a.jpg">
+<meta name="twitter:title" content="乐观锁和悲观锁">
+<meta name="twitter:description" content="概述曾在面试时，被问及锁的问题，当时只是模糊的描述了一下，事实证明基础知识还是不能太薄弱。今天就来恶补一下乐观锁和悲观锁。">
 
 
 
@@ -122,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/03/01/idea插件Alibaba Cloud Toolkit/">
+  <link rel="canonical" href="http://yoursite.com/2020/06/14/乐观锁和悲观锁/">
 
 
 
 
 
-  <title>idea插件Alibaba Cloud Toolkit | lralin</title>
+  <title>乐观锁和悲观锁 | lralin</title>
   
 
 
@@ -235,7 +233,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/01/idea插件Alibaba Cloud Toolkit/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/14/乐观锁和悲观锁/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="两个木">
@@ -252,7 +250,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">idea插件Alibaba Cloud Toolkit</h1>
+          <h1 class="post-title" itemprop="name headline">乐观锁和悲观锁</h1>
         
 
         <div class="post-meta">
@@ -264,8 +262,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-01T11:19:25+08:00">
-                2020-03-01
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-14T10:57:25+08:00">
+                2020-06-14
               </time>
             
 
@@ -302,23 +300,25 @@
       
 
       
-        <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>相信用过这个插件的人都说好，能快速的一键发布代码到开发环境，快速的登录到服务器，只需简单的配置，没有Jenkins那么复杂，自从用了cloud toolkit之后，发布开发环境的代码就不想用Jenkins了。</p>
+        <h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>曾在面试时，被问及锁的问题，当时只是模糊的描述了一下，事实证明基础知识还是不能太薄弱。今天就来恶补一下乐观锁和悲观锁。</p>
 <a id="more"></a>
-<h3 id="发包"><a href="#发包" class="headerlink" title="发包"></a>发包</h3><p>一般我们部署开发环境是先在本地打好包，然后通过XShell工具登录到开发服务器，找到部署到tomcat或者jar包目录，然后关闭服务，用Xftp工具打开这个目录，删除老的war包或者jar包，把刚刚打的新war包或jar包放到刚刚的目录，启动服务。</p>
-<p>Jenkins可以自动帮我们完成上面的打包，上传，关闭服务，启动服务的操作，虽然可以定时设置一个时间点发布每天的代码，但是如果想要临时发布一个开发版本的话，就需要重新打开一个面板。</p>
-<p>而我们的cloud toolkit插件可以在不切出idea界面的情况下，也能做到一键部署。</p>
+<h3 id="悲观锁"><a href="#悲观锁" class="headerlink" title="悲观锁"></a>悲观锁</h3><p>锁如其名，就是很悲观，总是考虑最坏的情况，认为这次更新都可能会有其他人也会进行更新，所以会先锁住，然后再进行读写操作，在它释放锁之前任何人都不能对其进行读写操作。所以其他人想要操作会被阻塞，知道获取到锁。锁机制有：行锁，表锁，读锁，写锁等。Java中<code>synchronized</code>和<code>ReentrantLock</code>等独占锁就是悲观锁思想的实现。</p>
+<h3 id="乐观锁"><a href="#乐观锁" class="headerlink" title="乐观锁"></a>乐观锁</h3><p>锁如其名，就是很乐观，总是假设最好的情况，每次读写数据的时候都不会上锁，而是通过版本号机制或者CAS算法来控制数据被其他人更新的问题。</p>
 <ol>
-<li><p>在Alibaba Cloud View界面，添加host</p>
-<p><img src="https://wx3.sinaimg.cn/mw690/006pJIq7gy1gcedzq5ylrj31440u0n0a.jpg" alt="image-20200301134117559"></p>
+<li><p>版本号机制</p>
+<p>数据表中增加一个version版本号字段，每次数据更新版本号都会加一。当修改数据库数据时，会先判断数据库中的版本号和你之前的版本号是否一致，如果一致才更新成功，否则整体重新再来一遍，直到成功为止。</p>
 </li>
-<li><p>添加好服务器之后，我们就可以在服务器上面写好需要执行的脚本restart-report.sh</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>这是一个重启war包的脚步</span><br><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line"><span class="meta">#</span>source /etc/profile</span><br><span class="line">ps -ef | grep apache-tomcat-report-manage | grep -v "grep" | awk '&#123;print $2&#125;' | xargs kill -9</span><br><span class="line">cd /home/xlzx_mysql/apache-tomcat-report-manage/ </span><br><span class="line">rm -rf webapps/*</span><br><span class="line">mv /home/sh/dev/report.war webapps/</span><br><span class="line">sh bin/startup.sh</span><br></pre></td></tr></table></figure>
+<li><p>CAS算法</p>
+<p>即<strong>compare and swap（比较与交换）</strong>，是一种有名的<strong>无锁算法</strong>，更多的应用于内存模式。CAS涉及到三个操作数：需要读写的内存值V，进行比较的值A，拟写入的新值B。仅当V值等于A值，B值才能进行原子操作更新V值，否则不进行操作。一般情况下是一个<strong>自旋操作</strong>，即<strong>不断的重试</strong>。</p>
 </li>
-<li><p>在Alibaba Cloud View界面中选择Upload，在After Upload中添加执行该脚本的命令</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh /home/sh/restart-report.sh</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>到此，idea自动部署就配置好了。</p>
-</li>
+</ol>
+<h5 id="乐观锁的缺点"><a href="#乐观锁的缺点" class="headerlink" title="乐观锁的缺点"></a>乐观锁的缺点</h5><ol>
+<li><strong>ABA问题</strong>：如果变量V，读取的时候是A值，在赋值的时候检查它仍然是A值，这个时候我们认为它从未改变过，显然是不对的。因为它可能被其他线程从A变成B，又从B变回A了，而CAS操作会认为它未被修改过，这就是CAS操作的ABA问题。但是jdk1.5解决了该问题</li>
+<li>自旋CAS，如果长时间不成功，会给CPU带来非常大的执行开销。</li>
+</ol>
+<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ol>
+<li>对于资源竞争严重（线程冲突严重）的情况，建议用synchronized，悲观锁。</li>
+<li>对于资源竞争较少（线程冲突较轻）的情况，建议用CAS，乐观锁。</li>
 </ol>
 
       
@@ -339,7 +339,7 @@
           
             <a href="/tags/java/" rel="tag"># java</a>
           
-            <a href="/tags/idea/" rel="tag"># idea</a>
+            <a href="/tags/锁/" rel="tag"># 锁</a>
           
         </div>
       
@@ -352,8 +352,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/02/23/微信小程序-第一篇/" rel="next" title="微信小程序-第一篇">
-                <i class="fa fa-chevron-left"></i> 微信小程序-第一篇
+              <a href="/2020/06/07/验证码识别/" rel="next" title="验证码自动识别">
+                <i class="fa fa-chevron-left"></i> 验证码自动识别
               </a>
             
           </div>
@@ -361,10 +361,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/03/15/dubbo协议/" rel="prev" title="dubbo协议">
-                dubbo协议 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -489,7 +485,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#发包"><span class="nav-number">2.</span> <span class="nav-text">发包</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#悲观锁"><span class="nav-number">2.</span> <span class="nav-text">悲观锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#乐观锁"><span class="nav-number">3.</span> <span class="nav-text">乐观锁</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#乐观锁的缺点"><span class="nav-number">3.0.1.</span> <span class="nav-text">乐观锁的缺点</span></a></li></ol></li></ol><li class="nav-item nav-level-3"><a class="nav-link" href="#使用场景"><span class="nav-number">4.</span> <span class="nav-text">使用场景</span></a></li></div>
             
 
           </div>
