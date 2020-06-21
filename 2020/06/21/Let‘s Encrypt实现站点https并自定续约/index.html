@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="dubbo,hessian,">
+  <meta name="keywords" content="Certbot,https,">
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="dubbo协议dubbo的默认协议，单一长连接和NIO异步通讯，适合少数据高并发，消费者大于提供者的应用场景。使用单连接的原因是防止消费者太多直接压垮服务者，而长连接是为了减少握手验证的次数，并使用异步IO，复用线程池。">
-<meta name="keywords" content="dubbo,hessian">
+<meta name="description" content="简介谷歌提倡网站使用https，而且如果你的网站是http的话，浏览器会显示不安全。而微信小程序更是直接只能通过https的站点，才能调用后台服务。网站启用https访问，首先需要一个证书机构颁发的ssl证书，目前给个人免费颁发证书的机构，比较好的是：Let’s Encrypt。而Let’s Encrypt的证书现在支持自动颁发安装，客户端工具为certbot。通过certbot工具，我们可以很便">
+<meta name="keywords" content="Certbot,https">
 <meta property="og:type" content="article">
-<meta property="og:title" content="dubbo协议">
-<meta property="og:url" content="http://yoursite.com/2020/03/15/dubbo协议/index.html">
+<meta property="og:title" content="免费配置站点https">
+<meta property="og:url" content="http://yoursite.com/2020/06/21/Let‘s Encrypt实现站点https并自定续约/index.html">
 <meta property="og:site_name" content="lralin">
-<meta property="og:description" content="dubbo协议dubbo的默认协议，单一长连接和NIO异步通讯，适合少数据高并发，消费者大于提供者的应用场景。使用单连接的原因是防止消费者太多直接压垮服务者，而长连接是为了减少握手验证的次数，并使用异步IO，复用线程池。">
+<meta property="og:description" content="简介谷歌提倡网站使用https，而且如果你的网站是http的话，浏览器会显示不安全。而微信小程序更是直接只能通过https的站点，才能调用后台服务。网站启用https访问，首先需要一个证书机构颁发的ssl证书，目前给个人免费颁发证书的机构，比较好的是：Let’s Encrypt。而Let’s Encrypt的证书现在支持自动颁发安装，客户端工具为certbot。通过certbot工具，我们可以很便">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-03-15T10:35:25.000Z">
+<meta property="og:updated_time" content="2020-06-21T04:57:25.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="dubbo协议">
-<meta name="twitter:description" content="dubbo协议dubbo的默认协议，单一长连接和NIO异步通讯，适合少数据高并发，消费者大于提供者的应用场景。使用单连接的原因是防止消费者太多直接压垮服务者，而长连接是为了减少握手验证的次数，并使用异步IO，复用线程池。">
+<meta name="twitter:title" content="免费配置站点https">
+<meta name="twitter:description" content="简介谷歌提倡网站使用https，而且如果你的网站是http的话，浏览器会显示不安全。而微信小程序更是直接只能通过https的站点，才能调用后台服务。网站启用https访问，首先需要一个证书机构颁发的ssl证书，目前给个人免费颁发证书的机构，比较好的是：Let’s Encrypt。而Let’s Encrypt的证书现在支持自动颁发安装，客户端工具为certbot。通过certbot工具，我们可以很便">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/03/15/dubbo协议/">
+  <link rel="canonical" href="http://yoursite.com/2020/06/21/Let‘s Encrypt实现站点https并自定续约/">
 
 
 
 
 
-  <title>dubbo协议 | lralin</title>
+  <title>免费配置站点https | lralin</title>
   
 
 
@@ -233,7 +233,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/15/dubbo协议/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/21/Let‘s Encrypt实现站点https并自定续约/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="两个木">
@@ -250,7 +250,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">dubbo协议</h1>
+          <h1 class="post-title" itemprop="name headline">免费配置站点https</h1>
         
 
         <div class="post-meta">
@@ -262,8 +262,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-15T18:35:25+08:00">
-                2020-03-15
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-21T12:57:25+08:00">
+                2020-06-21
               </time>
             
 
@@ -300,18 +300,22 @@
       
 
       
-        <h3 id="dubbo协议"><a href="#dubbo协议" class="headerlink" title="dubbo协议"></a>dubbo协议</h3><p>dubbo的默认协议，单一长连接和NIO异步通讯，适合少数据高并发，消费者大于提供者的应用场景。使用单连接的原因是防止消费者太多直接压垮服务者，而长连接是为了减少握手验证的次数，并使用异步IO，复用线程池。</p>
-<a id="more"></a>
-<h3 id="rmi协议"><a href="#rmi协议" class="headerlink" title="rmi协议"></a>rmi协议</h3><p>rmi协议是阻塞式短连接和JDK标准序列化，采用多连接，短连接，TCP同步传输，适合传入传出参数数据包大小混合，消费者与提供者个数差不多，可传文件。</p>
-<h3 id="hessian协议"><a href="#hessian协议" class="headerlink" title="hessian协议"></a>hessian协议</h3><p>hessian底层采用http通讯，采用多连接，短连接，同步传输，适合传入传出参数数据包较大，提供者比消费者个数多，提供者压力较大，可传文件。</p>
-<h3 id="http协议"><a href="#http协议" class="headerlink" title="http协议"></a>http协议</h3><p>采用Spring的HttpInvoker实现，也是多连接，短连接，同步传输，传入传出参数混合大小，提供者比消费者个数多，可浏览器查看，不支持传文件。</p>
-<h3 id="webservice协议"><a href="#webservice协议" class="headerlink" title="webservice协议"></a>webservice协议</h3><p>基于Apache CXF，多连接，短连接，同步传输，适用于系统集成，跨语言调用。</p>
-<h3 id="thrift协议"><a href="#thrift协议" class="headerlink" title="thrift协议"></a>thrift协议</h3><p>thrift 协议是对 thrift 原生协议的扩展，<a href="http://thrift.apache.org/" target="_blank" rel="noopener">Thrift</a> 是 Facebook 捐给 Apache 的一个 RPC 框架，不能在协议中传递 null 值。</p>
-<p>###memcached协议</p>
-<p>基于 memcached 实现的 RPC 协议，<a href="http://memcached.org/" target="_blank" rel="noopener">Memcached</a> 是一个高效的 KV 缓存服务器。</p>
-<h3 id="redis协议"><a href="#redis协议" class="headerlink" title="redis协议"></a>redis协议</h3><p>基于 Redis 实现的 RPC 协议，<a href="http://redis.io/" target="_blank" rel="noopener">Redis</a> 是一个高效的 KV 存储服务器。</p>
-<p>###rest协议</p>
-<p>基于标准的Java REST API，实现过程类似Spring MVC</p>
+        <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>谷歌提倡网站使用https，而且如果你的网站是http的话，浏览器会显示不安全。而微信小程序更是直接只能通过https的站点，才能调用后台服务。网站启用https访问，首先需要一个证书机构颁发的ssl证书，目前给个人免费颁发证书的机构，比较好的是：<a href="https://letsencrypt.org/" target="_blank" rel="noopener">Let’s Encrypt</a>。而Let’s Encrypt的证书现在支持自动颁发安装，客户端工具为certbot。通过certbot工具，我们可以很便捷的获取证书，再加上定时任务就能很便捷的自动续约了。</p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>官网下载工具</span><br><span class="line">cd /root</span><br><span class="line">wget https://dl.eff.org/certbot-auto</span><br><span class="line">chmod a+x certbot-auto</span><br></pre></td></tr></table></figure>
+<p>检查机器的80，443端口是否被占用，一般80端口会被nginx占用了，需要先停掉nginx。如果是阿里云的话还需要配置端口的安全组规则。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>停止nginx</span><br><span class="line">service nginx stop</span><br></pre></td></tr></table></figure>
+<p>生成证书(如果后期生成报错,先删除原有certbot-auto,按第一步重新下载certbot即可)</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>使用-d追加多个域名，使用时请将邮箱换成自己的邮箱</span><br><span class="line">./certbot-auto certonly --standalone --email xxxx@xx.com --agree-tos -d xxx.com -d api.xxx.com -d www.xxx.me</span><br></pre></td></tr></table></figure>
+<p>查看生成的证书</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ls /etc/letsencrypt/live/</span><br></pre></td></tr></table></figure>
+<p>nginx配置证书</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen       443 ssl;</span><br><span class="line">    server_name  api.xxx.com;</span><br><span class="line"><span class="meta">#</span>证书位置</span><br><span class="line">    ssl_certificate      /etc/letsencrypt/live/api.xxx.com/fullchain.pem;</span><br><span class="line">    # 私钥位置</span><br><span class="line">    ssl_certificate_key  /etc/letsencrypt/live/api.xxx.com/privkey.pem;</span><br><span class="line"></span><br><span class="line">    ssl_session_cache    shared:SSL:1m;</span><br><span class="line">    ssl_session_timeout  5m;</span><br><span class="line"></span><br><span class="line">    ssl_ciphers  HIGH:!aNULL:!MD5;</span><br><span class="line">    ssl_prefer_server_ciphers  on;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">        root   html;</span><br><span class="line">        index  index.html index.htm;</span><br><span class="line">        //服务地址</span><br><span class="line">        proxy_pass http://127.0.0.1:30519/;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>启动nginx</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service nginx start</span><br></pre></td></tr></table></figure>
+<p>编写更新脚本renew-cert.sh</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>!/bin/bash</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 停止nginx</span><br><span class="line">/sbin/service nginx stop</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 续签</span><br><span class="line"><span class="meta">#</span> --force-renew 强制更新</span><br><span class="line">/root/certbot-auto renew --force-renew</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 启动nginx</span><br><span class="line">/sbin/service nginx start</span><br><span class="line"></span><br><span class="line">chmod a+x renew-cert.sh</span><br></pre></td></tr></table></figure>
+<p>###配置定时任务</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//crontab定时任务自动更新证书</span><br><span class="line">0 3 1 */2 * /root/renew-cert.sh &gt;/root/crontab.log 2&gt;&amp;1</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -329,9 +333,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/dubbo/" rel="tag"># dubbo</a>
+            <a href="/tags/Certbot/" rel="tag"># Certbot</a>
           
-            <a href="/tags/hessian/" rel="tag"># hessian</a>
+            <a href="/tags/https/" rel="tag"># https</a>
           
         </div>
       
@@ -344,8 +348,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/03/01/idea插件Alibaba Cloud Toolkit/" rel="next" title="idea插件Alibaba Cloud Toolkit">
-                <i class="fa fa-chevron-left"></i> idea插件Alibaba Cloud Toolkit
+              <a href="/2020/06/14/乐观锁和悲观锁/" rel="next" title="乐观锁和悲观锁">
+                <i class="fa fa-chevron-left"></i> 乐观锁和悲观锁
               </a>
             
           </div>
@@ -353,10 +357,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/03/22/工厂模式/" rel="prev" title="工厂模式">
-                工厂模式 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -481,7 +481,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#dubbo协议"><span class="nav-number">1.</span> <span class="nav-text">dubbo协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rmi协议"><span class="nav-number">2.</span> <span class="nav-text">rmi协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hessian协议"><span class="nav-number">3.</span> <span class="nav-text">hessian协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#http协议"><span class="nav-number">4.</span> <span class="nav-text">http协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#webservice协议"><span class="nav-number">5.</span> <span class="nav-text">webservice协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#thrift协议"><span class="nav-number">6.</span> <span class="nav-text">thrift协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redis协议"><span class="nav-number">7.</span> <span class="nav-text">redis协议</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装"><span class="nav-number">2.</span> <span class="nav-text">安装</span></a></li></ol></div>
             
 
           </div>
