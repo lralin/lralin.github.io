@@ -229,6 +229,135 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/22/easyexcel处理excel/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="两个木">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/20180124140140.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lralin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/06/22/easyexcel处理excel/" itemprop="url">easyexcel阿里巴巴excel处理工具</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-22T22:01:25+08:00">
+                2020-06-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>之前写个一篇easypoi的工具，在使用excel模板方面有很多bug，所以重新找了一个工具。<a href="https://github.com/alibaba/easyexcel" target="_blank" rel="noopener">easyexcel</a>一看名字和项目拥有者，就觉得靠谱。它自己也说了，是为了简化poi，优化内存消耗，所以才出现了这个工具。所以上手是很简单，很快。<a href="https://www.yuque.com/easyexcel/doc/read" target="_blank" rel="noopener">https://www.yuque.com/easyexcel/doc/read</a></p>
+<h3 id="读"><a href="#读" class="headerlink" title="读"></a>读</h3><p>定义一个对象，通过注解@ExcelProperty指定当前字段对应excel中的那一列。可以根据名字或者Index去匹配。要想了解其他信息，可查阅<a href="https://www.yuque.com/easyexcel/doc/api" target="_blank" rel="noopener">官方文档</a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SerumExcelDataBean</span> <span class="keyword">implements</span> <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">	<span class="meta">@ExcelProperty</span>(<span class="string">"编号"</span>)</span><br><span class="line">	<span class="keyword">private</span> String index;</span><br><span class="line">	<span class="meta">@ExcelProperty</span>(<span class="string">"1"</span>)</span><br><span class="line">	<span class="keyword">private</span> Double num1;</span><br><span class="line">	<span class="meta">@ExcelProperty</span>(<span class="string">"2"</span>)</span><br><span class="line">	<span class="keyword">private</span> Double num2;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getIndex</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> index;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setIndex</span><span class="params">(String index)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.index = index;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Double <span class="title">getNum1</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> num1;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setNum1</span><span class="params">(Double num1)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.num1 = num1;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Double <span class="title">getNum2</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> num2;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setNum2</span><span class="params">(Double num2)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.num2 = num2;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>调用EasyExcel.read方法，就能把数据读到listSource里面了，当然官方不建议直接读到内存里面，而是建议把excel数据边读边写入的数据库中。具体可以参考<a href="https://www.yuque.com/easyexcel/doc/read" target="_blank" rel="noopener">文档</a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">List&lt;SerumExcelDataBean&gt; listSource = EasyExcel.read(filePath + sourceDataName).head(SerumExcelDataBean.class).sheet(<span class="number">0</span>).doReadSync();</span><br></pre></td></tr></table></figure>
+<h3 id="写"><a href="#写" class="headerlink" title="写"></a>写</h3><p>EasyExcel写，最简单的就是根据对象属性上面的@ExcelProperty注解来对应列名，写入到excel中。其他情况详见<a href="https://www.yuque.com/easyexcel/doc/write" target="_blank" rel="noopener">官方文档</a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String fileName = <span class="string">"D:"</span> + File.separator + System.currentTimeMillis() + <span class="string">".xlsx"</span>;</span><br><span class="line"><span class="comment">// 这里 需要指定写用哪个class去写，然后写到第一个sheet，名字为模板 然后文件流会自动关闭</span></span><br><span class="line">EasyExcel.write(fileName, SerumExcelDataBean.class).sheet(<span class="string">"模板"</span>).doWrite(data());</span><br></pre></td></tr></table></figure>
+<p>最常用到的就是使用excel模板，固定填充位置，把相应的数据填入excel中。首先在模板中加入表达式，表达式主要有对象{name}和列表{.name}{data1.name}两种。<a href="https://www.yuque.com/easyexcel/doc/fill" target="_blank" rel="noopener">详见文档</a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * 多列表组合填充填充</span></span><br><span class="line"><span class="comment">  *</span></span><br><span class="line"><span class="comment">  * <span class="doctag">@since</span> 2.2.0-beta1</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"> <span class="meta">@Test</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">compositeFill</span><span class="params">()</span> </span>&#123;</span><br><span class="line">     <span class="comment">// 模板注意 用&#123;&#125; 来表示你要用的变量 如果本来就有"&#123;","&#125;" 特殊字符 用"\&#123;","\&#125;"代替</span></span><br><span class="line">     <span class="comment">// &#123;&#125; 代表普通变量 &#123;.&#125; 代表是list的变量 &#123;前缀.&#125; 前缀可以区分不同的list</span></span><br><span class="line">     String templateFileName = TestFileUtil.getPath() + <span class="string">"demo"</span> + File.separator + <span class="string">"fill"</span> + File.separator + <span class="string">"composite.xlsx"</span>;</span><br><span class="line">     String fileName = TestFileUtil.getPath() + <span class="string">"compositeFill"</span> + System.currentTimeMillis() + <span class="string">".xlsx"</span>;</span><br><span class="line">     ExcelWriter excelWriter = EasyExcel.write(fileName).withTemplate(templateFileName).build();</span><br><span class="line">     WriteSheet writeSheet = EasyExcel.writerSheet().build();</span><br><span class="line">     FillConfig fillConfig = FillConfig.builder().direction(WriteDirectionEnum.HORIZONTAL).build();</span><br><span class="line">     <span class="comment">// 如果有多个list 模板上必须有&#123;前缀.&#125; 这里的前缀就是 data1，然后多个list必须用 FillWrapper包裹</span></span><br><span class="line">     excelWriter.fill(<span class="keyword">new</span> FillWrapper(<span class="string">"data1"</span>, data()), fillConfig, writeSheet);</span><br><span class="line">     excelWriter.fill(<span class="keyword">new</span> FillWrapper(<span class="string">"data2"</span>, data()), writeSheet);</span><br><span class="line">     excelWriter.fill(<span class="keyword">new</span> FillWrapper(<span class="string">"data3"</span>, data()), writeSheet);</span><br><span class="line"></span><br><span class="line">     Map&lt;String, Object&gt; map = <span class="keyword">new</span> HashMap&lt;String, Object&gt;();</span><br><span class="line">     map.put(<span class="string">"date"</span>, <span class="string">"2019年10月9日13:28:28"</span>);</span><br><span class="line">     excelWriter.fill(map, writeSheet);</span><br><span class="line"></span><br><span class="line">     <span class="comment">// 别忘记关闭流</span></span><br><span class="line">     excelWriter.finish();</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>easyexcel确实是一个非常好用的工具类， 大大的简化了excel处理复杂度。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/21/Let‘s Encrypt实现站点https并自定续约/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1345,130 +1474,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/22/工厂模式/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="两个木">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/20180124140140.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="lralin">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/03/22/工厂模式/" itemprop="url">工厂模式</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-22T12:57:25+08:00">
-                2020-03-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h5 id="简单工厂"><a href="#简单工厂" class="headerlink" title="简单工厂"></a>简单工厂</h5><p>封装创建对象的代码，解耦对象实力化的逻辑。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2020/03/22/工厂模式/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1521,7 +1526,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">46</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1534,7 +1539,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-count">47</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
