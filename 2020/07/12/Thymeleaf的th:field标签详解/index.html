@@ -79,13 +79,17 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="lralin">
-<meta property="og:url" content="http://yoursite.com/tags/消息队列/index.html">
+<meta name="description" content="概述最近项目上遇到给一个select标签设置name之后，却通过form提交始终拿不到值，查了好久资料后，发现是对th:field了解的不够。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Thymeleaf模版中的th:field标签">
+<meta property="og:url" content="http://yoursite.com/2020/07/12/Thymeleaf的th:field标签详解/index.html">
 <meta property="og:site_name" content="lralin">
+<meta property="og:description" content="概述最近项目上遇到给一个select标签设置name之后，却通过form提交始终拿不到值，查了好久资料后，发现是对th:field了解的不够。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-07-12T06:17:25.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="lralin">
+<meta name="twitter:title" content="Thymeleaf模版中的th:field标签">
+<meta name="twitter:description" content="概述最近项目上遇到给一个select标签设置name之后，却通过form提交始终拿不到值，查了好久资料后，发现是对th:field了解的不够。">
 
 
 
@@ -115,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/消息队列/">
+  <link rel="canonical" href="http://yoursite.com/2020/07/12/Thymeleaf的th:field标签详解/">
 
 
 
 
 
-  <title>标签: 消息队列 | lralin</title>
+  <title>Thymeleaf模版中的th:field标签 | lralin</title>
   
 
 
@@ -140,7 +144,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -214,52 +218,154 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>消息队列<small>标签</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/12/Thymeleaf的th:field标签详解/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="两个木">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/20180124140140.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="lralin">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2019/11/30/RabbitMQ安装教程/" itemprop="url">
-              
-                <span itemprop="name">RabbitMQ安装教程</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">Thymeleaf模版中的th:field标签</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-11-30T12:50:25+08:00" content="2019-11-30">
-          11-30
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-12T14:16:25+08:00">
+                2020-07-12
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h4><p>最近项目上遇到给一个select标签设置name之后，却通过form提交始终拿不到值，查了好久资料后，发现是对th:field了解的不够。</p>
+<a id="more"></a>
+<h4 id="th-field标签"><a href="#th-field标签" class="headerlink" title="th:field标签"></a>th:field标签</h4><ol>
+<li><p>th:field属性常用于表单字段绑定，除了自动生成id和name属性，对不同的节点类型还会有不同的生成逻辑。<br>例如input还会再生成value属性，textarea会自动设文本，select会自动选中相应的选项，如果是同个表单属性，radio和checkbox的id会全局自动增长。</p>
+</li>
+<li><p>th:field属性需要使用星号表达式*{…}，即先使用th:object声明表单对象，再使用th:field=*{…}对表单域进行处理。</p>
+</li>
+<li><p>使用th:field属性时，如果html节点中已经存在id属性，则不会再另外生成。如果存在name属性，还是会覆盖。</p>
+<p>在项目上遇到的这个问题，就是name定义的key和th:field的大括号中的key不一样，导致表单提交的key使用了th:field中的key，如果后台用的name的key，会导致拿不到值。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">class</span>=<span class="string">"form-horizontal"</span> <span class="attr">id</span>=<span class="string">"form-user-edit"</span> <span class="attr">th:object</span>=<span class="string">"$&#123;user&#125;"</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">"userValue"</span>  <span class="attr">type</span>=<span class="string">"hidden"</span> <span class="attr">id</span>=<span class="string">"userValueId"</span>  <span class="attr">th:field</span>=<span class="string">"*&#123;userId&#125;"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>如上代码块，通过id<code>userValueId</code>是可以拿到值的。而通过$(‘#form-user-edit’).serialize()，生成的数据，键值对的key是<code>userId</code>,而不是<code>userValue</code></p>
+</li>
+</ol>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>Thymeleaf确实是一个好的模版语言，在用的时候最好先熟悉其中的语法。</p>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/07/05/富文本编辑器summernote/" rel="next" title="富文本编辑器summernote">
+                <i class="fa fa-chevron-left"></i> 富文本编辑器summernote
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -267,6 +373,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -287,8 +397,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -341,6 +460,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#th-field标签"><span class="nav-number">2.</span> <span class="nav-text">th:field标签</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -495,6 +630,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
