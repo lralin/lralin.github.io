@@ -301,6 +301,7 @@
 
       
         <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>谷歌提倡网站使用https，而且如果你的网站是http的话，浏览器会显示不安全。而微信小程序更是直接只能通过https的站点，才能调用后台服务。网站启用https访问，首先需要一个证书机构颁发的ssl证书，目前给个人免费颁发证书的机构，比较好的是：<a href="https://letsencrypt.org/" target="_blank" rel="noopener">Let’s Encrypt</a>。而Let’s Encrypt的证书现在支持自动颁发安装，客户端工具为certbot。通过certbot工具，我们可以很便捷的获取证书，再加上定时任务就能很便捷的自动续约了。</p>
+<a id="more"></a>
 <h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>官网下载工具</span><br><span class="line">cd /root</span><br><span class="line">wget https://dl.eff.org/certbot-auto</span><br><span class="line">chmod a+x certbot-auto</span><br></pre></td></tr></table></figure>
 <p>检查机器的80，443端口是否被占用，一般80端口会被nginx占用了，需要先停掉nginx。如果是阿里云的话还需要配置端口的安全组规则。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span>停止nginx</span><br><span class="line">service nginx stop</span><br></pre></td></tr></table></figure>
@@ -439,7 +440,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">48</span>
+                  <span class="site-state-item-count">49</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -452,7 +453,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">48</span>
+                  <span class="site-state-item-count">50</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>

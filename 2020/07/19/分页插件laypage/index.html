@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="junit,测试,性能测试,">
+  <meta name="keywords" content="layui,分页,">
 
 
 
@@ -79,20 +79,18 @@
 
 
 
-<meta name="description" content="简介contiperf是一个性能测试工具，可以设置线程数threads，总笔数invocations，总时长duration 等参数，配合@PerfTest 注解自由设置，并且还会生成一个折线图，目录位置一般就在target/contiperf-report 目录下面。">
-<meta name="keywords" content="junit,测试,性能测试">
+<meta name="description" content="前言数据列表分页是很常见的一项功能，而要想把分页做的简介，清晰，一个好的分页插件就显得非常重要了。而laypage就是这么一款简单，易上手的分页插件。既可轻松胜任异步分页，也可作为页面刷新式分页。">
+<meta name="keywords" content="layui,分页">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Junit压力测试">
-<meta property="og:url" content="http://yoursite.com/2019/05/30/junit压力测试/index.html">
+<meta property="og:title" content="layui的分页插件laypage">
+<meta property="og:url" content="http://yoursite.com/2020/07/19/分页插件laypage/index.html">
 <meta property="og:site_name" content="lralin">
-<meta property="og:description" content="简介contiperf是一个性能测试工具，可以设置线程数threads，总笔数invocations，总时长duration 等参数，配合@PerfTest 注解自由设置，并且还会生成一个折线图，目录位置一般就在target/contiperf-report 目录下面。">
+<meta property="og:description" content="前言数据列表分页是很常见的一项功能，而要想把分页做的简介，清晰，一个好的分页插件就显得非常重要了。而laypage就是这么一款简单，易上手的分页插件。既可轻松胜任异步分页，也可作为页面刷新式分页。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://raw.githubusercontent.com/lralin/TheFirst/master/markdown_img/ContiPerf_Report.png">
-<meta property="og:updated_time" content="2019-05-30T04:15:25.000Z">
+<meta property="og:updated_time" content="2020-07-19T06:54:25.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Junit压力测试">
-<meta name="twitter:description" content="简介contiperf是一个性能测试工具，可以设置线程数threads，总笔数invocations，总时长duration 等参数，配合@PerfTest 注解自由设置，并且还会生成一个折线图，目录位置一般就在target/contiperf-report 目录下面。">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/lralin/TheFirst/master/markdown_img/ContiPerf_Report.png">
+<meta name="twitter:title" content="layui的分页插件laypage">
+<meta name="twitter:description" content="前言数据列表分页是很常见的一项功能，而要想把分页做的简介，清晰，一个好的分页插件就显得非常重要了。而laypage就是这么一款简单，易上手的分页插件。既可轻松胜任异步分页，也可作为页面刷新式分页。">
 
 
 
@@ -122,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/05/30/junit压力测试/">
+  <link rel="canonical" href="http://yoursite.com/2020/07/19/分页插件laypage/">
 
 
 
 
 
-  <title>Junit压力测试 | lralin</title>
+  <title>layui的分页插件laypage | lralin</title>
   
 
 
@@ -235,7 +233,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/30/junit压力测试/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/19/分页插件laypage/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="两个木">
@@ -252,7 +250,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Junit压力测试</h1>
+          <h1 class="post-title" itemprop="name headline">layui的分页插件laypage</h1>
         
 
         <div class="post-meta">
@@ -264,8 +262,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-30T12:15:25+08:00">
-                2019-05-30
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-19T14:54:25+08:00">
+                2020-07-19
               </time>
             
 
@@ -302,22 +300,17 @@
       
 
       
-        <h5 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h5><p>contiperf是一个性能测试工具，可以设置线程数<code>threads</code>，总笔数<code>invocations</code>，总时长<code>duration</code> 等参数，配合<code>@PerfTest</code> 注解自由设置，并且还会生成一个折线图，目录位置一般就在<code>target/contiperf-report</code> 目录下面。</p>
+        <h5 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h5><p>数据列表分页是很常见的一项功能，而要想把分页做的简介，清晰，一个好的分页插件就显得非常重要了。而laypage就是这么一款简单，易上手的分页插件。既可轻松胜任异步分页，也可作为页面刷新式分页。</p>
 <a id="more"></a>
-<h5 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h5><ol>
-<li><p>pom包：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.databene<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>contiperf<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.1.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h5 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h5><ol>
+<li><p>具体参数详见<a href="https://www.layui.com/doc/modules/laypage.html" target="_blank" rel="noopener">官方API</a></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">layui.use(<span class="string">'laypage'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> laypage = layui.laypage;</span><br><span class="line">    <span class="comment">//执行一个laypage实例</span></span><br><span class="line">    laypage.render(&#123;</span><br><span class="line">    elem: <span class="string">'test1'</span></span><br><span class="line">    ,<span class="attr">count</span>: <span class="number">70</span> <span class="comment">//数据总数，从服务端得到</span></span><br><span class="line">    ,<span class="attr">jump</span>: <span class="function"><span class="keyword">function</span>(<span class="params">obj, first</span>)</span>&#123;</span><br><span class="line">        <span class="comment">//obj包含了当前分页的所有参数，比如：</span></span><br><span class="line">        <span class="built_in">console</span>.log(obj.curr); <span class="comment">//得到当前页，以便向服务端请求对应页的数据。</span></span><br><span class="line">        <span class="built_in">console</span>.log(obj.limit); <span class="comment">//得到每页显示的条数</span></span><br><span class="line">        <span class="comment">//首次不执行</span></span><br><span class="line">        <span class="keyword">if</span>(!first)&#123;</span><br><span class="line">          <span class="comment">//do something</span></span><br><span class="line">        &#125;</span><br><span class="line">    	&#125;</span><br><span class="line">  	&#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>Java代码中的实际调用关系</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RunWith</span>(SpringJUnit4ClassRunner.class)</span><br><span class="line"><span class="meta">@ContextConfiguration</span>(locations = &#123; <span class="string">"classpath:spring-dubbo-test.xml"</span> &#125;)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PhoneverifyDubboTest</span> </span>&#123;</span><br><span class="line">	<span class="comment">//使用@Rule注释激活ContiPerf</span></span><br><span class="line">	<span class="meta">@Rule</span></span><br><span class="line">	<span class="keyword">public</span> ContiPerfRule i = <span class="keyword">new</span> ContiPerfRule();</span><br><span class="line">	<span class="comment">//加上junit的注解，表示该测试启动100个线程，一共跑5000次</span></span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="meta">@PerfTest</span>(threads = <span class="number">100</span>, invocations = <span class="number">5000</span>)</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testTelecom</span><span class="params">()</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"lralin"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//表示该测试启动100个线程，一共执行50s</span></span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="meta">@PerfTest</span>(threads = <span class="number">100</span>, duration = <span class="number">50000</span>)</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testDuration</span><span class="params">()</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"lralin"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<li><p>配合ajax使用的话</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">layui.use(<span class="string">'laypage'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> laypage = layui.laypage;</span><br><span class="line">  </span><br><span class="line">  $.post(<span class="string">'/News/GetNewsByPage'</span>, &#123; <span class="attr">page</span>: <span class="number">1</span>, <span class="attr">limit</span>: <span class="number">3</span>, <span class="attr">typeId</span>: typeId &#125;, <span class="function"><span class="keyword">function</span> (<span class="params">result</span>) </span>&#123;</span><br><span class="line">        res = result.data;</span><br><span class="line">    		setHtml(res);</span><br><span class="line">    		pages(result.count, typeId)<span class="comment">//切换分类时候，调用页码，重新渲染</span></span><br><span class="line">  &#125;);</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">pages</span>(<span class="params">count, typeId</span>) </span>&#123;</span><br><span class="line">    laypage.render(&#123;</span><br><span class="line">      elem: <span class="string">'demo7'</span></span><br><span class="line">      , <span class="attr">count</span>: count</span><br><span class="line">      , <span class="attr">theme</span>: <span class="string">'#4A90E2'</span></span><br><span class="line">      , <span class="attr">layout</span>: [<span class="string">'prev'</span>, <span class="string">'page'</span>, <span class="string">'next'</span>]</span><br><span class="line">      , <span class="attr">limit</span>: <span class="number">3</span></span><br><span class="line">      , <span class="attr">jump</span>: <span class="function"><span class="keyword">function</span> (<span class="params">obj, first</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!first) &#123;</span><br><span class="line">          $.post(<span class="string">'/News/GetNewsByPage'</span></span><br><span class="line">                 , &#123; <span class="attr">page</span>: obj.curr, <span class="attr">limit</span>: obj.limit, <span class="attr">typeId</span>: typeId &#125;</span><br><span class="line">                 , <span class="function"><span class="keyword">function</span> (<span class="params">result</span>) </span>&#123;</span><br><span class="line">            res = result.data;</span><br><span class="line">            setHtml(res);</span><br><span class="line">          &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><p>可以看出laypage用起来很方便，而且可以自定义样式，非常的实用</p>
 </li>
-<li><p>在<code>@PerfTest</code>配置中如果duration和invocations同时使用的话会在保证两个参数都符合的情况，才会停止。例如<code>@PerfTest(threads = 100, duration = 50000, invocations = 500)</code> ，如果50s内，500次请求还没结束的话，会一直等到500次执行完毕才会结束.</p>
-</li>
-<li>关于timer参数，主要是用于设置等待多久后又执行，例如<code>@PerfTest(invocations = 500, threads = 100, timer = RandomTimer.class, timerParams = {200, 300})</code> ，每执行完一次后，等待200~300ms继续执行下一次.</li>
-<li>可能测试用例刚开始启动的时候，响应时间比较慢，需要运行一段时间后才能响应速度才会变快，这时我们就需要去掉前一段时间。这时我们就可以用到ContiPerf的rampUp和warmUp参数，例如<code>@PerfTest(threads = 5, duration = 50000, rampUp = 2000)</code> ，启动时会先起一个线程，然后每个2000ms起一线程，到8000ms时5个线程同时执行，那么这个测试实际执行了58s，这时我们要去掉前8s，那么就要在注释中加入warmUp，即<code>@PerfTest(threads = 5, duration = 50000, rampUp = 2000, warmUp = 8000)</code>，那么统计结果的时候会去掉预热的8s.</li>
-<li>也可以使用@Required指定性能要求<br><code>@Required(max = 1000, average = 800, totalTime = 10000)</code>  要求每次执行的最长时间不能超过1s，平均时间不能超过0.8s，总时间不能超过10s;<br><code>@Required(percentile90 = 5000)</code>要求90%的测试不超过5s;<br><code>@Required(percentiles = &quot;70:300,95:550&quot;)</code>要求70%的测试不超过300ms，95%的测试不超过550ms;</li>
 </ol>
-<h5 id="折线图"><a href="#折线图" class="headerlink" title="折线图"></a>折线图</h5><p>文件目录<code>target/contiperf-report/index.html</code><br><img src="https://raw.githubusercontent.com/lralin/TheFirst/master/markdown_img/ContiPerf_Report.png" alt="Image text"></p>
 
       
     </div>
@@ -335,11 +328,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/junit/" rel="tag"># junit</a>
+            <a href="/tags/layui/" rel="tag"># layui</a>
           
-            <a href="/tags/测试/" rel="tag"># 测试</a>
-          
-            <a href="/tags/性能测试/" rel="tag"># 性能测试</a>
+            <a href="/tags/分页/" rel="tag"># 分页</a>
           
         </div>
       
@@ -352,8 +343,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/05/24/mock模拟测试/" rel="next" title="Mock模拟测试">
-                <i class="fa fa-chevron-left"></i> Mock模拟测试
+              <a href="/2020/07/12/Thymeleaf的th:field标签详解/" rel="next" title="Thymeleaf模版中的th:field标签">
+                <i class="fa fa-chevron-left"></i> Thymeleaf模版中的th:field标签
               </a>
             
           </div>
@@ -361,10 +352,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/06/09/ES6变量解构赋值/" rel="prev" title="ES6变量解构赋值">
-                ES6变量解构赋值 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -489,7 +476,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#示例"><span class="nav-number">2.</span> <span class="nav-text">示例</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#折线图"><span class="nav-number">3.</span> <span class="nav-text">折线图</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#使用"><span class="nav-number">2.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
 
           </div>
